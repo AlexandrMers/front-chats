@@ -1,6 +1,11 @@
 @import "~antd/dist/antd.css";
-@import "../components/Button/style";
+@import "../primitives/Button/style";
 
-body {
-  background-color: red;
+html, body, #root {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
 }
