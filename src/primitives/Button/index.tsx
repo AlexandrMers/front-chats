@@ -3,6 +3,8 @@ import { Button as ButtonBase } from "antd";
 import { ButtonProps } from "antd/lib/button/button";
 import classNames from "classnames";
 
+import "./style.scss";
+
 interface ButtonPropsInterface extends ButtonProps {
   children: ReactNode;
 }

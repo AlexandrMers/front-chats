@@ -1,15 +1,29 @@
 @import "~antd/dist/antd.css";
-@import "../primitives/Button/style";
+
+@import "./tools/vars.scss";
 
 html, body, #root {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
   height: 100%;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
 }
 
-#root > .wrapper {
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+#root > div {
   height: 100%;
 }

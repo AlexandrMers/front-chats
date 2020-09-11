@@ -1,0 +1,75 @@
+//variables
+@import "src/styles/tools/vars";
+
+.wrapperAuth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  height: 100%;
+
+  &__header {
+    text-align: center;
+
+    margin-bottom: 50px;
+  }
+
+  &__title {
+    font-size: 28px;
+    line-height: 33px;
+
+    color: $black;
+
+    margin-bottom: 7px;
+  }
+
+  &__text {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.12px;
+    color: $black;
+    opacity: 0.5;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+
+    padding: 54px 45px;
+  }
+
+  &__input {
+    margin-bottom: 15px;
+
+    &:last-of-type {
+      margin-bottom: 25px;
+    }
+  }
+}
+
+.authForm {
+
+  &__button {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.1px;
+    color: $white;
+    height: 56px;
+  }
+
+  &__linkWrapper {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  &__link {
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.114px;
+    color: #ADADAD;
+  }
+}
