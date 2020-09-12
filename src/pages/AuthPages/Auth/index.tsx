@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 
 import { Form } from "antd";
+import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
 
 import Wrapper from "primitives/Wrapper";
 import Button from "primitives/Button";
@@ -27,11 +28,19 @@ const AuthPage = () => {
             className={styleModule.wrapperAuth__input}
             name="username"
           >
-            <Input type="text" placeholder="Логин" />
+            <Input
+              type="text"
+              placeholder="Логин"
+              prefix={<UserOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Form.Item className={styleModule.wrapperAuth__input} name="password">
-            <Input type="password" placeholder="Пароль" />
+            <Input
+              type="password"
+              placeholder="Пароль"
+              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Button

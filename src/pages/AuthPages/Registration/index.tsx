@@ -9,6 +9,11 @@ import WhiteBlock from "primitives/WhiteBlock";
 import Input from "primitives/Input/Input";
 import Button from "primitives/Button";
 import Wrapper from "primitives/Wrapper";
+import {
+  MailOutlined,
+  SecurityScanOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 const RegistrationPage = () => {
   return (
@@ -27,22 +32,38 @@ const RegistrationPage = () => {
             className={styleModule.wrapperAuth__input}
             name="email"
           >
-            <Input type="email" placeholder="E-mail" />
+            <Input
+              type="email"
+              placeholder="E-mail"
+              prefix={<MailOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Form.Item className={styleModule.wrapperAuth__input} name="username">
-            <Input type="text" placeholder="Ваше имя" />
+            <Input
+              type="text"
+              placeholder="Ваше имя"
+              prefix={<UserOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Form.Item className={styleModule.wrapperAuth__input} name="password">
-            <Input type="password" placeholder="Пароль" />
+            <Input
+              type="password"
+              placeholder="Пароль"
+              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Form.Item
             className={styleModule.wrapperAuth__input}
             name="passwordReset"
           >
-            <Input type="password" placeholder="Повторите пароль" />
+            <Input
+              type="password"
+              placeholder="Повторите пароль"
+              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+            />
           </Form.Item>
 
           <Button
