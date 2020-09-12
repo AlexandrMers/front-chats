@@ -1,12 +1,14 @@
-import React from "react";
-import Wrapper from "primitives/Wrapper";
-import Button from "primitives/Button";
-import WhiteBlock from "primitives/WhiteBlock";
+import React, { memo } from "react";
+import { Link } from "react-router-dom";
 
 import { Form } from "antd";
 
-import styleModule from "./style.module.scss";
-import Input from "../../primitives/Input/Input";
+import Wrapper from "primitives/Wrapper";
+import Button from "primitives/Button";
+import WhiteBlock from "primitives/WhiteBlock";
+import Input from "primitives/Input/Input";
+
+import styleModule from "../style.module.scss";
 
 const AuthPage = () => {
   return (
@@ -41,13 +43,13 @@ const AuthPage = () => {
           </Button>
         </Form>
         <Wrapper className={styleModule.authForm__linkWrapper}>
-          <a className={styleModule.authForm__link} href="/">
+          <Link to="/registration" className={styleModule.authForm__link}>
             Зарегистрироваться
-          </a>
+          </Link>
         </Wrapper>
       </WhiteBlock>
     </Wrapper>
   );
 };
 
-export default AuthPage;
+export default memo(AuthPage);
