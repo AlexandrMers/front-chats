@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Link } from "react-router-dom";
 
 import { Form } from "antd";
 import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
@@ -11,7 +10,7 @@ import Input from "primitives/Input/Input";
 
 import styleModule from "../style.module.scss";
 
-const AuthPage = () => {
+const AuthPage = ({ toRegister }: { toRegister: () => void }) => {
   return (
     <Wrapper className={styleModule.wrapperAuth}>
       <header className={styleModule.wrapperAuth__header}>
@@ -52,9 +51,13 @@ const AuthPage = () => {
           </Button>
         </Form>
         <Wrapper className={styleModule.authForm__linkWrapper}>
-          <Link to="/registration" className={styleModule.authForm__link}>
+          <Button
+            type="text"
+            onClick={toRegister}
+            className={styleModule.authForm__link}
+          >
             Зарегистрироваться
-          </Link>
+          </Button>
         </Wrapper>
       </WhiteBlock>
     </Wrapper>

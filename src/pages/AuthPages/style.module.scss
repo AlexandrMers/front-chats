@@ -71,6 +71,16 @@
     line-height: 19px;
     letter-spacing: 0.114px;
     color: #ADADAD;
+
+    &:hover {
+      color: #ADADAD;
+      background: transparent;
+    }
+
+    &:active {
+      color: #ADADAD;
+      background: transparent;
+    }
   }
 }
 
