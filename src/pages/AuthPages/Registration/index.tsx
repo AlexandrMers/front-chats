@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Form } from "antd";
@@ -15,7 +15,11 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
+import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
+
 const RegistrationPage = () => {
+  const [isSuccessRegistration, setIsSuccessRegistration] = useState(false);
+
   return (
     <Wrapper className={styleModule.wrapperAuth}>
       <header className={styleModule.wrapperAuth__header}>
@@ -25,61 +29,72 @@ const RegistrationPage = () => {
         </p>
       </header>
 
-      <WhiteBlock className={styleModule.wrapperAuth__form} withShadow>
-        <Form className={styleModule.authForm__form} name="authForm">
-          <Form.Item
-            hasFeedback
-            className={styleModule.wrapperAuth__input}
-            name="email"
-          >
-            <Input
-              type="email"
-              placeholder="E-mail"
-              prefix={<MailOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+      {isSuccessRegistration ? (
+        <SuccessNotifyRegistration />
+      ) : (
+        <WhiteBlock className={styleModule.wrapperAuth__form} withShadow>
+          <Form className={styleModule.authForm__form} name="authForm">
+            <Form.Item
+              hasFeedback
+              className={styleModule.wrapperAuth__input}
+              name="email"
+            >
+              <Input
+                type="email"
+                placeholder="E-mail"
+                prefix={<MailOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Form.Item className={styleModule.wrapperAuth__input} name="username">
-            <Input
-              type="text"
-              placeholder="Ваше имя"
-              prefix={<UserOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+            <Form.Item
+              className={styleModule.wrapperAuth__input}
+              name="username"
+            >
+              <Input
+                type="text"
+                placeholder="Ваше имя"
+                prefix={<UserOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Form.Item className={styleModule.wrapperAuth__input} name="password">
-            <Input
-              type="password"
-              placeholder="Пароль"
-              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+            <Form.Item
+              className={styleModule.wrapperAuth__input}
+              name="password"
+            >
+              <Input
+                type="password"
+                placeholder="Пароль"
+                prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Form.Item
-            className={styleModule.wrapperAuth__input}
-            name="passwordReset"
-          >
-            <Input
-              type="password"
-              placeholder="Повторите пароль"
-              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+            <Form.Item
+              className={styleModule.wrapperAuth__input}
+              name="passwordReset"
+            >
+              <Input
+                type="password"
+                placeholder="Повторите пароль"
+                prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Button
-            className={styleModule.authForm__button}
-            type="primary"
-            htmlType="submit"
-          >
-            Зарегистрироваться
-          </Button>
-        </Form>
-        <Wrapper className={styleModule.authForm__linkWrapper}>
-          <Link to="/auth" className={styleModule.authForm__link}>
-            Войти в аккаунт
-          </Link>
-        </Wrapper>
-      </WhiteBlock>
+            <Button
+              className={styleModule.authForm__button}
+              type="primary"
+              htmlType="submit"
+              onClick={() => setIsSuccessRegistration(true)}
+            >
+              Зарегистрироваться
+            </Button>
+          </Form>
+          <Wrapper className={styleModule.authForm__linkWrapper}>
+            <Link to="/auth" className={styleModule.authForm__link}>
+              Войти в аккаунт
+            </Link>
+          </Wrapper>
+        </WhiteBlock>
+      )}
     </Wrapper>
   );
 };

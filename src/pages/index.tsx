@@ -1,10 +1,9 @@
 import React, { memo, useContext } from "react";
 import { __RouterContext, Route, Switch } from "react-router";
-import { useTransition, animated } from "react-spring";
+import { animated, useTransition } from "react-spring";
 
 import AuthPage from "./AuthPages/Auth";
 import RegistrationPage from "./AuthPages/Registration";
-import ConfirmPage from "./AuthPages/Confirm";
 
 function useRouter() {
   return useContext(__RouterContext);
@@ -36,7 +35,6 @@ const Routes = () => {
       <Switch location={item}>
         <Route exact path={["/", "/auth"]} component={AuthPage} />
         <Route exact path="/registration" component={RegistrationPage} />
-        <Route exact path="/confirm" component={ConfirmPage} />
       </Switch>
     </animated.div>
   ));
