@@ -1,0 +1,125 @@
+@import "src/styles/tools/vars";
+
+.messageWrapper {
+
+  max-width: 430px;
+  width: 100%;
+
+  &_mine {
+    align-self: flex-end;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+
+  &__params {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+
+
+
+    .iconCheck {
+      align-self: flex-end;
+    }
+  }
+
+  &__contentInner {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+
+
+    &_reverse {
+      justify-content: flex-end;
+      order: 1;
+    }
+  }
+
+  &__avatar {
+    display: flex;
+    width: 33px;
+    height: 33px;
+    min-width: 33px;
+    min-height: 33px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    align-self: flex-end;
+
+    margin-right: 13px;
+
+    &_mine {
+      margin-right: 0;
+      margin-left: 13px;
+      order: 2;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__content {
+    background: #3674FF;
+    box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+    border-radius: 12px 12px 12px 0;
+
+    padding: 13px 18px;
+
+
+    .messageWrapper__text {
+      font-size: 14px;
+      line-height: 16px;
+      color: $white;
+
+
+      &::selection {
+        color: $white;
+        background: $black;
+      }
+    }
+  }
+
+  &__content_mine {
+    background: #FFFFFF;
+    border: 1px solid $gray_border;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.0220444);
+    border-radius: 12px 12px 0 12px;
+
+    padding: 13px 18px;
+
+
+    .messageWrapper__text {
+      font-size: 14px;
+      line-height: 16px;
+      color: $black;
+    }
+  }
+
+
+  &__dateWrapper {
+    margin-left: 47px;
+
+
+    &_me {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &__date {
+    font-size: 12px;
+    line-height: 14px;
+
+    color: $black;
+    opacity: 0.4;
+  }
+}
