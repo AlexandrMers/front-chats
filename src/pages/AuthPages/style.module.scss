@@ -73,3 +73,49 @@
     color: #ADADAD;
   }
 }
+
+.authForm__confirmWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.authForm__confirmBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+.confirmBlock {
+  min-height: 430px;
+  justify-content: center;;
+
+  &__iconConfirm {
+    width: 55px;
+    height: 61px;
+    background-image: url('./Confirm/images/confirm.png');
+
+    margin-bottom: 14px;
+  }
+
+  &__title {
+    font-size: 22px;
+    line-height: 25px;
+    color: $black;
+
+    margin-bottom: 14px;
+  }
+
+  &__text {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: $black;
+    opacity: 0.5;
+  }
+}
