@@ -1,9 +1,11 @@
 import React, { memo } from "react";
+import classNames from "classnames";
+
+import { useFormatRelativeDate } from "hooks/date";
 
 import Wrapper from "primitives/Wrapper";
 
 import styleModule from "./style.module.scss";
-import classNames from "classnames";
 
 import "styles/tools/icons.scss";
 
@@ -21,6 +23,8 @@ interface MessagePropsInterface {
 }
 
 const Message = ({ message, user, isMe }: MessagePropsInterface) => {
+  const { date } = useFormatRelativeDate(message.date);
+
   return (
     <Wrapper
       className={classNames(
@@ -53,9 +57,24 @@ const Message = ({ message, user, isMe }: MessagePropsInterface) => {
           <p className={styleModule.messageWrapper__text}>{message.text}</p>
         </Wrapper>
 
-        <Wrapper className={styleModule.messageWrapper__params}>
-          <div className="tripplePoint"></div>
-          <div className="iconCheck"></div>
+        <Wrapper
+          className={classNames(
+            styleModule.messageWrapper__params,
+            isMe && styleModule.messageWrapper__params_me
+          )}
+        >
+          <div
+            className={classNames(
+              "tripplePoint",
+              styleModule.messageWrapper__tripplePoint
+            )}
+          ></div>
+          <div
+            className={classNames(
+              "iconCheck",
+              styleModule.messageWrapper__iconCheck
+            )}
+          ></div>
         </Wrapper>
       </Wrapper>
 
@@ -65,7 +84,7 @@ const Message = ({ message, user, isMe }: MessagePropsInterface) => {
           isMe && styleModule.messageWrapper__dateWrapper_me
         )}
       >
-        <time className={styleModule.messageWrapper__date}>{message.date}</time>
+        <time className={styleModule.messageWrapper__date}>{date}</time>
       </Wrapper>
     </Wrapper>
   );

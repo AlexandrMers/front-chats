@@ -15,27 +15,36 @@
 
 
   &__params {
+    position: relative;
+    margin-left: 13px;
+
     display: flex;
-    flex-direction: column;
+    align-items: center;
 
-    height: 100%;
-
-
-
-    .iconCheck {
-      align-self: flex-end;
+    &_me {
+      margin-left: 0;
+      margin-right: 13px;
+      order: 1;
     }
+  }
+
+  &__tripplePoint {
+    cursor: pointer;
+  }
+
+  &__iconCheck {
+    position: absolute;
+    bottom: 0;
   }
 
   &__contentInner {
     display: flex;
-    align-items: center;
+
     margin-bottom: 8px;
 
 
     &_reverse {
       justify-content: flex-end;
-      order: 1;
     }
   }
 
@@ -55,7 +64,7 @@
     &_mine {
       margin-right: 0;
       margin-left: 13px;
-      order: 2;
+      order: 3;
     }
 
     img {
@@ -93,6 +102,7 @@
 
     padding: 13px 18px;
 
+    order: 2;
 
     .messageWrapper__text {
       font-size: 14px;
@@ -122,4 +132,7 @@
     color: $black;
     opacity: 0.4;
   }
+
+
+
 }
