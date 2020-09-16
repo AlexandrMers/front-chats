@@ -22,6 +22,7 @@ const Home = () => {
           date: "Sun Sep 13 2020 17:54:45",
           text:
             "Привет, как дела? Привет, как дела?  Привет, как дела? Привет, как дела? Привет, как дела? Привет, как дела? Привет, как дела? мм",
+          attachments: [],
         }}
         user={{
           name: "Александр",
@@ -35,6 +36,23 @@ const Home = () => {
           date: "Tue Sep 15 2020 06:00:45",
           text:
             "Привет, как дела? Привет, как дела?  Привет, как дела? Привет, как дела? Привет, как дела? Привет, как дела? Привет, как дела? мм",
+          attachments: [
+            {
+              name: "девушка.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50339368162_ddc568be3e_c.jpg",
+            },
+            {
+              name: "море.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50339930638_41a205fcab_c.jpg",
+            },
+            {
+              name: "город.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50337310643_de579e4bb1_c.jpg",
+            },
+          ],
         }}
         user={{
           name: "Александр",
@@ -47,11 +65,44 @@ const Home = () => {
             "https://static8.depositphotos.com/1207999/1027/i/450/depositphotos_10275227-stock-photo-office-avatar-woman.jpg",
           date: "Mon Sep 14 2020 16:50:48",
           text: "другое сообщение",
+          attachments: [
+            {
+              name: "девушка.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50339368162_ddc568be3e_c.jpg",
+            },
+            {
+              name: "море.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50339930638_41a205fcab_c.jpg",
+            },
+            {
+              name: "город.jpg",
+              url:
+                "https://live.staticflickr.com/65535/50337310643_de579e4bb1_c.jpg",
+            },
+          ],
         }}
         user={{
           name: "Александр",
         }}
         isMe
+        isRead
+      />
+
+      <Message
+        message={{
+          avatar:
+            "https://static8.depositphotos.com/1207999/1027/i/450/depositphotos_10275227-stock-photo-office-avatar-woman.jpg",
+          date: "Mon Sep 14 2020 16:50:48",
+          text: "другое сообщение",
+          attachments: [],
+        }}
+        user={{
+          name: "Александр",
+        }}
+        isMe
+        isRead={false}
       />
     </Wrapper>
   );
