@@ -20,6 +20,8 @@ import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
 
 import {
   excludeUndefinedFromErrors,
+  fieldValidate,
+  helpViewForFormik,
   validateEmail,
   validatePassword,
 } from "libs/validators";
@@ -37,10 +39,15 @@ const RegistrationPage = () => {
     email: "";
     password: "";
   }>({
+    initialTouched: {
+      email: false,
+      password: false,
+    },
     initialValues: {
       email: "",
       password: "",
     },
+    enableReinitialize: true,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -79,8 +86,13 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="email"
-              help={!isValid && touched.email && errors.email}
-              hasFeedback={!errors.email}
+              validateStatus={fieldValidate(
+                touched.email,
+                errors.email,
+                isValid
+              )}
+              hasFeedback={touched.email}
+              help={helpViewForFormik(touched.email, errors.email)}
             >
               <Input
                 id="email"

@@ -1,6 +1,16 @@
 const regExpEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 const regExpPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i;
 
+export const helpViewForFormik = (touchedField: boolean, errorField: string) =>
+  touchedField && !!errorField && errorField;
+
+export const fieldValidate = (
+  touched: boolean,
+  errorField: string,
+  isValid: boolean
+) =>
+  touched && !!errorField ? "error" : isValid && !errorField ? "success" : null;
+
 export const validateEmail = (email: string) =>
   !email
     ? "Обязательное поле"
