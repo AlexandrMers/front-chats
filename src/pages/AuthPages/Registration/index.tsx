@@ -1,7 +1,13 @@
 import React, { memo, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useFormik } from "formik";
 import { Form } from "antd";
+
+import {
+  MailOutlined,
+  SecurityScanOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 import styleModule from "pages/AuthPages/style.module.scss";
 
@@ -9,14 +15,14 @@ import WhiteBlock from "primitives/WhiteBlock";
 import Input from "primitives/Input/Input";
 import Button from "primitives/Button";
 import Wrapper from "primitives/Wrapper";
-import {
-  MailOutlined,
-  SecurityScanOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 
 import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
-import { useFormik } from "formik";
+
+import {
+  excludeUndefinedFromErrors,
+  validateEmail,
+  validatePassword,
+} from "libs/validators";
 
 const RegistrationPage = () => {
   const {
@@ -26,7 +32,7 @@ const RegistrationPage = () => {
     values,
     errors,
     touched,
-    dirty,
+    isValid,
   } = useFormik<{
     email: "";
     password: "";
@@ -38,28 +44,15 @@ const RegistrationPage = () => {
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
-    validate: (values) => {
+    validate: ({ password, email }) => {
       const errors: {
         [key: string]: string;
-      } = {};
+      } = {
+        email: validateEmail(email),
+        password: validatePassword(password),
+      };
 
-      if (!values.email) {
-        errors.email = "Обязательное поле";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        errors.email = "Невалидный адрес почты";
-      }
-
-      if (!values.password) {
-        errors.password = "Обязательное поле";
-      } else if (
-        !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i.test(values.password)
-      ) {
-        errors.password = "Невалидный пароль";
-      }
-
-      return errors;
+      return excludeUndefinedFromErrors(errors);
     },
   });
 
@@ -86,7 +79,8 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="email"
-              help={dirty && touched.email && errors.email}
+              help={!isValid && touched.email && errors.email}
+              hasFeedback={!errors.email}
             >
               <Input
                 id="email"
@@ -113,16 +107,17 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="password"
-              help={dirty && touched.password && errors.password}
+              help={!isValid && touched.password && errors.password}
+              hasFeedback={!errors.email}
             >
               <Input
                 id="password"
                 type="password"
                 placeholder="Пароль"
+                value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
-                value={values.password}
               />
             </Form.Item>
 
@@ -141,6 +136,7 @@ const RegistrationPage = () => {
               className={styleModule.authForm__button}
               type="primary"
               htmlType="submit"
+              disabled={!isValid}
             >
               Зарегистрироваться
             </Button>

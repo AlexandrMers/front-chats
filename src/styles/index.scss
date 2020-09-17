@@ -1,6 +1,7 @@
 @import "~antd/dist/antd.css";
 
 @import "./tools/vars.scss";
+@import "./tools/common.scss";
 
 
 html, body, #root {
@@ -28,4 +29,3 @@ p {
 #root > div {
   height: 100%;
 }
-
