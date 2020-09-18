@@ -19,12 +19,11 @@ import Wrapper from "primitives/Wrapper";
 import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
 
 import {
-  excludeUndefinedFromErrors,
   fieldValidate,
   helpViewForFormik,
-  validateEmail,
-  validatePassword,
+  RegistrationFormInterface,
 } from "libs/validators";
+import { configFormRegistrationFormik } from "./tools";
 
 const RegistrationPage = () => {
   const {
@@ -35,31 +34,10 @@ const RegistrationPage = () => {
     errors,
     touched,
     isValid,
-  } = useFormik<{
-    email: "";
-    password: "";
-  }>({
-    initialTouched: {
-      email: false,
-      password: false,
-    },
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    enableReinitialize: true,
-    onSubmit: (values) => {
+  } = useFormik<RegistrationFormInterface>({
+    ...configFormRegistrationFormik,
+    onSubmit: (values: RegistrationFormInterface) => {
       alert(JSON.stringify(values, null, 2));
-    },
-    validate: ({ password, email }) => {
-      const errors: {
-        [key: string]: string;
-      } = {
-        email: validateEmail(email),
-        password: validatePassword(password),
-      };
-
-      return excludeUndefinedFromErrors(errors);
     },
   });
 
@@ -86,11 +64,7 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="email"
-              validateStatus={fieldValidate(
-                touched.email,
-                errors.email,
-                isValid
-              )}
+              validateStatus={fieldValidate(touched.email, errors.email)}
               hasFeedback={touched.email}
               help={helpViewForFormik(touched.email, errors.email)}
             >
@@ -107,11 +81,19 @@ const RegistrationPage = () => {
 
             <Form.Item
               className={styleModule.wrapperAuth__input}
-              name="username"
+              name="name"
+              validateStatus={fieldValidate(touched.name, errors.name)}
+              help={helpViewForFormik(touched.name, errors.name)}
+              hasFeedback={touched.name}
             >
               <Input
+                id="name"
+                name="name"
                 type="text"
                 placeholder="Ваше имя"
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 prefix={<UserOutlined style={{ opacity: 0.5 }} />}
               />
             </Form.Item>
@@ -119,8 +101,9 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="password"
-              help={!isValid && touched.password && errors.password}
-              hasFeedback={!errors.email}
+              validateStatus={fieldValidate(touched.password, errors.password)}
+              help={helpViewForFormik(touched.password, errors.password)}
+              hasFeedback={touched.password}
             >
               <Input
                 id="password"
@@ -135,11 +118,22 @@ const RegistrationPage = () => {
 
             <Form.Item
               className={styleModule.wrapperAuth__input}
-              name="passwordReset"
+              name="password2"
+              validateStatus={fieldValidate(
+                touched.password2,
+                errors.password2
+              )}
+              hasFeedback={touched.password2}
+              help={helpViewForFormik(touched.password2, errors.password2)}
             >
               <Input
+                id="password2"
+                name="password2"
                 type="password"
                 placeholder="Повторите пароль"
+                value={values.password2}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
               />
             </Form.Item>
