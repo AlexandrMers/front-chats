@@ -1,22 +1,20 @@
 import React, { memo } from "react";
 
-import { MessageInterface } from "components/Message/types";
-
 import Wrapper from "../Wrapper";
 import classNames from "classnames";
 
 import styleModule from "./style.module.scss";
 
 interface AvatarPropsInterface {
-  message: MessageInterface;
-  user: { name: string };
+  avatar: string;
+  name: string;
   className?: any;
   size?: number;
 }
 
 const Avatar = ({
-  message,
-  user,
+  avatar,
+  name,
   className,
   size = 30,
 }: AvatarPropsInterface) => {
@@ -30,7 +28,7 @@ const Avatar = ({
       }}
       className={classNames(styleModule.avatar, className)}
     >
-      <img src={message.avatar} alt={`avatar ${user.name}`} />
+      <img src={avatar} alt={`avatar ${name}`} />
     </Wrapper>
   );
 };

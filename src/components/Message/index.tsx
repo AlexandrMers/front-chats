@@ -85,8 +85,8 @@ const Message = ({
           className={classNames(styleModule.avatar_order, {
             [styleModule.avatar_order_me]: isMe,
           })}
-          user={user}
-          message={message}
+          name={user.name}
+          avatar={message.avatar}
         />
 
         {isTyping ? (
