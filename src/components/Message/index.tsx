@@ -11,11 +11,11 @@ import "styles/tools/icons.scss";
 
 import checkOnceIcon from "assets/check-once.svg";
 import checkDoubleIcon from "assets/check-double.svg";
-import WaveLoader from "../../primitives/WaveLoader";
+import WaveLoader from "primitives/WaveLoader";
+import Avatar from "primitives/Avatar";
 import { MessageInterface } from "./types";
 import ImageFilesRow, { AlignRow } from "./ImageFilesRow";
 import { calculateStylesContentMsg } from "./helpers";
-import Avatar from "../../primitives/Avatar";
 
 interface MessagePropsInterface {
   user: {
@@ -27,10 +27,12 @@ interface MessagePropsInterface {
   isTyping?: boolean;
 }
 
-const ActionsMessage: FC<{
+interface ActionsMessagePropsInterface {
   isMe: boolean;
   isRead: boolean;
-}> = ({ isMe, isRead }) => {
+}
+
+const ActionsMessage: FC<ActionsMessagePropsInterface> = ({ isMe, isRead }) => {
   return (
     <Wrapper
       className={classNames(
