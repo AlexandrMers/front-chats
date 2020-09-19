@@ -1,0 +1,33 @@
+@import "src/styles/tools/vars";
+
+$blinkDuration: 1s;
+$waveDuration: .3333s;
+$cicleTime: .3333s;
+
+@keyframes blinkAnimation {
+  50% {
+    opacity: 1;
+  }
+}
+
+.typingIndicator {
+  will-change: transform;
+  width: auto;
+  display: flex;
+  span {
+    height: 15px;
+    width: 15px;
+    margin: 0 1px;
+    background-color: $wave-bg-color;
+    display: block;
+    border-radius: 50%;
+    opacity: 0.4;
+
+
+    @for $i from 1 through 3 {
+      &:nth-of-type(#{$i}) {
+        animation: blinkAnimation $blinkDuration  infinite ($i * $cicleTime);
+      }
+    }
+  }
+}

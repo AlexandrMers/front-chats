@@ -5,10 +5,12 @@ import { ru } from "date-fns/locale";
 export function useFormatRelativeDate(date: string) {
   const dateFormatted = useMemo(
     () =>
-      formatRelative(new Date(date), Date.now(), {
-        locale: ru,
-        weekStartsOn: 1,
-      }),
+      date
+        ? formatRelative(new Date(date), Date.now(), {
+            locale: ru,
+            weekStartsOn: 1,
+          })
+        : null,
     [date]
   );
 

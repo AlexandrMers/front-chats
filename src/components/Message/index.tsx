@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { FC, memo } from "react";
 import classNames from "classnames";
 
 import { useFormatRelativeDate } from "hooks/date";
@@ -11,27 +11,58 @@ import "styles/tools/icons.scss";
 
 import checkOnceIcon from "assets/check-once.svg";
 import checkDoubleIcon from "assets/check-double.svg";
-
-interface AttachmentFileInterface {
-  name: string;
-  url: string;
-}
+import WaveLoader from "../../primitives/WaveLoader";
+import { MessageInterface } from "./types";
+import ImageFilesRow, { AlignRow } from "./ImageFilesRow";
+import { calculateStylesContentMsg } from "./helpers";
 
 interface MessagePropsInterface {
   user: {
     name: string;
   };
-  message: {
-    avatar: string;
-    text: string;
-    date: string;
-    attachments: AttachmentFileInterface[];
-  };
+  message: MessageInterface;
   isMe?: boolean;
   isRead?: boolean;
+  isTyping?: boolean;
 }
 
-const Message = ({ message, user, isMe, isRead }: MessagePropsInterface) => {
+const ActionsMessage: FC<{
+  isMe: boolean;
+  isRead: boolean;
+}> = ({ isMe, isRead }) => {
+  return (
+    <Wrapper
+      className={classNames(
+        styleModule.messageWrapper__params,
+        isMe && styleModule.messageWrapper__params_me
+      )}
+    >
+      <div
+        className={classNames(
+          "tripplePoint",
+          styleModule.messageWrapper__tripplePoint
+        )}
+      />
+      <img
+        src={isRead ? checkDoubleIcon : checkOnceIcon}
+        alt="icon read"
+        className={classNames(
+          "iconCheck",
+          styleModule.messageWrapper__iconCheck,
+          !isRead && styleModule.messageWrapper__iconCheck_left
+        )}
+      />
+    </Wrapper>
+  );
+};
+
+const Message = ({
+  message,
+  user,
+  isMe,
+  isRead,
+  isTyping,
+}: MessagePropsInterface) => {
   const { date } = useFormatRelativeDate(message.date);
 
   return (
@@ -56,65 +87,50 @@ const Message = ({ message, user, isMe, isRead }: MessagePropsInterface) => {
           <img src={message.avatar} alt={`avatar ${user.name}`} />
         </Wrapper>
 
-        <Wrapper
-          className={
-            isMe
-              ? styleModule.messageWrapper__content_mine
-              : styleModule.messageWrapper__content
-          }
-        >
-          <p className={styleModule.messageWrapper__text}>{message.text}</p>
-        </Wrapper>
-
-        {isMe && (
+        {isTyping ? (
           <Wrapper
-            className={classNames(
-              styleModule.messageWrapper__params,
-              isMe && styleModule.messageWrapper__params_me
-            )}
+            className={classNames({
+              [styleModule.messageWrapper__content_mine]: isMe,
+              [styleModule.messageWrapper__content]: !isMe,
+              [styleModule.messageWrapper__content_lightGray]: isTyping,
+              [styleModule.messageWrapper__content_mine_lightGray]: isTyping,
+            })}
           >
-            <div
-              className={classNames(
-                "tripplePoint",
-                styleModule.messageWrapper__tripplePoint
-              )}
-            />
-            <img
-              src={isRead ? checkDoubleIcon : checkOnceIcon}
-              alt="icon read"
-              className={classNames(
-                "iconCheck",
-                styleModule.messageWrapper__iconCheck,
-                !isRead && styleModule.messageWrapper__iconCheck_left
-              )}
-            />
+            <WaveLoader />
           </Wrapper>
+        ) : message.text ? (
+          <Wrapper
+            className={classNames(calculateStylesContentMsg(isMe, isTyping))}
+          >
+            <p className={styleModule.messageWrapper__text}>{message.text}</p>
+          </Wrapper>
+        ) : (
+          <ImageFilesRow
+            message={message}
+            alignRow={isMe ? AlignRow.END : AlignRow.START}
+          />
         )}
+
+        {isMe && !isTyping && <ActionsMessage isMe={isMe} isRead={isRead} />}
       </Wrapper>
 
-      {message?.attachments.length > 0 && (
-        <Wrapper
-          className={classNames(
-            styleModule.messageWrapper__attachments,
-            isMe && styleModule.messageWrapper__attachments_me
-          )}
-        >
-          {message.attachments.map((file) => (
-            <Wrapper className={styleModule.messageWrapper__attachment}>
-              <img src={file.url} alt="file" />
-            </Wrapper>
-          ))}
-        </Wrapper>
+      {message.text && message?.attachments.length > 0 && (
+        <ImageFilesRow
+          message={message}
+          alignRow={isMe ? AlignRow.END : AlignRow.START}
+        />
       )}
 
-      <Wrapper
-        className={classNames(
-          styleModule.messageWrapper__dateWrapper,
-          isMe && styleModule.messageWrapper__dateWrapper_me
-        )}
-      >
-        <time className={styleModule.messageWrapper__date}>{date}</time>
-      </Wrapper>
+      {date && (
+        <Wrapper
+          className={classNames(
+            styleModule.messageWrapper__dateWrapper,
+            isMe && styleModule.messageWrapper__dateWrapper_me
+          )}
+        >
+          <time className={styleModule.messageWrapper__date}>{date}</time>
+        </Wrapper>
+      )}
     </Wrapper>
   );
 };
