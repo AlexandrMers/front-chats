@@ -15,6 +15,7 @@ import WaveLoader from "../../primitives/WaveLoader";
 import { MessageInterface } from "./types";
 import ImageFilesRow, { AlignRow } from "./ImageFilesRow";
 import { calculateStylesContentMsg } from "./helpers";
+import Avatar from "../../primitives/Avatar";
 
 interface MessagePropsInterface {
   user: {
@@ -78,14 +79,13 @@ const Message = ({
           isMe && styleModule.messageWrapper__contentInner_reverse
         )}
       >
-        <Wrapper
-          className={classNames(
-            styleModule.messageWrapper__avatar,
-            isMe && styleModule.messageWrapper__avatar_mine
-          )}
-        >
-          <img src={message.avatar} alt={`avatar ${user.name}`} />
-        </Wrapper>
+        <Avatar
+          className={classNames(styleModule.avatar_order, {
+            [styleModule.avatar_order_me]: isMe,
+          })}
+          user={user}
+          message={message}
+        />
 
         {isTyping ? (
           <Wrapper
@@ -93,7 +93,6 @@ const Message = ({
               [styleModule.messageWrapper__content_mine]: isMe,
               [styleModule.messageWrapper__content]: !isMe,
               [styleModule.messageWrapper__content_lightGray]: isTyping,
-              [styleModule.messageWrapper__content_mine_lightGray]: isTyping,
             })}
           >
             <WaveLoader />
