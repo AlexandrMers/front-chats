@@ -5,10 +5,13 @@ import styleModule from "./style.module.scss";
 import Wrapper from "primitives/Wrapper";
 import DialogItem from "components/DialogItem";
 
+const fakeData = [{}];
+
 const DialogItemsWrapper: FC<any> = () => {
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
-      <DialogItem />
+      <DialogItem key={1} isOnline />
+      <DialogItem key={2} isSelected />
     </Wrapper>
   );
 };

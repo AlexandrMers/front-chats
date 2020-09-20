@@ -5,20 +5,56 @@ import styleModule from "./style.module.scss";
 
 import Avatar from "primitives/Avatar";
 import classNames from "classnames";
+import BadgeCounter from "primitives/BadgeCounter";
+import { MessageInterface } from "../Message/types";
 
-const DialogItem: FC<any> = () => {
+interface UserInterface {
+  name: string;
+  avatar: string;
+  id: string;
+}
+
+interface ChatInterface {
+  user: UserInterface;
+  lastMessage: MessageInterface;
+  unreadCount: number;
+}
+
+interface DialogItemPropsInterface {
+  isSelected?: boolean;
+  isOnline?: boolean;
+  chat: ChatInterface;
+}
+
+const DialogItem: FC<DialogItemPropsInterface> = ({
+  isSelected,
+  isOnline,
+  chat,
+}) => {
+  const { lastMessage, unreadCount, user } = chat;
+
   return (
-    <div className={styleModule.dialogItem}>
+    <div
+      className={classNames(styleModule.dialogItem, {
+        [styleModule.dialogItem_isSelected]: isSelected,
+      })}
+    >
       <Avatar
         size={40}
-        avatar="https://live.staticflickr.com/65535/50339368162_ddc568be3e_c.jpg"
-        name="Светлана"
-        className={classNames(styleModule.dialogItem__avatar)}
+        avatar={user.avatar}
+        name={user.name}
+        className={classNames(styleModule.dialogItem__avatar, {
+          [styleModule.dialogItem__avatar_isOnline]: isOnline,
+        })}
       />
       <div className={styleModule.dialogItem__content}>
         <header className={styleModule.dialogItem__header}>
-          <Typography.Title className={styleModule.dialogItem__title} level={5}>
-            Светлана
+          <Typography.Title
+            ellipsis
+            className={styleModule.dialogItem__title}
+            level={5}
+          >
+            {user.name}
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>Сейчас</time>
         </header>
@@ -28,11 +64,9 @@ const DialogItem: FC<any> = () => {
             ellipsis
             className={styleModule.dialogItem__messageText}
           >
-            Текст последнего сообщения Текст последнего сообщения Текст
-            последнего сообщения Текст последнего сообщения Текст последнего
-            сообщения
+            {lastMessage.text}
           </Typography.Paragraph>
-          <div className="dialogItem__counter">3</div>
+          <BadgeCounter value={unreadCount} />
         </section>
       </div>
     </div>

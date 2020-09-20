@@ -1,0 +1,21 @@
+@import "src/styles/tools/vars";
+
+.badgeCounter {
+  background: $badge-counter-color;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__inner {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 13px;
+
+    color: $white;
+  }
+}
+
+
