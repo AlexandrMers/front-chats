@@ -1,9 +1,10 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 
 import Wrapper from "../Wrapper";
 import classNames from "classnames";
 
 import styleModule from "./style.module.scss";
+import { isEmpty } from "ramda";
 
 interface AvatarPropsInterface {
   avatar: string;
@@ -18,6 +19,8 @@ const Avatar = ({
   className,
   size = 30,
 }: AvatarPropsInterface) => {
+  const isEmptyAvatar = useMemo(() => isEmpty(avatar), [avatar]);
+
   return (
     <Wrapper
       styles={{
@@ -26,9 +29,15 @@ const Avatar = ({
         minWidth: size,
         minHeight: size,
       }}
-      className={classNames(styleModule.avatar, className)}
+      className={classNames(
+        styleModule.avatar,
+        {
+          [styleModule.avatar_isEmpty]: isEmptyAvatar,
+        },
+        className
+      )}
     >
-      <img src={avatar} alt={`avatar ${name}`} />
+      {!isEmptyAvatar && <img src={avatar} alt={`avatar ${name}`} />}
     </Wrapper>
   );
 };

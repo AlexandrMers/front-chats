@@ -1,5 +1,14 @@
+@import "src/styles/tools/vars";
+
+
 .avatar {
   display: flex;
+
+  &_isEmpty {
+    border-radius: 50%;
+    background-color: $light-gray;
+    border: 1px solid $gray_border;
+  }
 
   img {
     width: 100%;
@@ -7,4 +16,5 @@
 
     border-radius: 50%;
   }
+
 }

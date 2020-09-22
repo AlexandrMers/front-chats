@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
 
 import styleModule from "./style.module.scss";
@@ -6,38 +6,40 @@ import styleModule from "./style.module.scss";
 import Avatar from "primitives/Avatar";
 import classNames from "classnames";
 import BadgeCounter from "primitives/BadgeCounter";
-import { MessageInterface } from "../Message/types";
-
-interface UserInterface {
-  name: string;
-  avatar: string;
-  id: string;
-}
-
-interface ChatInterface {
-  user: UserInterface;
-  lastMessage: MessageInterface;
-  unreadCount: number;
-}
+import { ChatInterface } from "../../types/types";
+import formatRelative from "date-fns/format";
+import { ru } from "date-fns/locale";
 
 interface DialogItemPropsInterface {
   isSelected?: boolean;
   isOnline?: boolean;
   chat: ChatInterface;
+  onSelect: (dialogId: string) => void;
 }
 
 const DialogItem: FC<DialogItemPropsInterface> = ({
   isSelected,
   isOnline,
   chat,
+  onSelect,
 }) => {
   const { lastMessage, unreadCount, user } = chat;
+
+  const date = useMemo(
+    () =>
+      formatRelative(new Date(lastMessage.date), "HH:mm:ss", {
+        weekStartsOn: 1,
+        locale: ru,
+      }),
+    [lastMessage.date]
+  );
 
   return (
     <div
       className={classNames(styleModule.dialogItem, {
         [styleModule.dialogItem_isSelected]: isSelected,
       })}
+      onClick={() => onSelect(chat.chatId)}
     >
       <Avatar
         size={40}
@@ -56,7 +58,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           >
             {user.name}
           </Typography.Title>
-          <time className={styleModule.dialogItem__date}>Сейчас</time>
+          <time className={styleModule.dialogItem__date}>{date}</time>
         </header>
 
         <section className={styleModule.dialogItem__msgInfo}>
@@ -66,7 +68,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           >
             {lastMessage.text}
           </Typography.Paragraph>
-          <BadgeCounter value={unreadCount} />
+          {unreadCount > 0 && <BadgeCounter value={unreadCount} />}
         </section>
       </div>
     </div>
