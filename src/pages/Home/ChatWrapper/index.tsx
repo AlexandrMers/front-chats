@@ -5,6 +5,7 @@ import classNames from "classnames";
 import styleModule from "./style.module.scss";
 import Message from "components/Message";
 import Wrapper from "primitives/Wrapper";
+import MessageAudio from "../../../components/Message/MessageAudio";
 
 const ChatWrapper: FC<any> = () => {
   return (
@@ -154,6 +155,20 @@ const ChatWrapper: FC<any> = () => {
             name: "Александр",
           }}
           isMe
+        />
+
+        <MessageAudio
+          message={{
+            avatar:
+              "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
+            date: "Tue Sep 15 2020 06:00:45",
+            text: "",
+            attachments: [],
+            audio: "https://sound-pack.net/download/Sound_00619.wav",
+          }}
+          user={{
+            name: "Александр",
+          }}
         />
       </Wrapper>
     </ScrollBar>

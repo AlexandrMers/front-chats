@@ -1,15 +1,25 @@
-import React, { memo } from "react";
+import React, { CSSProperties, memo } from "react";
 import classNames from "classnames";
 
 interface WrapperPropsInterface {
   children: React.ReactNode;
   className?: any;
-  styles?: any;
+  styles?: CSSProperties;
+  appendProps?: any;
 }
 
-const Wrapper = ({ children, className, styles }: WrapperPropsInterface) => {
+const Wrapper = ({
+  children,
+  className,
+  styles,
+  appendProps,
+}: WrapperPropsInterface) => {
   return (
-    <div className={classNames("wrapper", className)} style={styles}>
+    <div
+      {...appendProps}
+      className={classNames("wrapper", className)}
+      style={styles}
+    >
       {children}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { memo } from "react";
 import classNames from "classnames";
 
 import { useFormatRelativeDate } from "hooks/date";
@@ -8,56 +8,12 @@ import Wrapper from "primitives/Wrapper";
 import styleModule from "./style.module.scss";
 
 import "styles/tools/icons.scss";
-
-import checkOnceIcon from "assets/check-once.svg";
-import checkDoubleIcon from "assets/check-double.svg";
 import WaveLoader from "primitives/WaveLoader";
 import Avatar from "primitives/Avatar";
-import { MessageInterface } from "./types";
 import ImageFilesRow, { AlignRow } from "./ImageFilesRow";
 import { calculateStylesContentMsg } from "./helpers";
-
-interface MessagePropsInterface {
-  user: {
-    name: string;
-  };
-  message: MessageInterface;
-  isMe?: boolean;
-  isRead?: boolean;
-  isTyping?: boolean;
-}
-
-interface ActionsMessagePropsInterface {
-  isMe: boolean;
-  isRead: boolean;
-}
-
-const ActionsMessage: FC<ActionsMessagePropsInterface> = ({ isMe, isRead }) => {
-  return (
-    <Wrapper
-      className={classNames(
-        styleModule.messageWrapper__params,
-        isMe && styleModule.messageWrapper__params_me
-      )}
-    >
-      <div
-        className={classNames(
-          "tripplePoint",
-          styleModule.messageWrapper__tripplePoint
-        )}
-      />
-      <img
-        src={isRead ? checkDoubleIcon : checkOnceIcon}
-        alt="icon read"
-        className={classNames(
-          "iconCheck",
-          styleModule.messageWrapper__iconCheck,
-          !isRead && styleModule.messageWrapper__iconCheck_left
-        )}
-      />
-    </Wrapper>
-  );
-};
+import { MessagePropsInterface } from "./types";
+import ActionsMessage from "./ActionsMessage/ActionsMessage";
 
 const Message = ({
   message,
