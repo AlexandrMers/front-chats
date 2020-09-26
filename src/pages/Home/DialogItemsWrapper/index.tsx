@@ -9,7 +9,7 @@ import { ChatInterface } from "types/types";
 
 const fakeData: ChatInterface[] = [
   {
-    chatId: "c1",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Когда-то давным давно",
       date: "Tue Sep 22 2020 04:40:50 GMT+0300",
@@ -25,7 +25,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c2",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Что то там случилось, и однажды",
       date: "Tue Sep 21 2020 04:12:50 GMT+0300",
@@ -40,7 +40,7 @@ const fakeData: ChatInterface[] = [
     },
   },
   {
-    chatId: "c3",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "And I'm fine, thanks a lot for your help",
       date: "Tue Sep 20 2020 04:12:50 GMT+0300",
@@ -57,7 +57,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c4",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Не всегда ты осознаешь, насколько был неправ.",
       date: "Tue Sep 22 2020 04:50:50 GMT+0300",
@@ -74,7 +74,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c5",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Эх, что бы было, если бы не ты)",
       date: "Tue Sep 22 2020 04:50:50 GMT+0300",
@@ -90,7 +90,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c6",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Возможно!",
       date: "Tue Sep 19 2020 04:50:50 GMT+0300",
@@ -107,7 +107,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c7",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Как дела твои?",
       date: "Tue Sep 16 2020 04:50:50 GMT+0300",
@@ -124,7 +124,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c8",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Все хорошо, спасибо",
       date: "Tue Sep 16 2020 01:50:50 GMT+0300",
@@ -141,7 +141,7 @@ const fakeData: ChatInterface[] = [
   },
 
   {
-    chatId: "c9",
+    chatId: Math.random().toString(),
     lastMessage: {
       text: "Ага",
       date: "Tue Sep 12 2020 01:50:50 GMT+0300",
@@ -167,22 +167,26 @@ const DialogItemsWrapper: FC<any> = () => {
         style={{
           paddingRight: 6,
         }}
-        autoHide={false}
+        autoHide
         hideTracksWhenNotNeeded
       >
-        {fakeData.map((dialog) => {
-          const isSelected = selectedDialogId === dialog.chatId;
-          return (
-            <Wrapper className={styleModule.marginFromScroll}>
-              <DialogItem
+        <>
+          {fakeData.map((dialog) => {
+            const isSelected = selectedDialogId === dialog.chatId;
+            return (
+              <Wrapper
                 key={dialog.chatId}
-                onSelect={setSelectedDialogId}
-                chat={dialog}
-                isSelected={isSelected}
-              />
-            </Wrapper>
-          );
-        })}
+                className={styleModule.marginFromScroll}
+              >
+                <DialogItem
+                  onSelect={setSelectedDialogId}
+                  chat={dialog}
+                  isSelected={isSelected}
+                />
+              </Wrapper>
+            );
+          })}
+        </>
       </ScrollBar>
     </Wrapper>
   );

@@ -32,8 +32,9 @@ const ImageFilesRow: FC<FileRowPropsInterface> = ({
       )}
     >
       {attachments.length > 0 &&
-        attachments.map((file) => (
+        attachments.map((file, index) => (
           <Wrapper
+            key={index}
             className={classNames(styleModule.attachmentsWrapper__attachment, {
               [styleModule.attachmentsWrapper__attachment_big]: isOneAttachment,
             })}

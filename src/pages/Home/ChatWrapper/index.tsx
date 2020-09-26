@@ -9,9 +9,10 @@ import MessageAudio from "../../../components/Message/MessageAudio";
 
 const ChatWrapper: FC<any> = () => {
   return (
-    <ScrollBar hideTracksWhenNotNeeded autoHide>
+    <ScrollBar hideTracksWhenNotNeeded>
       <Wrapper className={classNames(styleModule.chatWrapper)}>
         <Message
+          key={4}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -26,6 +27,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={8}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -56,6 +58,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={9}
           message={{
             avatar:
               "https://static8.depositphotos.com/1207999/1027/i/450/depositphotos_10275227-stock-photo-office-avatar-woman.jpg",
@@ -76,6 +79,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={10}
           message={{
             avatar:
               "https://static8.depositphotos.com/1207999/1027/i/450/depositphotos_10275227-stock-photo-office-avatar-woman.jpg",
@@ -91,6 +95,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={11}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -110,6 +115,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={12}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -124,6 +130,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={13}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -138,6 +145,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <Message
+          key={14}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",
@@ -158,6 +166,7 @@ const ChatWrapper: FC<any> = () => {
         />
 
         <MessageAudio
+          key={15}
           message={{
             avatar:
               "https://sun9-69.userapi.com/impf/c824201/v824201969/17341f/IfCwbiGRL7c.jpg?size=200x0&quality=90&crop=0,0,500,588&sign=9b4d43be2be378401d5bec41a9c5d5b3&ava=1",

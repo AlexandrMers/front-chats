@@ -1,13 +1,22 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import classNames from "classnames";
 
-import pauseButton from "assets/pause-button.svg";
-import playButton from "assets/play-button.svg";
-import audioBg from "assets/audio-bg.svg";
+import pauseButton from "assets/icons/pause-button.svg";
+import playButton from "assets/icons/play-button.svg";
+import audioBg from "assets/icons/audio-bg.svg";
 
 import styleModule from "../style.module.scss";
 
 import Wrapper from "primitives/Wrapper";
+
 import Avatar from "primitives/Avatar";
 import WaveLoader from "primitives/WaveLoader";
 import ActionsMessage from "../ActionsMessage/ActionsMessage";
@@ -15,6 +24,19 @@ import ActionsMessage from "../ActionsMessage/ActionsMessage";
 import { MessagePropsInterface } from "../types";
 import { useFormatRelativeDate } from "hooks/date";
 import { calculateStylesContentMsg } from "../helpers";
+import {
+  calculateRestOfTimeToPercents,
+  calculateTimeInPercents,
+  fixSymbolsNumber,
+  formatRestOfTime,
+} from "./helpers";
+import { compose } from "ramda";
+
+const useForceUpdate = () => {
+  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  return forceUpdate;
+};
 
 const MessageAudio: FC<MessagePropsInterface> = ({
   message,
@@ -25,16 +47,40 @@ const MessageAudio: FC<MessagePropsInterface> = ({
 }) => {
   const { date } = useFormatRelativeDate(message.date);
   const [isPlay, setIsPlay] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const progressBarMessage = useRef(0);
+  const restOfTimeMessage = useRef<string>(null);
+
+  const update = useForceUpdate();
+
+  const onCanPlay = useCallback(() => {
+    const audioElement = audioRef.current;
+    restOfTimeMessage.current = compose(
+      formatRestOfTime,
+      calculateRestOfTimeToPercents
+    )(audioElement.duration, audioElement.currentTime);
+    update();
+  }, [audioRef.current]);
 
   const onTimeUpdate = (e: Event) => {
     const element = e.target as HTMLAudioElement;
     const duration = element.duration;
     const currentTime = element.currentTime;
 
-    const restOfTime = duration - currentTime;
+    restOfTimeMessage.current = compose(
+      formatRestOfTime,
+      calculateRestOfTimeToPercents
+    )(duration, currentTime);
 
-    console.log("rest of time => ", restOfTime.toFixed(2));
+    progressBarMessage.current = compose(
+      Number,
+      fixSymbolsNumber(0) as (num: number) => string,
+      calculateTimeInPercents
+    )(duration, currentTime);
+
+    update();
   };
 
   useEffect(() => {
@@ -44,14 +90,21 @@ const MessageAudio: FC<MessagePropsInterface> = ({
 
     const onPlay = () => setIsPlay(true);
     const onPause = () => setIsPlay(false);
+    const onEnded = () => {
+      progressBarMessage.current = 0;
+      update();
+    };
 
     audioElement.addEventListener("playing", onPlay);
     audioElement.addEventListener("pause", onPause);
     audioElement.addEventListener("timeupdate", onTimeUpdate);
+    audioElement.addEventListener("ended", onEnded);
 
     return () => {
       audioElement.removeEventListener("playing", onPlay);
       audioElement.removeEventListener("pause", onPause);
+      audioElement.removeEventListener("timeupdate", onTimeUpdate);
+      audioElement.removeEventListener("ended", onEnded);
     };
   }, []);
 
@@ -102,7 +155,12 @@ const MessageAudio: FC<MessagePropsInterface> = ({
             )}
           >
             <Wrapper className={styleModule.messageWrapper__content_audioInner}>
-              <audio ref={audioRef} src={message.audio} />
+              <audio
+                ref={audioRef}
+                src={message.audio}
+                preload="metadata"
+                onCanPlay={onCanPlay}
+              />
               <Wrapper
                 className={
                   styleModule.messageWrapper__content_audioInner_button
@@ -121,7 +179,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
                 <img src={audioBg} alt="audio-bg" />
               </div>
               <div className={styleModule.messageAudio__totalTime}>
-                <time>0:19</time>
+                <time>{restOfTimeMessage.current}</time>
               </div>
             </Wrapper>
             <div
@@ -130,7 +188,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
                 styleModule.progressBar
               )}
               style={{
-                width: "35%",
+                width: `${progressBarMessage.current}%`,
               }}
             />
           </Wrapper>
@@ -146,7 +204,9 @@ const MessageAudio: FC<MessagePropsInterface> = ({
             isMe && styleModule.messageWrapper__dateWrapper_me
           )}
         >
-          <time className={styleModule.messageWrapper__date}>{date}</time>
+          {restOfTimeMessage.current && (
+            <time className={styleModule.messageWrapper__date}>{date}</time>
+          )}
         </Wrapper>
       )}
     </Wrapper>
