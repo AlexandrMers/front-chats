@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import classNames from "classnames";
 
-import { useFormatRelativeDate } from "hooks/date";
+import { useFormatRelativeDate } from "hooks/hooks";
 
 import Wrapper from "primitives/Wrapper";
 

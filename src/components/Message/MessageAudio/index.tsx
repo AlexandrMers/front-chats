@@ -3,11 +3,11 @@ import React, {
   memo,
   useCallback,
   useEffect,
-  useReducer,
   useRef,
-  useState,
+  useState
 } from "react";
 import classNames from "classnames";
+import { compose } from "ramda";
 
 import pauseButton from "assets/icons/pause-button.svg";
 import playButton from "assets/icons/play-button.svg";
@@ -16,34 +16,27 @@ import audioBg from "assets/icons/audio-bg.svg";
 import styleModule from "../style.module.scss";
 
 import Wrapper from "primitives/Wrapper";
-
 import Avatar from "primitives/Avatar";
 import WaveLoader from "primitives/WaveLoader";
-import ActionsMessage from "../ActionsMessage/ActionsMessage";
 
+import ActionsMessage from "../ActionsMessage/ActionsMessage";
 import { MessagePropsInterface } from "../types";
-import { useFormatRelativeDate } from "hooks/date";
-import { calculateStylesContentMsg } from "../helpers";
+import { useForceUpdate, useFormatRelativeDate } from "hooks/hooks";
+
 import {
   calculateRestOfTimeToPercents,
   calculateTimeInPercents,
   fixSymbolsNumber,
-  formatRestOfTime,
+  formatRestOfTime
 } from "./helpers";
-import { compose } from "ramda";
-
-const useForceUpdate = () => {
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
-
-  return forceUpdate;
-};
+import { calculateStylesContentMsg } from "../helpers";
 
 const MessageAudio: FC<MessagePropsInterface> = ({
   message,
   user,
   isMe,
   isRead,
-  isTyping,
+  isTyping
 }) => {
   const { date } = useFormatRelativeDate(message.date);
   const [isPlay, setIsPlay] = useState(false);
@@ -62,6 +55,8 @@ const MessageAudio: FC<MessagePropsInterface> = ({
       calculateRestOfTimeToPercents
     )(audioElement.duration, audioElement.currentTime);
     update();
+
+    // eslint-disable-next-line
   }, [audioRef.current]);
 
   const onTimeUpdate = (e: Event) => {
@@ -106,6 +101,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
       audioElement.removeEventListener("timeupdate", onTimeUpdate);
       audioElement.removeEventListener("ended", onEnded);
     };
+    // eslint-disable-next-line
   }, []);
 
   const toggleAudioPlay = () => {
@@ -113,6 +109,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
       audioRef.current.pause();
       return;
     }
+
     audioRef.current.play();
   };
 
@@ -131,7 +128,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
       >
         <Avatar
           className={classNames(styleModule.avatar_order, {
-            [styleModule.avatar_order_me]: isMe,
+            [styleModule.avatar_order_me]: isMe
           })}
           name={user.name}
           avatar={message.avatar}
@@ -142,7 +139,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
             className={classNames({
               [styleModule.messageWrapper__content_mine]: isMe,
               [styleModule.messageWrapper__content]: !isMe,
-              [styleModule.messageWrapper__content_lightGray]: isTyping,
+              [styleModule.messageWrapper__content_lightGray]: isTyping
             })}
           >
             <WaveLoader />
@@ -166,7 +163,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
                   styleModule.messageWrapper__content_audioInner_button
                 }
                 appendProps={{
-                  onClick: toggleAudioPlay,
+                  onClick: toggleAudioPlay
                 }}
               >
                 {!isPlay ? (
@@ -188,7 +185,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
                 styleModule.progressBar
               )}
               style={{
-                width: `${progressBarMessage.current}%`,
+                width: `${progressBarMessage.current}%`
               }}
             />
           </Wrapper>
