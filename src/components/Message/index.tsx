@@ -15,13 +15,7 @@ import { calculateStylesContentMsg } from "./helpers";
 import { MessagePropsInterface } from "./types";
 import ActionsMessage from "./ActionsMessage/ActionsMessage";
 
-const Message = ({
-  message,
-  user,
-  isMe,
-  isRead,
-  isTyping,
-}: MessagePropsInterface) => {
+const Message = ({ message, user, isMe, isTyping }: MessagePropsInterface) => {
   const { date } = useFormatRelativeDate(message.date);
 
   return (
@@ -39,10 +33,10 @@ const Message = ({
       >
         <Avatar
           className={classNames(styleModule.avatar_order, {
-            [styleModule.avatar_order_me]: isMe,
+            [styleModule.avatar_order_me]: isMe
           })}
           name={user.name}
-          avatar={message.avatar}
+          avatar={user.avatar}
         />
 
         {isTyping ? (
@@ -50,7 +44,7 @@ const Message = ({
             className={classNames({
               [styleModule.messageWrapper__content_mine]: isMe,
               [styleModule.messageWrapper__content]: !isMe,
-              [styleModule.messageWrapper__content_lightGray]: isTyping,
+              [styleModule.messageWrapper__content_lightGray]: isTyping
             })}
           >
             <WaveLoader />
@@ -68,7 +62,9 @@ const Message = ({
           />
         )}
 
-        {isMe && !isTyping && <ActionsMessage isMe={isMe} isRead={isRead} />}
+        {isMe && !isTyping && (
+          <ActionsMessage isMe={isMe} isRead={message.isRead} />
+        )}
       </Wrapper>
 
       {message.text && message?.attachments.length > 0 && (

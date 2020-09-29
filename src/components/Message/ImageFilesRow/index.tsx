@@ -8,7 +8,7 @@ import { calculateAlignForAttachments } from "./helpers";
 
 export enum AlignRow {
   START = "start",
-  END = "end",
+  END = "end"
 }
 
 interface FileRowPropsInterface {
@@ -18,8 +18,8 @@ interface FileRowPropsInterface {
 }
 
 const ImageFilesRow: FC<FileRowPropsInterface> = ({
-  message: { attachments, avatar, date, text },
-  alignRow = AlignRow.START,
+  message: { attachments, date, text },
+  alignRow = AlignRow.START
 }) => {
   const isOneAttachment = attachments.length === 1;
 
@@ -36,7 +36,7 @@ const ImageFilesRow: FC<FileRowPropsInterface> = ({
           <Wrapper
             key={index}
             className={classNames(styleModule.attachmentsWrapper__attachment, {
-              [styleModule.attachmentsWrapper__attachment_big]: isOneAttachment,
+              [styleModule.attachmentsWrapper__attachment_big]: isOneAttachment
             })}
           >
             <img src={file.url} alt="file" />

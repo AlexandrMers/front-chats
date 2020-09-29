@@ -4,18 +4,10 @@ import Wrapper from "primitives/Wrapper";
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 
+import styleModule from "./style.module.scss";
+
 const Home = () => (
-  <Wrapper
-    styles={{
-      display: "flex",
-      width: "100%",
-      maxWidth: 1143,
-      padding: 35,
-      height: "100%",
-      maxHeight: 600,
-      margin: "auto",
-    }}
-  >
+  <Wrapper className={styleModule.homeWrapper}>
     <DialogItemsWrapper />
     <ChatWrapper />
   </Wrapper>

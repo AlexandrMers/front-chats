@@ -35,7 +35,6 @@ const MessageAudio: FC<MessagePropsInterface> = ({
   message,
   user,
   isMe,
-  isRead,
   isTyping
 }) => {
   const { date } = useFormatRelativeDate(message.date);
@@ -131,7 +130,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
             [styleModule.avatar_order_me]: isMe
           })}
           name={user.name}
-          avatar={message.avatar}
+          avatar={user.avatar}
         />
 
         {isTyping ? (
@@ -191,7 +190,9 @@ const MessageAudio: FC<MessagePropsInterface> = ({
           </Wrapper>
         )}
 
-        {isMe && !isTyping && <ActionsMessage isMe={isMe} isRead={isRead} />}
+        {isMe && !isTyping && (
+          <ActionsMessage isMe={isMe} isRead={message.isRead} />
+        )}
       </Wrapper>
 
       {date && (
