@@ -1,20 +1,21 @@
 import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
+import { ru } from "date-fns/locale";
 
 import styleModule from "./style.module.scss";
 
 import Avatar from "primitives/Avatar";
 import classNames from "classnames";
-import BadgeCounter from "primitives/BadgeCounter";
-import { ChatInterface } from "../../types/types";
+import { ChatInterface, UserInterface } from "../../types/types";
 import formatRelative from "date-fns/format";
-import { ru } from "date-fns/locale";
+import DialogLastMessage from "./DialogLastMessage";
 
 interface DialogItemPropsInterface {
-  isSelected?: boolean;
-  isOnline?: boolean;
   chat: ChatInterface;
   onSelect: (dialogId: string) => void;
+  isSelected?: boolean;
+  isOnline?: boolean;
+  currentUser?: UserInterface;
 }
 
 const DialogItem: FC<DialogItemPropsInterface> = ({
@@ -22,6 +23,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
   isOnline,
   chat,
   onSelect,
+  currentUser
 }) => {
   const { lastMessage, unreadCount, user } = chat;
 
@@ -29,7 +31,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
     () =>
       formatRelative(new Date(lastMessage.date), "HH:mm:ss", {
         weekStartsOn: 1,
-        locale: ru,
+        locale: ru
       }),
     [lastMessage.date]
   );
@@ -37,7 +39,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
   return (
     <div
       className={classNames(styleModule.dialogItem, {
-        [styleModule.dialogItem_isSelected]: isSelected,
+        [styleModule.dialogItem_isSelected]: isSelected
       })}
       onClick={() => onSelect(chat.chatId)}
     >
@@ -46,7 +48,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
         avatar={user.avatar}
         name={user.name}
         className={classNames(styleModule.dialogItem__avatar, {
-          [styleModule.dialogItem__avatar_isOnline]: isOnline,
+          [styleModule.dialogItem__avatar_isOnline]: isOnline
         })}
       />
       <div className={styleModule.dialogItem__content}>
@@ -60,16 +62,11 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>
-
-        <section className={styleModule.dialogItem__msgInfo}>
-          <Typography.Paragraph
-            ellipsis
-            className={styleModule.dialogItem__messageText}
-          >
-            {lastMessage.text}
-          </Typography.Paragraph>
-          {unreadCount > 0 && <BadgeCounter value={unreadCount} />}
-        </section>
+        <DialogLastMessage
+          lastMessage={lastMessage}
+          unreadCount={unreadCount}
+          currentUser={currentUser}
+        />
       </div>
     </div>
   );

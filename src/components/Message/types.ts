@@ -1,3 +1,5 @@
+import { UserInterface } from "../../types/types";
+
 export interface AttachmentFileInterface {
   name: string;
   url: string;
@@ -25,9 +27,5 @@ export interface MessageInterface {
   text: string;
   date: string;
   attachments: AttachmentFileInterface[];
-  author: {
-    name: string;
-    id: string;
-    avatar: string;
-  };
+  author: UserInterface;
 }
