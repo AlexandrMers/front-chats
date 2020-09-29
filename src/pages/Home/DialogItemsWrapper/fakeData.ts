@@ -10,25 +10,26 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
-      isRead: false,
-      text: "Когда-то давным давно",
-      date: "Tue Sep 22 2020 04:40:50 GMT+0300",
+      isRead: true,
+      text: "Ага",
+
+      date: "Tue Sep 12 2020 01:50:50 GMT+0300",
       attachments: [],
-      audio: "link/;f;sdalsdlsdl",
       author: {
-        name: "Александр Авдеев",
-        avatar: "",
-        id: "1"
+        name: "Алина Транковская",
+        avatar:
+          "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/6a/6ad99bb051e1200790a756ac6537e1889d44a253.jpg",
+        id: "9"
       }
     },
-    unreadCount: 3,
+    unreadCount: 4,
     user: {
-      name: "Александр Авдеев",
-      avatar: "",
-      id: "1"
+      name: "Алина Транковская",
+      avatar:
+        "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/6a/6ad99bb051e1200790a756ac6537e1889d44a253.jpg",
+      id: "9"
     }
   },
-
   {
     chatId: Math.random().toString(),
     lastMessage: {
@@ -76,7 +77,27 @@ export const fakeData: ChatInterface[] = [
       id: "3"
     }
   },
-
+  {
+    chatId: Math.random().toString(),
+    lastMessage: {
+      isRead: false,
+      text: "Когда-то давным давно",
+      date: "Tue Sep 22 2020 04:40:50 GMT+0300",
+      attachments: [],
+      audio: "link/;f;sdalsdlsdl",
+      author: {
+        name: "Александр Авдеев",
+        avatar: "",
+        id: "1"
+      }
+    },
+    unreadCount: 3,
+    user: {
+      name: "Александр Авдеев",
+      avatar: "",
+      id: "1"
+    }
+  },
   {
     chatId: Math.random().toString(),
     lastMessage: {
@@ -105,7 +126,7 @@ export const fakeData: ChatInterface[] = [
     lastMessage: {
       isRead: true,
       text: "Эх, что бы было, если бы не ты)",
-      date: "Tue Sep 22 2020 04:50:50 GMT+0300",
+      date: "Tue Sep 22 2020 04:50:49 GMT+0300",
       attachments: [],
       author: {
         name: "Зигмунд Фрейд",
@@ -187,30 +208,6 @@ export const fakeData: ChatInterface[] = [
       avatar:
         "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/00/0085de6a4adcadfe28a8a503f26c5568e781d09b.jpg",
       id: "8"
-    }
-  },
-
-  {
-    chatId: Math.random().toString(),
-    lastMessage: {
-      isRead: true,
-      text: "Ага",
-
-      date: "Tue Sep 12 2020 01:50:50 GMT+0300",
-      attachments: [],
-      author: {
-        name: "Алина Транковская",
-        avatar:
-          "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/6a/6ad99bb051e1200790a756ac6537e1889d44a253.jpg",
-        id: "9"
-      }
-    },
-    unreadCount: 4,
-    user: {
-      name: "Алина Транковская",
-      avatar:
-        "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/6a/6ad99bb051e1200790a756ac6537e1889d44a253.jpg",
-      id: "9"
     }
   }
 ];

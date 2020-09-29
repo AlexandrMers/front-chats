@@ -1,14 +1,29 @@
 import React, { FC, memo, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
+import { compose, map, prop } from "ramda";
 
 import styleModule from "./style.module.scss";
 import Wrapper from "primitives/Wrapper";
-import DialogItem from "components/DialogItem";
-import {currentUser, fakeData} from "./fakeData";
+import { renderSortedDialogs } from "./tools";
+import { OrderSort, sortByDate } from "libs/sorters";
+import { ChatInterface } from "types/types";
+import { fakeData } from "./fakeData";
 
 const DialogItemsWrapper: FC<any> = () => {
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
+
+  console.log(
+    "sorting => ",
+
+    compose(
+      sortByDate<ChatInterface>({
+        pathToCode: ["date"],
+        order: OrderSort.DESC
+      }),
+      map(prop("lastMessage"))
+    )(fakeData)
+  );
 
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
@@ -19,25 +34,7 @@ const DialogItemsWrapper: FC<any> = () => {
         autoHide
         hideTracksWhenNotNeeded
       >
-        <>
-          {fakeData.map((dialog) => {
-            const isSelected = selectedDialogId === dialog.chatId;
-            return (
-              <Wrapper
-                key={dialog.chatId}
-                className={styleModule.marginFromScroll}
-              >
-                <DialogItem
-                  onSelect={setSelectedDialogId}
-                  chat={dialog}
-                  isSelected={isSelected}
-                  isOnline={dialog.unreadCount > 0}
-                  currentUser={currentUser}
-                />
-              </Wrapper>
-            );
-          })}
-        </>
+        <>{renderSortedDialogs(selectedDialogId, setSelectedDialogId)}</>
       </ScrollBar>
     </Wrapper>
   );
