@@ -1,4 +1,4 @@
-import { hasPath, path } from "ramda";
+import { hasPath, path, sort } from "ramda";
 
 export enum OrderSort {
   ASC = "asc",
@@ -29,7 +29,7 @@ export const sortByDate = <T>({
     return array;
   }
 
-  const sortedArrayByDates = array.sort(compareByDate<T>(pathToCode));
+  const sortedArrayByDates = sort(compareByDate<T>(pathToCode), array);
 
   return order === OrderSort.ASC
     ? sortedArrayByDates
