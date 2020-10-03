@@ -3,65 +3,55 @@ import ScrollBar from "react-custom-scrollbars";
 import { SearchOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 
-import styleModule from "./style.module.scss";
-import Wrapper from "primitives/Wrapper";
-import { renderSortedDialogs } from "./tools";
 import Input from "primitives/Input/Input";
-import { hasPath, path } from "ramda";
+import Wrapper from "primitives/Wrapper";
+
 import { fakeData } from "./fakeData";
+import { ChatInterface } from "../../../types/types";
+
+import styleModule from "./style.module.scss";
+
+import { renderSortedDialogs } from "./tools";
+import { filterChange } from "./filter";
+import { debounce } from "lodash";
+
+const filterCallback = (field: string, matchField: string) => {
+  const fieldLower = field.toLowerCase();
+  const matchValue = matchField.toLowerCase();
+  return fieldLower.includes(matchValue);
+};
 
 const DialogItemsWrapper: FC<any> = () => {
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
 
-  const [dialogs, setDialogs] = useState([]);
+  const [allDialogs, setAllDialogs] = useState([]);
+  const [filteredDialogs, setFilteredDialogs] = useState([]);
 
   useEffect(() => {
-    setDialogs(fakeData);
+    setAllDialogs(fakeData);
+    setFilteredDialogs(fakeData);
   }, []);
 
   const onChangeSearch = useCallback(
-    (value) => {
-      // if (isEmpty(value)) {
-      //   setDialogs(fakeData);
-      //   return;
-      // }
-
-      const filteredData = filterChange({
-        array: dialogs,
+    (value: string) => {
+      const filteredData = filterChange<ChatInterface, string>({
+        array: allDialogs,
         pathToElem: ["user", "name"],
-        matchField: value
+        matchField: value,
+        filterCallback
       });
 
-      setDialogs(filteredData);
+      setFilteredDialogs(filteredData);
     },
-    [dialogs, setDialogs, filterChange]
+    [allDialogs, setFilteredDialogs]
   );
-
-  function filterChange<T>({
-    pathToElem,
-    array,
-    matchField
-  }: {
-    pathToElem: string[];
-    array: T[];
-    matchField: string;
-  }) {
-    return array.filter((elem) => {
-      if (hasPath(pathToElem, elem)) {
-        return path<string>(pathToElem, elem).includes(matchField);
-      }
-
-      console.error("Указанный путь в функции фильтра не существует");
-      return false;
-    });
-  }
 
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
       <Wrapper className={styleModule.searchInput_Wrapper}>
         <Input
           prefix={<SearchOutlined className={styleModule.searchIcon} />}
-          onChange={onChangeSearch}
+          onChange={debounce(onChangeSearch, 500)}
           placeholder="Поиск среди контактов"
           className={styleModule.searchInput}
         />
@@ -76,7 +66,7 @@ const DialogItemsWrapper: FC<any> = () => {
         hideTracksWhenNotNeeded
       >
         {renderSortedDialogs({
-          dialogItems: dialogs,
+          dialogItems: filteredDialogs,
           selectedDialogId,
           setSelectedDialogId
         })}

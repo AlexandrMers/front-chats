@@ -43,6 +43,6 @@ export function renderSortedDialogs({
       })
     )(dialogItems)
   ) : (
-    <Empty />
+    <Empty description="Поиск не дал результатов" />
   );
 }

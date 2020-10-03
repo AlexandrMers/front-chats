@@ -4,12 +4,16 @@ import { InputProps } from "antd/lib/input/Input";
 import classNames from "classnames";
 
 import styledModule from "./style.module.scss";
+import { Overwrite } from "../../types/helpersType";
 
-type InputPropsInterface = InputProps & {
-  onChange?: (value: string) => void;
-  className?: any;
-  placeholder?: string;
-};
+type InputPropsInterface = Overwrite<
+  InputProps,
+  {
+    className?: any;
+    placeholder?: string;
+    onChange?: (value: string) => void;
+  }
+>;
 
 const Input = (props: InputPropsInterface) => {
   const changeInputValue = (e: ChangeEvent<HTMLInputElement>) =>
