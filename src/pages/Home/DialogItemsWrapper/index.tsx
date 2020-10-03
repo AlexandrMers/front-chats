@@ -14,6 +14,7 @@ import styleModule from "./style.module.scss";
 import { renderSortedDialogs } from "./tools";
 import { filterChange } from "./filter";
 import { debounce } from "lodash";
+import { LeftColumnHeader } from "./LeftColumnHeader";
 
 const filterCallback = (field: string, matchField: string) => {
   const fieldLower = field.toLowerCase();
@@ -46,31 +47,38 @@ const DialogItemsWrapper: FC<any> = () => {
     [allDialogs, setFilteredDialogs]
   );
 
+  const createNewChat = useCallback(() => {
+    console.log("create chat at");
+  }, []);
+
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
-      <Wrapper className={styleModule.searchInput_Wrapper}>
-        <Input
-          prefix={<SearchOutlined className={styleModule.searchIcon} />}
-          onChange={debounce(onChangeSearch, 500)}
-          placeholder="Поиск среди контактов"
-          className={styleModule.searchInput}
-        />
-      </Wrapper>
+      <LeftColumnHeader onNewChat={createNewChat} />
+      <Wrapper className={styleModule.leftColumn__inner}>
+        <Wrapper className={styleModule.searchInput_Wrapper}>
+          <Input
+            prefix={<SearchOutlined className={styleModule.searchIcon} />}
+            onChange={debounce(onChangeSearch, 500)}
+            placeholder="Поиск среди контактов"
+            className={styleModule.searchInput}
+          />
+        </Wrapper>
 
-      <ScrollBar
-        style={{
-          paddingRight: 6,
-          height: "calc(100% - 68px)"
-        }}
-        autoHide
-        hideTracksWhenNotNeeded
-      >
-        {renderSortedDialogs({
-          dialogItems: filteredDialogs,
-          selectedDialogId,
-          setSelectedDialogId
-        })}
-      </ScrollBar>
+        <ScrollBar
+          style={{
+            paddingRight: 6,
+            height: "calc(100% - 80px)"
+          }}
+          autoHide
+          hideTracksWhenNotNeeded
+        >
+          {renderSortedDialogs({
+            dialogItems: filteredDialogs,
+            selectedDialogId,
+            setSelectedDialogId
+          })}
+        </ScrollBar>
+      </Wrapper>
     </Wrapper>
   );
 };
