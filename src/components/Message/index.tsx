@@ -15,7 +15,7 @@ import { calculateStylesContentMsg } from "./helpers";
 import { MessagePropsInterface } from "./types";
 import ActionsMessage from "./ActionsMessage/ActionsMessage";
 
-const Message = ({ message, user, isMe, isTyping }: MessagePropsInterface) => {
+const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
   const { date } = useFormatRelativeDate(message.date);
 
   return (
@@ -35,8 +35,8 @@ const Message = ({ message, user, isMe, isTyping }: MessagePropsInterface) => {
           className={classNames(styleModule.avatar_order, {
             [styleModule.avatar_order_me]: isMe
           })}
-          name={user.name}
-          avatar={user.avatar}
+          name={message.author.name}
+          avatar={message.author.avatar}
         />
 
         {isTyping ? (

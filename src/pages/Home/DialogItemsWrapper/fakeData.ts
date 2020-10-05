@@ -10,9 +10,9 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 1,
       isRead: true,
       text: "Ага",
-
       date: "Tue Sep 12 2020 01:50:50 GMT+0300",
       attachments: [],
       author: {
@@ -33,6 +33,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 2,
       isRead: true,
       text: "Что то там случилось, и однажды",
       date: "Tue Sep 21 2020 04:12:50 GMT+0300",
@@ -58,6 +59,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 3,
       isRead: false,
       text: "And I'm fine, thanks a lot for your help",
       date: "Tue Sep 20 2020 04:12:50 GMT+0300",
@@ -80,6 +82,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 4,
       isRead: false,
       text: "Когда-то давным давно",
       date: "Tue Sep 22 2020 04:40:50 GMT+0300",
@@ -101,6 +104,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 6,
       isRead: true,
       text: "Не всегда ты осознаешь, насколько был неправ.",
       date: "Tue Sep 22 2020 04:50:50 GMT+0300",
@@ -124,6 +128,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 8,
       isRead: true,
       text: "Эх, что бы было, если бы не ты)",
       date: "Tue Sep 22 2020 04:50:49 GMT+0300",
@@ -145,6 +150,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 10,
       isRead: false,
       text: "Возможно!",
       date: "Tue Sep 19 2020 04:50:50 GMT+0300",
@@ -168,6 +174,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 11,
       isRead: true,
       text: "Как дела твои?",
       date: "Tue Sep 16 2020 04:50:50 GMT+0300",
@@ -191,6 +198,7 @@ export const fakeData: ChatInterface[] = [
   {
     chatId: Math.random().toString(),
     lastMessage: {
+      id: 12,
       isRead: false,
       text: "Все хорошо, спасибо",
       date: "Tue Sep 16 2020 01:50:50 GMT+0300",

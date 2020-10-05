@@ -22,7 +22,7 @@ const filterCallback = (field: string, matchField: string) => {
   return fieldLower.includes(matchValue);
 };
 
-const DialogItemsWrapper: FC<any> = () => {
+const DialogItemsWrapper: FC = () => {
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
 
   const [allDialogs, setAllDialogs] = useState([]);

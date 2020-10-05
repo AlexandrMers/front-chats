@@ -11,17 +11,13 @@ export interface ActionsMessagePropsInterface {
 }
 
 export interface MessagePropsInterface {
-  user: {
-    name: string;
-    avatar: string;
-    id: string;
-  };
   message: MessageInterface;
   isMe?: boolean;
   isTyping?: boolean;
 }
 
 export interface MessageInterface {
+  id: number;
   audio?: string;
   isRead: boolean;
   text: string;
