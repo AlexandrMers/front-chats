@@ -33,7 +33,6 @@ import { calculateStylesContentMsg } from "../helpers";
 
 const MessageAudio: FC<MessagePropsInterface> = ({
   message,
-  user,
   isMe,
   isTyping
 }) => {
@@ -129,8 +128,8 @@ const MessageAudio: FC<MessagePropsInterface> = ({
           className={classNames(styleModule.avatar_order, {
             [styleModule.avatar_order_me]: isMe
           })}
-          name={user.name}
-          avatar={user.avatar}
+          name={message.author.name}
+          avatar={message.author.avatar}
         />
 
         {isTyping ? (

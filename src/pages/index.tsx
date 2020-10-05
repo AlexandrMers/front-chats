@@ -12,13 +12,13 @@ function useRouter() {
 const animationsValues = {
   from: {
     opacity: 0.5,
-    transform: "scale(0.5)",
+    transform: "scale(0.5)"
   },
   enter: { opacity: 1, transform: "scale(1)" },
   leave: {
     opacity: 0,
-    transform: "scale(0.5)",
-  },
+    transform: "scale(0.5)"
+  }
 };
 
 const Routes = () => {
@@ -31,7 +31,13 @@ const Routes = () => {
   );
 
   return transitions.map(({ item, props: transition, key }) => (
-    <animated.div key={key} style={transition}>
+    <animated.div
+      key={key}
+      style={{
+        ...transition,
+        overflow: "hidden"
+      }}
+    >
       <Switch location={item}>
         <Route exact path={["/", "/auth"]} component={Auth} />
         <Route exact path="/home" component={Home} />

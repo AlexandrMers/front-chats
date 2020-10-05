@@ -1,18 +1,12 @@
 @import "src/styles/tools/vars";
 
 .messageWrapper {
-
   max-width: 430px;
   width: 100%;
 
   &_mine {
     align-self: flex-end;
   }
-
-  &:not(:last-child) {
-    margin-bottom: 15px;
-  }
-
 
   &__params {
     position: relative;
@@ -92,10 +86,12 @@
       }
     }
 
-    &_audio {
+    .messageWrapper &_audio {
       position: relative;
       overflow: hidden;
       flex-grow: 1;
+
+      background:$blue-message;
     }
   }
 
@@ -125,6 +121,7 @@
     background: $white;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.0220444);
     border-radius: 12px 12px 0 12px;
+    border: 1px solid $border-message-me;
 
     padding: 13px 18px;
     order: 2;
@@ -136,10 +133,8 @@
     }
   }
 
-
   &__dateWrapper {
     margin-left: 47px;
-
 
     &_me {
       margin-left: 0;
@@ -159,6 +154,7 @@
   }
 
 }
+
 
 .messageAudio__progressBar {
   position: absolute;

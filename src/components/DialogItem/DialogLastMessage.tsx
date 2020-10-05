@@ -1,8 +1,7 @@
 import React, { memo } from "react";
 import { Typography } from "antd";
 
-import { MessageInterface } from "../Message/types";
-import { UserInterface } from "types/types";
+import { MessageInterface, UserInterface } from "types/types";
 import styleModule from "./style.module.scss";
 
 import BadgeCounter from "primitives/BadgeCounter";

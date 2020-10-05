@@ -1,14 +1,28 @@
-import { MessageInterface } from "../components/Message/types";
-
 export interface UserInterface {
   name: string;
   avatar: string;
   id: string;
+  isOnline?: boolean;
 }
 
 export interface ChatInterface {
   chatId: string;
   user: UserInterface;
-  lastMessage: MessageInterface;
   unreadCount: number;
+  messages: MessageInterface[];
+}
+
+export interface AttachmentFileInterface {
+  name: string;
+  url: string;
+}
+
+export interface MessageInterface {
+  id: number;
+  audio?: string;
+  isRead: boolean;
+  text: string;
+  date: string;
+  attachments: AttachmentFileInterface[];
+  author: UserInterface;
 }

@@ -5,8 +5,6 @@ import classNames from "classnames";
 
 import Input from "primitives/Input/Input";
 import Wrapper from "primitives/Wrapper";
-
-import { fakeData } from "./fakeData";
 import { ChatInterface } from "../../../types/types";
 
 import styleModule from "./style.module.scss";
@@ -15,6 +13,7 @@ import { renderSortedDialogs } from "./tools";
 import { filterChange } from "./filter";
 import { debounce } from "lodash";
 import { LeftColumnHeader } from "./LeftColumnHeader";
+import { propEq } from "ramda";
 
 const filterCallback = (field: string, matchField: string) => {
   const fieldLower = field.toLowerCase();
@@ -22,16 +21,49 @@ const filterCallback = (field: string, matchField: string) => {
   return fieldLower.includes(matchValue);
 };
 
-const DialogItemsWrapper: FC<any> = () => {
+interface DialogItemsWrapperPropsInterface {
+  chats: ChatInterface[];
+  onSelectChat: (selectedChat: ChatInterface) => void;
+}
+
+const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
+  onSelectChat,
+  chats
+}) => {
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
+
+  useEffect(() => {
+    const selectedChat = chats.find(propEq("chatId", selectedDialogId));
+
+    if (!selectedChat) return undefined;
+    onSelectChat(selectedChat);
+  }, [selectedDialogId, chats, onSelectChat]);
 
   const [allDialogs, setAllDialogs] = useState([]);
   const [filteredDialogs, setFilteredDialogs] = useState([]);
 
   useEffect(() => {
-    setAllDialogs(fakeData);
-    setFilteredDialogs(fakeData);
-  }, []);
+    setAllDialogs(chats);
+    setFilteredDialogs(chats);
+  }, [chats]);
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.keyCode !== 27 || !selectedDialogId) return;
+
+      setSelectedDialogId(null);
+      onSelectChat(null);
+    },
+    [selectedDialogId, onSelectChat]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown, selectedDialogId]);
 
   const onChangeSearch = useCallback(
     (value: string) => {

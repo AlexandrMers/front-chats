@@ -17,7 +17,7 @@ const Avatar = ({
   avatar,
   name,
   className,
-  size = 30,
+  size = 30
 }: AvatarPropsInterface) => {
   const isEmptyAvatar = useMemo(() => isEmpty(avatar), [avatar]);
 
@@ -27,7 +27,7 @@ const Avatar = ({
         width: size,
         height: size,
         minWidth: size,
-        minHeight: size,
+        minHeight: size
       }}
       className={classNames(
         styleModule.avatar,

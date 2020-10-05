@@ -1,0 +1,7 @@
+@import "src/styles/tools/vars";
+
+.circle {
+  display: inline-block;
+  border-radius: 50%;
+  background: $online-color;
+}
