@@ -1,6 +1,7 @@
 import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
 import { ru } from "date-fns/locale";
+import {last} from "ramda";
 
 import styleModule from "./style.module.scss";
 
@@ -25,15 +26,19 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
   onSelect,
   currentUser
 }) => {
-  const { lastMessage, unreadCount, user } = chat;
+  const { messages, unreadCount, user } = chat;
+
+
+  const extractedLastMessage = useMemo(() => last(messages), [messages]);
+
 
   const date = useMemo(
     () =>
-      formatRelative(new Date(lastMessage.date), "HH:mm:ss", {
+      formatRelative(new Date(extractedLastMessage.date), "HH:mm:ss", {
         weekStartsOn: 1,
         locale: ru
       }),
-    [lastMessage.date]
+    [extractedLastMessage.date]
   );
 
   return (
@@ -63,7 +68,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>
         <DialogLastMessage
-          lastMessage={lastMessage}
+          lastMessage={extractedLastMessage}
           unreadCount={unreadCount}
           currentUser={currentUser}
         />

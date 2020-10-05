@@ -15,7 +15,7 @@ import { currentUser } from "./fakeData";
 export function renderSortedDialogs({
   selectedDialogId,
   setSelectedDialogId,
-  dialogItems
+  dialogItems,
 }: {
   selectedDialogId: string;
   setSelectedDialogId: (value: string) => void;
@@ -26,7 +26,10 @@ export function renderSortedDialogs({
       map<ChatInterface, ReactElement>((dialog) => {
         const isSelected = selectedDialogId === dialog.chatId;
         return (
-          <Wrapper key={dialog.chatId} className={styleModule.marginFromScroll}>
+          <Wrapper
+            key={dialog.chatId}
+            className={styleModule.marginFromScroll}
+          >
             <DialogItem
               onSelect={setSelectedDialogId}
               chat={dialog}

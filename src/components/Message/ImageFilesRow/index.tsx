@@ -2,8 +2,10 @@ import React, { FC, memo } from "react";
 import classNames from "classnames";
 
 import styleModule from "./style.module.scss";
+import { MessageInterface } from "types/types";
+
 import Wrapper from "primitives/Wrapper";
-import { MessageInterface } from "../types";
+
 import { calculateAlignForAttachments } from "./helpers";
 
 export enum AlignRow {
