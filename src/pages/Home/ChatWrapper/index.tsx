@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useState } from "react";
+import React, { FC, memo, useCallback } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -10,7 +10,8 @@ import Wrapper from "primitives/Wrapper";
 import ChatHeader from "./ChatHeader";
 
 import { ChatInterface, UserInterface } from "types/types";
-import InputMessage from "../../../components/InputMessage";
+
+import InputMessage from "components/InputMessage";
 
 interface ChatWrapperPropsInterface {
   chat: ChatInterface;
@@ -22,17 +23,9 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
     console.log("click on action by dialog");
   }, []);
 
-  const [inputValue, setInputValue] = useState("");
-
-  const onInput = useCallback(setInputValue, [setInputValue]);
-
   return (
     <Wrapper
-      styles={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column"
-      }}
+        className={styleModule.mainWrapper}
     >
       <ChatHeader onClick={onActionDialog} user={chat.user} />
 
@@ -71,11 +64,9 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
         </Wrapper>
       </ScrollBar>
 
-      <InputMessage
-        placeholder={"Введите текст сообщения..."}
-        value={inputValue}
-        onChange={onInput}
-      />
+      <Wrapper className={styleModule.chatWrapper__inputWrapper}>
+        <InputMessage placeholder={"Введите текст сообщения..."} />
+      </Wrapper>
     </Wrapper>
   );
 };
