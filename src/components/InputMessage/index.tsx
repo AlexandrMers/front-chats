@@ -30,7 +30,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
   const changeValueInput = useCallback(
     (e: FormEvent<HTMLDivElement>) => {
       const element = e.target as HTMLElement;
-      setInputValue(element.textContent);
+      setInputValue(!element.textContent ? "" : element.innerText);
     },
     [setInputValue]
   );
