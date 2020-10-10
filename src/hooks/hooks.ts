@@ -1,6 +1,13 @@
-import { useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
+import debounce from "lodash/debounce";
+import {
+  calculateScrollBottom,
+  saveScrollPosition,
+  scrollToBottom
+} from "../libs/scroll";
+import { ScrollViewRefInterface } from "../types/helpersType";
 
 export function useFormatRelativeDate(date: string) {
   const dateFormatted = useMemo(
@@ -24,4 +31,121 @@ export const useForceUpdate = () => {
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
   return forceUpdate;
+};
+
+export function useChatScrollManager({
+  observableElement,
+  observerConfig,
+  scrollRef,
+  callback
+}: {
+  observableElement: React.RefObject<HTMLElement>;
+  observerConfig: MutationObserverInit;
+  scrollRef: React.RefObject<ScrollViewRefInterface>;
+  callback?: (isLoaded: boolean) => void;
+}) {
+  const initialScrolledBottom = useRef(false);
+  const isPined = useRef(true);
+  const observer = useRef<MutationObserver>();
+
+  const initializeObserver = useRef(false);
+
+  const isUpPosition = useRef(false);
+
+  const oldHeightScroll = useRef(0);
+
+  useScrollObserver({
+    scroll: scrollRef.current?.view,
+    debounceDelay: 200,
+    callback: ({ target }) => {
+      const pinned = calculateScrollBottom(target) === 0;
+      const isUp = target.scrollTop < 50;
+      if (isUpPosition.current !== isUp) {
+        isUpPosition.current = isUp;
+      }
+      if (isPined.current !== pinned) {
+        isPined.current = pinned;
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (!observableElement.current || !scrollRef.current?.view) {
+      return undefined;
+    }
+
+    const element = scrollRef.current?.view;
+
+    oldHeightScroll.current = element.scrollHeight;
+
+    observer.current = new MutationObserver(() => {
+      if (!initialScrolledBottom.current) {
+        scrollToBottom(element, "auto");
+        initialScrolledBottom.current = true;
+        return;
+      }
+
+      if (isUpPosition.current) {
+        saveScrollPosition(element, oldHeightScroll);
+
+        oldHeightScroll.current = element.scrollHeight;
+      }
+
+      if (!isPined.current) {
+        return;
+      }
+
+      scrollToBottom(element, "smooth");
+    });
+
+    observer.current.observe(observableElement.current, observerConfig);
+
+    if (!initializeObserver.current) {
+      initializeObserver.current = true;
+      callback(initializeObserver.current);
+    }
+
+    return () => observer.current.disconnect();
+    // eslint-disable-next-line
+  }, [
+    scrollRef.current,
+    observableElement.current,
+    isPined.current,
+    initialScrolledBottom.current,
+    isUpPosition.current
+  ]);
+
+  return {
+    scrollToBottom: () => {
+      isPined.current = true;
+      scrollToBottom(scrollRef.current.view, "smooth");
+    }
+  };
+}
+
+export const useScrollObserver = (
+  {
+    scroll,
+    debounceDelay,
+    callback
+  }: {
+    scroll: HTMLElement;
+    debounceDelay: number;
+    callback: (event: { target: HTMLInputElement }) => void;
+  },
+  deps: any[] = []
+) => {
+  const debouncedRefScroll = useRef<any>();
+
+  useEffect(() => {
+    if (!scroll) return undefined;
+
+    debouncedRefScroll.current = debounce(callback, debounceDelay);
+
+    scroll.addEventListener("scroll", debouncedRefScroll.current);
+
+    return () =>
+      scroll.removeEventListener("scroll", debouncedRefScroll.current);
+    // eslint-disable-next-line
+  }, [scroll, ...deps]);
 };

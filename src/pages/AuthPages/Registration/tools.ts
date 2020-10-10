@@ -1,18 +1,31 @@
-import { validateRegistrationForm } from "libs/validators";
+import {
+  RegistrationFormInterface,
+  validateRegistrationForm
+} from "libs/validators";
+import { FormikConfig } from "formik/dist/types";
 
-export const configFormRegistrationFormik = {
-  initialTouched: {
-    email: false,
-    password: false,
-    password2: false,
-    name: false,
-  },
+export const configFormRegistrationFormik: Omit<
+  FormikConfig<RegistrationFormInterface>,
+  "onSubmit"
+> = {
   initialValues: {
+    name: "",
     email: "",
     password: "",
-    password2: "",
-    name: "",
+    password2: ""
   },
-  enableReinitialize: true,
-  validate: validateRegistrationForm(),
+  validateOnChange: true,
+  initialTouched: {
+    name: false,
+    email: false,
+    password: false,
+    password2: false
+  },
+  validate: validateRegistrationForm,
+  initialErrors: {
+    name: "",
+    email: "",
+    password: "",
+    password2: ""
+  }
 };

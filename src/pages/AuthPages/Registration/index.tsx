@@ -6,7 +6,7 @@ import { Form } from "antd";
 import {
   MailOutlined,
   SecurityScanOutlined,
-  UserOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 
 import styleModule from "pages/AuthPages/style.module.scss";
@@ -21,7 +21,7 @@ import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
 import {
   fieldValidate,
   helpViewForFormik,
-  RegistrationFormInterface,
+  RegistrationFormInterface
 } from "libs/validators";
 import { configFormRegistrationFormik } from "./tools";
 
@@ -33,12 +33,12 @@ const RegistrationPage = () => {
     values,
     errors,
     touched,
-    isValid,
+    isValid
   } = useFormik<RegistrationFormInterface>({
     ...configFormRegistrationFormik,
     onSubmit: (values: RegistrationFormInterface) => {
       alert(JSON.stringify(values, null, 2));
-    },
+    }
   });
 
   const [isSuccessRegistration] = useState(false);
@@ -70,10 +70,10 @@ const RegistrationPage = () => {
             >
               <Input
                 id="email"
-                type="email"
                 placeholder="email"
+                name="email"
                 prefix={<MailOutlined style={{ opacity: 0.5 }} />}
-                onChange={handleChange}
+                onChange={handleChange("email")}
                 onBlur={handleBlur}
                 value={values.email}
               />
@@ -83,8 +83,8 @@ const RegistrationPage = () => {
               className={styleModule.wrapperAuth__input}
               name="name"
               validateStatus={fieldValidate(touched.name, errors.name)}
-              help={helpViewForFormik(touched.name, errors.name)}
               hasFeedback={touched.name}
+              help={helpViewForFormik(touched.name, errors.name)}
             >
               <Input
                 id="name"
@@ -92,7 +92,7 @@ const RegistrationPage = () => {
                 type="text"
                 placeholder="Ваше имя"
                 value={values.name}
-                onChange={handleChange}
+                onChange={handleChange("name")}
                 onBlur={handleBlur}
                 prefix={<UserOutlined style={{ opacity: 0.5 }} />}
               />
@@ -110,7 +110,7 @@ const RegistrationPage = () => {
                 type="password"
                 placeholder="Пароль"
                 value={values.password}
-                onChange={handleChange}
+                onChange={handleChange("password")}
                 onBlur={handleBlur}
                 prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
               />
@@ -132,7 +132,7 @@ const RegistrationPage = () => {
                 type="password"
                 placeholder="Повторите пароль"
                 value={values.password2}
-                onChange={handleChange}
+                onChange={handleChange("password2")}
                 onBlur={handleBlur}
                 prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
               />

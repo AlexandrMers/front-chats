@@ -1,4 +1,4 @@
-import React, { CSSProperties, memo } from "react";
+import React, { CSSProperties, FC, memo } from "react";
 import classNames from "classnames";
 
 interface WrapperPropsInterface {
@@ -8,12 +8,12 @@ interface WrapperPropsInterface {
   appendProps?: any;
 }
 
-const Wrapper = ({
+const Wrapper: FC<WrapperPropsInterface> = ({
   children,
   className,
   styles,
-  appendProps,
-}: WrapperPropsInterface) => {
+  appendProps
+}) => {
   return (
     <div
       {...appendProps}
