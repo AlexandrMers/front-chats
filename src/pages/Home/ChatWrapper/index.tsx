@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback } from "react";
+import React, { FC, memo, useCallback, useRef, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -12,6 +12,8 @@ import ChatHeader from "./ChatHeader";
 import { ChatInterface, UserInterface } from "types/types";
 
 import InputMessage from "components/InputMessage";
+import { useChatScrollManager } from "../../../hooks/hooks";
+import { ScrollbarsOverrideType } from "../../../types/helpersType";
 
 interface ChatWrapperPropsInterface {
   chat: ChatInterface;
@@ -23,10 +25,26 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
     console.log("click on action by dialog");
   }, []);
 
+  const scrollRef = useRef<ScrollbarsOverrideType>(null);
+  const refMessagesWrapper = useRef(null);
+
+  const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);
+
+  useChatScrollManager({
+    observableElement: refMessagesWrapper,
+    scrollRef,
+    observerConfig: {
+      childList: true,
+      subtree: false,
+      attributes: false
+    },
+    callback: (isLoaded) => {
+      setIsLoadedMessagesWrapper(isLoaded);
+    }
+  });
+
   return (
-    <Wrapper
-        className={styleModule.mainWrapper}
-    >
+    <Wrapper className={styleModule.mainWrapper}>
       <ChatHeader onClick={onActionDialog} user={chat.user} />
 
       <ScrollBar
@@ -35,37 +53,44 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
           flex: "1 0 0"
         }}
         hideTracksWhenNotNeeded
+        ref={scrollRef}
       >
-        <Wrapper className={classNames(styleModule.chatWrapper)}>
+        <Wrapper
+          appendProps={{
+            ref: refMessagesWrapper
+          }}
+          className={classNames(styleModule.chatWrapper)}
+        >
           <>
-            {chat.messages.map((message) => {
-              const isAudioMsg = !!message.audio;
+            {isLoadedMessagesWrapper &&
+              chat.messages.map((message) => {
+                const isAudioMsg = !!message.audio;
 
-              return (
-                <Wrapper
-                  className={styleModule.messageWrapper}
-                  key={message.id}
-                >
-                  {isAudioMsg ? (
-                    <MessageAudio
-                      message={message}
-                      isMe={currentUser.id === message.author.id}
-                    />
-                  ) : (
-                    <Message
-                      message={message}
-                      isMe={currentUser.id === message.author.id}
-                    />
-                  )}
-                </Wrapper>
-              );
-            })}
+                return (
+                  <Wrapper
+                    className={styleModule.messageWrapper}
+                    key={message.id}
+                  >
+                    {isAudioMsg ? (
+                      <MessageAudio
+                        message={message}
+                        isMe={currentUser.id === message.author.id}
+                      />
+                    ) : (
+                      <Message
+                        message={message}
+                        isMe={currentUser.id === message.author.id}
+                      />
+                    )}
+                  </Wrapper>
+                );
+              })}
           </>
         </Wrapper>
       </ScrollBar>
 
       <Wrapper className={styleModule.chatWrapper__inputWrapper}>
-        <InputMessage placeholder={"Введите текст сообщения..."} />
+        <InputMessage placeholder="Введите текст сообщения..." />
       </Wrapper>
     </Wrapper>
   );

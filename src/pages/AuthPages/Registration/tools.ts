@@ -2,13 +2,12 @@ import {
   RegistrationFormInterface,
   validateRegistrationForm
 } from "libs/validators";
-import { FormikConfig, FormikErrors } from "formik/dist/types";
+import { FormikConfig } from "formik/dist/types";
 
-interface valuesParamsInterface {
-  [key: string]: string;
-}
-
-export const configFormRegistrationFormik: FormikConfig<RegistrationFormInterface> = {
+export const configFormRegistrationFormik: Omit<
+  FormikConfig<RegistrationFormInterface>,
+  "onSubmit"
+> = {
   initialValues: {
     name: "",
     email: "",
@@ -28,8 +27,5 @@ export const configFormRegistrationFormik: FormikConfig<RegistrationFormInterfac
     email: "",
     password: "",
     password2: ""
-  },
-  onSubmit: (values: RegistrationFormInterface) => {
-    alert(JSON.stringify(values, null, 2));
   }
 };

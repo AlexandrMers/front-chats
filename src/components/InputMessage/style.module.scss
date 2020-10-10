@@ -5,11 +5,14 @@
   position: relative;
   border-radius: 4px;
 
-  min-height: 40px;
-  max-height: 160px;
-  overflow-y: auto;
-
   transition: box-shadow ease .2s;
+
+  &__smiles {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
 
   &_focused {
     box-shadow: 0 0 0 1px $blue-message;
@@ -17,7 +20,8 @@
 
   &__placeholder {
     position: absolute;
-    top: 13px;
+    top: 50%;
+    transform: translateY(-50%);
     left: 40px;
     opacity: .3;
 
@@ -32,6 +36,45 @@
     height: 100%;
 
     outline: transparent;
+
+    min-height: 40px;
+    max-height: 160px;
+    overflow-y: auto;
   }
 
+
+  &__actionMessageWrap {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    & > .input__button:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+}
+
+
+.icon_common {
+  font-size: 18px;
+  opacity: .3;
+  cursor: pointer;
+  transition: opacity .1s ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.input__button {
+  &[disabled] {
+     & > .icon_common:hover {
+      opacity: .3;
+      cursor: initial;
+    }
+  }
 }

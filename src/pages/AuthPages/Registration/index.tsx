@@ -21,9 +21,9 @@ import SuccessNotifyRegistration from "./SuccessNotifyRegistration";
 import {
   fieldValidate,
   helpViewForFormik,
-  RegistrationFormInterface,
-  validateRegistrationForm
+  RegistrationFormInterface
 } from "libs/validators";
+import { configFormRegistrationFormik } from "./tools";
 
 const RegistrationPage = () => {
   const {
@@ -35,19 +35,7 @@ const RegistrationPage = () => {
     touched,
     isValid
   } = useFormik<RegistrationFormInterface>({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      password2: ""
-    },
-    initialTouched: {
-      name: false,
-      email: false,
-      password: false,
-      password2: false
-    },
-    validate: validateRegistrationForm,
+    ...configFormRegistrationFormik,
     onSubmit: (values: RegistrationFormInterface) => {
       alert(JSON.stringify(values, null, 2));
     }

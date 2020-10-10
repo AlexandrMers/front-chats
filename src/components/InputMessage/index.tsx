@@ -11,6 +11,12 @@ import Wrapper from "primitives/Wrapper";
 
 import styleModule from "./style.module.scss";
 import classNames from "classnames";
+import {
+  AudioOutlined,
+  PictureOutlined,
+  SendOutlined,
+  SmileOutlined
+} from "@ant-design/icons";
 
 interface InputMessagePropsInterface {
   defaultInputValue?: string;
@@ -48,6 +54,13 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
         [styleModule.input_focused]: isFocusInput
       })}
     >
+      <SmileOutlined
+        className={classNames(
+          styleModule.input__smiles,
+          styleModule.icon_common
+        )}
+      />
+
       {!!placeholder && !inputValue && (
         <span
           onClick={() => inputRef.current && inputRef.current.focus()}
@@ -71,6 +84,20 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
         }}
         tabIndex={2}
       />
+
+      <div className={styleModule.input__actionMessageWrap}>
+        <button className={styleModule.input__button}  disabled={true} onClick={() => console.log("click")}>
+          <PictureOutlined className={classNames(styleModule.icon_common)} />
+        </button>
+
+        <button className={styleModule.input__button} onClick={() => console.log("click")}>
+          <AudioOutlined className={classNames(styleModule.icon_common)} />
+        </button>
+
+        <button className={styleModule.input__button} onClick={() => console.log("click")}>
+          <SendOutlined className={classNames(styleModule.icon_common)} />
+        </button>
+      </div>
     </Wrapper>
   );
 };
