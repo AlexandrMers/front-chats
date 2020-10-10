@@ -8,23 +8,29 @@ export interface RegistrationFormInterface {
   name: string;
 }
 
-export function validateRegistrationForm() {
-  return ({ password, password2, email, name }: RegistrationFormInterface) => {
-    const errors: {
-      [key: string]: string;
-    } = {
-      email: validateEmail(email),
-      password: validatePassword(password),
-      password2: validateMatchPasswords(password, password2),
-      name: validateName(name),
-    };
-
-    return excludeUndefinedFromErrors(errors);
+export const validateRegistrationForm = ({
+  password2,
+  password,
+  email,
+  name
+}: RegistrationFormInterface) => {
+  const errors: {
+    [key: string]: string;
+  } = {
+    email: validateEmail(email),
+    password: validatePassword(password),
+    password2: validateMatchPasswords(password, password2),
+    name: validateName(name)
   };
-}
 
-export const helpViewForFormik = (touchedField: boolean, errorField: string) =>
-  touchedField && !!errorField && errorField;
+  return excludeUndefinedFromErrors(errors);
+};
+
+export const helpViewForFormik = (touched: boolean, errorField: string) => {
+  if (touched && !!errorField) {
+    return errorField;
+  }
+};
 
 export const fieldValidate = (touched: boolean, errorField: string) =>
   touched && !!errorField ? "error" : !errorField ? "success" : null;
@@ -43,8 +49,9 @@ export const validatePassword = (password: string) =>
     ? "Невалидный пароль"
     : undefined;
 
-export const validateName = (name: string) =>
-  !name ? "Обязательное поле" : undefined;
+export const validateName = (name: string) => {
+  return !name ? "Обязательное поле" : undefined;
+};
 
 export const validateMatchPasswords = (password1: string, password2: string) =>
   password1 !== password2 ? "Пароли не совпадают" : undefined;
