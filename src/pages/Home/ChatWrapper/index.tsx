@@ -9,15 +9,14 @@ import Message from "components/Message";
 import Wrapper from "primitives/Wrapper";
 import ChatHeader from "./ChatHeader";
 
-import { ChatInterface, UserInterface } from "types/types";
-
 import InputMessage from "components/InputMessage";
 import { useChatScrollManager } from "../../../hooks/hooks";
 import { ScrollbarsOverrideType } from "../../../types/helpersType";
+import { ChatInterface, UserInterface } from "../../../types/types";
 
 interface ChatWrapperPropsInterface {
-  chat: ChatInterface;
   currentUser: UserInterface;
+  chat: ChatInterface;
 }
 
 const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {

@@ -1,32 +1,56 @@
-import React, { memo, useState } from "react";
+import React, { FC, memo, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { Empty } from "antd";
+import { WechatOutlined } from "@ant-design/icons";
+
+import { StateInterface } from "../../state/store";
+import { getAllDialogs } from "../../state/dialogs/thunk";
 
 import Wrapper from "primitives/Wrapper";
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 
 import styleModule from "./style.module.scss";
-import { fakeData } from "./DialogItemsWrapper/fakeData";
-import { ChatInterface } from "../../types/types";
-import { Empty } from "antd";
-import { WechatOutlined } from "@ant-design/icons";
 
-const Home = () => {
+import { ChatInterface, UserInterface } from "../../types/types";
+import { getCurrentUser } from "../../state/user/thunk/getCurrentUser";
+
+interface HomeCmpInterface {
+  dialogs: ChatInterface[];
+  currentUser: UserInterface;
+  getAllDialogs: () => void;
+  getCurrentUser: () => void;
+}
+
+const Home: FC<HomeCmpInterface> = ({
+  dialogs,
+  currentUser,
+  getAllDialogs,
+  getCurrentUser
+}) => {
   const [selectedChat, setSelectedChat] = useState<ChatInterface>(null);
+
+  useEffect(() => {
+    getAllDialogs();
+    getCurrentUser();
+    // eslint-disable-next-line
+  }, []);
+
+  if (!currentUser.id) {
+    //TODO - Здесь должен будет быть лоадер, который будет крутиться, пока не получена информация о текущем авторизованном пользователе.
+    return null;
+  }
 
   return (
     <Wrapper className={styleModule.homeWrapper}>
-      <DialogItemsWrapper chats={fakeData} onSelectChat={setSelectedChat} />
+      <DialogItemsWrapper chats={dialogs} onSelectChat={setSelectedChat} />
       <>
         {selectedChat ? (
           <ChatWrapper
-            key={selectedChat.chatId}
-            currentUser={{
-              isOnline: true,
-              name: "Александр Авдеев",
-              avatar: "",
-              id: "1"
-            }}
+            key={selectedChat.id}
             chat={selectedChat}
+            currentUser={currentUser}
           />
         ) : (
           <Wrapper className={styleModule.chatWrapper}>
@@ -54,4 +78,19 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+const mapStateToProps = (state: StateInterface) => {
+  const dialogs = state.dialogs.dialogs;
+  const currentUser = state.user;
+
+  return {
+    dialogs,
+    currentUser
+  };
+};
+
+const HomeCmp = compose<FC<HomeCmpInterface>>(
+  memo,
+  connect(mapStateToProps, { getAllDialogs, getCurrentUser })
+)(Home);
+
+export default HomeCmp;

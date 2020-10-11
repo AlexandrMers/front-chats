@@ -33,7 +33,7 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
 
   useEffect(() => {
-    const selectedChat = chats.find(propEq("chatId", selectedDialogId));
+    const selectedChat = chats.find(propEq("id", selectedDialogId));
 
     if (!selectedChat) return undefined;
     onSelectChat(selectedChat);

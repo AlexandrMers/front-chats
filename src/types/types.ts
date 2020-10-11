@@ -6,7 +6,7 @@ export interface UserInterface {
 }
 
 export interface ChatInterface {
-  chatId: string;
+  id: string;
   user: UserInterface;
   unreadCount: number;
   messages: MessageInterface[];

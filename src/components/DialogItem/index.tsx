@@ -1,7 +1,7 @@
 import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
 import { ru } from "date-fns/locale";
-import {last} from "ramda";
+import { last } from "ramda";
 
 import styleModule from "./style.module.scss";
 
@@ -28,9 +28,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
 }) => {
   const { messages, unreadCount, user } = chat;
 
-
   const extractedLastMessage = useMemo(() => last(messages), [messages]);
-
 
   const date = useMemo(
     () =>
@@ -46,7 +44,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
       className={classNames(styleModule.dialogItem, {
         [styleModule.dialogItem_isSelected]: isSelected
       })}
-      onClick={() => onSelect(chat.chatId)}
+      onClick={() => onSelect(chat.id)}
     >
       <Avatar
         size={40}
