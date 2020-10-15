@@ -4,8 +4,9 @@ import { compose } from "redux";
 import { Empty } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 
-import { StateInterface } from "../../state/store";
-import { getAllDialogs } from "../../state/dialogs/thunk";
+import { StateInterface } from "state/store";
+import { getAllDialogs } from "state/dialogs/thunk";
+import { getCurrentUser } from "state/user/thunk/getCurrentUser";
 
 import Wrapper from "primitives/Wrapper";
 import ChatWrapper from "./ChatWrapper";
@@ -14,7 +15,6 @@ import DialogItemsWrapper from "./DialogItemsWrapper";
 import styleModule from "./style.module.scss";
 
 import { ChatInterface, UserInterface } from "../../types/types";
-import { getCurrentUser } from "../../state/user/thunk/getCurrentUser";
 
 interface HomeCmpInterface {
   dialogs: ChatInterface[];

@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { Form } from "antd";
@@ -43,6 +43,46 @@ const RegistrationPage = () => {
 
   const [isSuccessRegistration] = useState(false);
 
+  const validateStatusEmail = useMemo(
+    () => fieldValidate(touched.email, errors.email),
+    [touched.email, errors.email]
+  );
+
+  const helpViewEmail = useMemo(
+    () => helpViewForFormik(touched.email, errors.email),
+    [touched.email, errors.email]
+  );
+
+  const validateStatusName = useMemo(
+    () => fieldValidate(touched.name, errors.name),
+    [touched.name, errors.name]
+  );
+
+  const helpViewName = useMemo(
+    () => helpViewForFormik(touched.name, errors.name),
+    [touched.name, errors.name]
+  );
+
+  const validateStatusPassword = useMemo(
+    () => fieldValidate(touched.password, errors.password),
+    [touched.password, errors.password]
+  );
+
+  const helpViewPassword = useMemo(
+    () => helpViewForFormik(touched.password, errors.password),
+    [touched.password, errors.password]
+  );
+
+  const validateStatusPasswordRepeat = useMemo(
+    () => fieldValidate(touched.password2, errors.password2),
+    [touched.password2, errors.password2]
+  );
+
+  const helpViewPasswordRepeat = useMemo(
+    () => helpViewForFormik(touched.password2, errors.password2),
+    [touched.password2, errors.password2]
+  );
+
   return (
     <Wrapper className={styleModule.wrapperAuth}>
       <header className={styleModule.wrapperAuth__header}>
@@ -64,9 +104,9 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="email"
-              validateStatus={fieldValidate(touched.email, errors.email)}
+              validateStatus={validateStatusEmail}
               hasFeedback={touched.email}
-              help={helpViewForFormik(touched.email, errors.email)}
+              help={helpViewEmail}
             >
               <Input
                 id="email"
@@ -82,9 +122,9 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="name"
-              validateStatus={fieldValidate(touched.name, errors.name)}
+              validateStatus={validateStatusName}
               hasFeedback={touched.name}
-              help={helpViewForFormik(touched.name, errors.name)}
+              help={helpViewName}
             >
               <Input
                 id="name"
@@ -101,8 +141,8 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="password"
-              validateStatus={fieldValidate(touched.password, errors.password)}
-              help={helpViewForFormik(touched.password, errors.password)}
+              validateStatus={validateStatusPassword}
+              help={helpViewPassword}
               hasFeedback={touched.password}
             >
               <Input
@@ -119,12 +159,9 @@ const RegistrationPage = () => {
             <Form.Item
               className={styleModule.wrapperAuth__input}
               name="password2"
-              validateStatus={fieldValidate(
-                touched.password2,
-                errors.password2
-              )}
+              validateStatus={validateStatusPasswordRepeat}
               hasFeedback={touched.password2}
-              help={helpViewForFormik(touched.password2, errors.password2)}
+              help={helpViewPasswordRepeat}
             >
               <Input
                 id="password2"

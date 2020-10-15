@@ -1,3 +1,5 @@
+import { AuthorizationInterface } from "../pages/AuthPages/Auth";
+
 const regExpEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 const regExpPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i;
 
@@ -20,7 +22,21 @@ export const validateRegistrationForm = ({
     email: validateEmail(email),
     password: validatePassword(password),
     password2: validateMatchPasswords(password, password2),
-    name: validateName(name)
+    name: validateRequiredField(name)
+  };
+
+  return excludeUndefinedFromErrors(errors);
+};
+
+export const validateAuthForm = ({
+  password,
+  username
+}: AuthorizationInterface) => {
+  const errors: {
+    [key: string]: string;
+  } = {
+    username: validateRequiredField(username),
+    password: validateRequiredField(password)
   };
 
   return excludeUndefinedFromErrors(errors);
@@ -49,7 +65,7 @@ export const validatePassword = (password: string) =>
     ? "Невалидный пароль"
     : undefined;
 
-export const validateName = (name: string) => {
+export const validateRequiredField = (name: string) => {
   return !name ? "Обязательное поле" : undefined;
 };
 

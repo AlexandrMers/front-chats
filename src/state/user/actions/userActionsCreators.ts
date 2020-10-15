@@ -6,5 +6,9 @@ export const userActionsCreators = {
     ({
       type: TypeActions.CURRENT_USER__GET_CURRENT_USER,
       payload: currentUserInfo
+    } as const),
+  authUserActionCreator: () =>
+    ({
+      type: TypeActions.CURRENT_USER__AUTH
     } as const)
 };

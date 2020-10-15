@@ -1,6 +1,6 @@
 import { InferActionsTypes } from "../../types";
 import { userActionsCreators } from "../actions/userActionsCreators";
 
-export type getCurrentUserActionType = InferActionsTypes<
+export type userActionType = InferActionsTypes<
   typeof userActionsCreators
 >;
