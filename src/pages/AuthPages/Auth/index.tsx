@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { Form } from "antd";
@@ -19,118 +19,131 @@ import {
   helpViewForFormik,
   validateAuthForm
 } from "libs/validators";
+import { RouteComponentProps, withRouter } from "react-router";
 
 export interface AuthorizationInterface {
   username: string;
   password: string;
 }
 
-const AuthPage = ({ toRegister }: { toRegister: () => void }) => {
-  const {
-    handleSubmit,
-    handleBlur,
-    handleChange,
-    values,
-    errors,
-    touched,
-    isValid
-  } = useFormik<AuthorizationInterface>({
-    initialValues: {
-      username: "",
-      password: ""
-    },
-    validate: validateAuthForm,
-    onSubmit: (_values: AuthorizationInterface) => {
-      setAuthDispatch();
-    }
-  });
+interface AuthPagePropsInterface extends RouteComponentProps {
+  toRegister: () => void;
+}
 
-  const isAuth = useSelector<StateInterface>(
-    createSelector(
-      (state) => state.user.isAuth,
-      (isAuth) => isAuth
-    ),
-    shallowEqual
-  );
+const AuthPage = withRouter(
+  ({ toRegister, history }: AuthPagePropsInterface) => {
+    const {
+      handleSubmit,
+      handleBlur,
+      handleChange,
+      values,
+      errors,
+      touched,
+      isValid
+    } = useFormik<AuthorizationInterface>({
+      initialValues: {
+        username: "",
+        password: ""
+      },
+      validate: validateAuthForm,
+      onSubmit: (_values: AuthorizationInterface) => {
+        setAuthDispatch();
+      }
+    });
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const setAuthDispatch = useCallback(
-    () => dispatch(userActionsCreators.authUserActionCreator()),
-    [dispatch]
-  );
+    const setAuthDispatch = useCallback(
+      () => dispatch(userActionsCreators.authUserActionCreator()),
+      [dispatch]
+    );
 
-  return (
-    <Wrapper className={styleModule.wrapperAuth}>
-      <header className={styleModule.wrapperAuth__header}>
-        <h1 className={styleModule.wrapperAuth__title}>Войти в аккаунт</h1>
-        <p className={styleModule.wrapperAuth__text}>
-          Пожалуйста, войдите в свой аккаунт
-        </p>
-      </header>
+    const isAuth = useSelector<StateInterface>(
+      createSelector(
+        (state) => state.user.isAuth,
+        (isAuth) => isAuth
+      ),
+      shallowEqual
+    );
 
-      <WhiteBlock className={styleModule.wrapperAuth__form} withShadow>
-        <Form
-          className={styleModule.authForm__form}
-          name="authForm"
-          onSubmitCapture={handleSubmit}
-        >
-          <Form.Item
-            className={styleModule.wrapperAuth__input}
-            name="username"
-            validateStatus={fieldValidate(touched.username, errors.username)}
-            hasFeedback={touched.username}
-            help={helpViewForFormik(touched.username, errors.username)}
+    useEffect(() => {
+      if (!isAuth) return;
+      history.replace("/home");
+      // eslint-disable-next-line
+    }, [isAuth]);
+
+    return (
+      <Wrapper className={styleModule.wrapperAuth}>
+        <header className={styleModule.wrapperAuth__header}>
+          <h1 className={styleModule.wrapperAuth__title}>Войти в аккаунт</h1>
+          <p className={styleModule.wrapperAuth__text}>
+            Пожалуйста, войдите в свой аккаунт
+          </p>
+        </header>
+
+        <WhiteBlock className={styleModule.wrapperAuth__form} withShadow>
+          <Form
+            className={styleModule.authForm__form}
+            name="authForm"
+            onSubmitCapture={handleSubmit}
           >
-            <Input
+            <Form.Item
+              className={styleModule.wrapperAuth__input}
               name="username"
-              type="text"
-              onChange={handleChange("username")}
-              onBlur={handleBlur("username")}
-              placeholder="Логин"
-              value={values.username}
-              prefix={<UserOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+              validateStatus={fieldValidate(touched.username, errors.username)}
+              hasFeedback={touched.username}
+              help={helpViewForFormik(touched.username, errors.username)}
+            >
+              <Input
+                name="username"
+                type="text"
+                onChange={handleChange("username")}
+                onBlur={handleBlur("username")}
+                placeholder="Логин"
+                value={values.username}
+                prefix={<UserOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Form.Item
-            className={styleModule.wrapperAuth__input}
-            name="password"
-            validateStatus={fieldValidate(touched.password, errors.password)}
-            hasFeedback={touched.password}
-            help={helpViewForFormik(touched.password, errors.password)}
-          >
-            <Input
-              type="password"
+            <Form.Item
+              className={styleModule.wrapperAuth__input}
               name="password"
-              onChange={handleChange("password")}
-              onBlur={handleBlur("password")}
-              placeholder="Пароль"
-              prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
-            />
-          </Form.Item>
+              validateStatus={fieldValidate(touched.password, errors.password)}
+              hasFeedback={touched.password}
+              help={helpViewForFormik(touched.password, errors.password)}
+            >
+              <Input
+                type="password"
+                name="password"
+                onChange={handleChange("password")}
+                onBlur={handleBlur("password")}
+                placeholder="Пароль"
+                prefix={<SecurityScanOutlined style={{ opacity: 0.5 }} />}
+              />
+            </Form.Item>
 
-          <Button
-            className={styleModule.authForm__button}
-            type="primary"
-            htmlType="submit"
-            disabled={!isValid}
-          >
-            Войти в аккаунт
-          </Button>
-        </Form>
-        <Wrapper className={styleModule.authForm__linkWrapper}>
-          <Button
-            type="text"
-            onClick={toRegister}
-            className={styleModule.authForm__link}
-          >
-            Зарегистрироваться
-          </Button>
-        </Wrapper>
-      </WhiteBlock>
-    </Wrapper>
-  );
-};
+            <Button
+              className={styleModule.authForm__button}
+              type="primary"
+              htmlType="submit"
+              disabled={!isValid}
+            >
+              Войти в аккаунт
+            </Button>
+          </Form>
+          <Wrapper className={styleModule.authForm__linkWrapper}>
+            <Button
+              type="text"
+              onClick={toRegister}
+              className={styleModule.authForm__link}
+            >
+              Зарегистрироваться
+            </Button>
+          </Wrapper>
+        </WhiteBlock>
+      </Wrapper>
+    );
+  }
+);
 
 export default memo(AuthPage);

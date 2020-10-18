@@ -1,7 +1,7 @@
 import { combineReducers, compose, createStore, applyMiddleware } from "redux";
 import thunkReact from "redux-thunk";
 
-import dialogsReducer from "./dialogs/reducers";
+import dialogsReducer from "./dialogs/reducers/dialogsReducer";
 import { userReducer } from "./user/reducers/userReducer";
 
 const rootReducer = combineReducers({

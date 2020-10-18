@@ -13,11 +13,21 @@ export const dialogsActionsCreator = {
         dialogs
       }
     } as const),
-  setSelectedDialog: (dialogId: string) =>
+  setSelectedDialog: (selectedDialog: ChatInterface) =>
     ({
       type: TypeActions.DIALOGS__SELECT_DIALOG,
       payload: {
-        dialogId
+        selectedDialog
       }
+    } as const),
+
+  setLoadingAllDialogs: () =>
+    ({
+      type: TypeActions.DIALOGS__LOADING
+    } as const),
+
+  setLoadingSelectedDialog: () =>
+    ({
+      type: TypeActions.DIALOGS__SELECT_DIALOG_LOADING
     } as const)
 };

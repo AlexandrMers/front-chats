@@ -6,7 +6,7 @@ const Auth = () => {
   const [isRegisterView, setIsRegisterView] = useState(false);
 
   return isRegisterView ? (
-    <RegistrationPage  />
+    <RegistrationPage />
   ) : (
     <AuthPage toRegister={() => setIsRegisterView(true)} />
   );

@@ -1,52 +1,100 @@
-import React, { FC, memo, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React, { FC, memo, useCallback, useEffect } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Empty } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
+import { createSelector } from "reselect";
 
 import { StateInterface } from "state/store";
-import { getAllDialogs } from "state/dialogs/thunk";
-import { getCurrentUser } from "state/user/thunk/getCurrentUser";
+import { getAllDialogs, getSelectedDialog } from "state/dialogs/thunk";
+import { getCurrentUser as getCurrentUserThunk } from "state/user/thunk/getCurrentUser";
 
 import Wrapper from "primitives/Wrapper";
+import Loader from "primitives/Loader";
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 
 import styleModule from "./style.module.scss";
+import { SelectedPropsToHomeCmpInterfacce } from "./types";
 
-import { ChatInterface, UserInterface } from "../../types/types";
+import {
+  combineSelectorStateForHomeCmp,
+  selectPropsFromStateForHomeCmp
+} from "./lib";
 
-interface HomeCmpInterface {
-  dialogs: ChatInterface[];
-  currentUser: UserInterface;
-  getAllDialogs: () => void;
-  getCurrentUser: () => void;
-}
+const Home: FC = () => {
+  const dispatch = useDispatch();
 
-const Home: FC<HomeCmpInterface> = ({
-  dialogs,
-  currentUser,
-  getAllDialogs,
-  getCurrentUser
-}) => {
-  const [selectedChat, setSelectedChat] = useState<ChatInterface>(null);
+  const onSelectChatDispatch = useCallback(
+    (id: string) => dispatch(getSelectedDialog(id)),
+    [dispatch]
+  );
+
+  const getDialogs = useCallback(() => dispatch(getAllDialogs()), [dispatch]);
+
+  const getCurrentUser = useCallback(() => dispatch(getCurrentUserThunk()), [
+    dispatch
+  ]);
+
+  const {
+    selectedChat,
+    getLoadingSelectedChat,
+    currentUser,
+    allDialogs,
+    getAllDialogsLoading
+  } = useSelector<StateInterface, SelectedPropsToHomeCmpInterfacce>(
+    createSelector(
+      selectPropsFromStateForHomeCmp,
+      combineSelectorStateForHomeCmp
+    ),
+    shallowEqual
+  );
 
   useEffect(() => {
-    getAllDialogs();
+    getDialogs();
     getCurrentUser();
     // eslint-disable-next-line
   }, []);
 
-  if (!currentUser.id) {
-    //TODO - Здесь должен будет быть лоадер, который будет крутиться, пока не получена информация о текущем авторизованном пользователе.
-    return null;
+  const onSelectChat = useCallback((selectedChatId: string) => {
+    onSelectChatDispatch(selectedChatId);
+    // eslint-disable-next-line
+  }, []);
+
+  if (getAllDialogsLoading) {
+    return (
+      <Wrapper
+        styles={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <Loader />
+      </Wrapper>
+    );
   }
 
   return (
     <Wrapper className={styleModule.homeWrapper}>
-      <DialogItemsWrapper chats={dialogs} onSelectChat={setSelectedChat} />
+      {!!allDialogs && (
+        <DialogItemsWrapper chats={allDialogs} onSelectChat={onSelectChat} />
+      )}
       <>
-        {selectedChat ? (
+        {getLoadingSelectedChat ? (
+          <Wrapper
+            styles={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <Loader />
+          </Wrapper>
+        ) : !!selectedChat ? (
           <ChatWrapper
             key={selectedChat.id}
             chat={selectedChat}
@@ -78,19 +126,4 @@ const Home: FC<HomeCmpInterface> = ({
   );
 };
 
-const mapStateToProps = (state: StateInterface) => {
-  const dialogs = state.dialogs.dialogs;
-  const currentUser = state.user;
-
-  return {
-    dialogs,
-    currentUser
-  };
-};
-
-const HomeCmp = compose<FC<HomeCmpInterface>>(
-  memo,
-  connect(mapStateToProps, { getAllDialogs, getCurrentUser })
-)(Home);
-
-export default HomeCmp;
+export default memo(Home);

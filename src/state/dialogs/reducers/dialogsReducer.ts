@@ -4,12 +4,16 @@ import { dialogsActionCreatorType } from "../actions/dialogsActionCreators";
 
 interface DialogsStateInterface {
   dialogs: ChatInterface[];
-  selectedDialogId: string;
+  dialogsLoading: boolean;
+  selectedDialog: ChatInterface;
+  selectedDialogLoading: boolean;
 }
 
 const initialState: DialogsStateInterface = {
-  dialogs: [],
-  selectedDialogId: null
+  dialogs: null,
+  dialogsLoading: false,
+  selectedDialog: null,
+  selectedDialogLoading: false
 };
 
 export default (
@@ -17,16 +21,32 @@ export default (
   action: dialogsActionCreatorType
 ) => {
   switch (action.type) {
+    case TypeActions.DIALOGS__LOADING:
+      return {
+        ...state,
+        dialogsLoading: true
+      };
+
     case TypeActions.DIALOGS__GET_ALL_DIALOGS:
       return {
         ...state,
-        dialogs: action.payload.dialogs
+        dialogs: action.payload.dialogs,
+        dialogsLoading: false
+      };
+
+    case TypeActions.DIALOGS__SELECT_DIALOG_LOADING:
+      return {
+        ...state,
+        selectedDialogLoading: true
       };
 
     case TypeActions.DIALOGS__SELECT_DIALOG:
       return {
         ...state,
-        selectedDialogId: action.payload.dialogId
+        selectedDialog: {
+          ...action.payload.selectedDialog
+        },
+        selectedDialogLoading: false
       };
 
     default:

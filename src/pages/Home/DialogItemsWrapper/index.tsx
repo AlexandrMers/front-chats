@@ -23,7 +23,7 @@ const filterCallback = (field: string, matchField: string) => {
 
 interface DialogItemsWrapperPropsInterface {
   chats: ChatInterface[];
-  onSelectChat: (selectedChat: ChatInterface) => void;
+  onSelectChat: (selectedChatId: string) => void;
 }
 
 const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
@@ -36,7 +36,7 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
     const selectedChat = chats.find(propEq("id", selectedDialogId));
 
     if (!selectedChat) return undefined;
-    onSelectChat(selectedChat);
+    onSelectChat(selectedChat.id);
   }, [selectedDialogId, chats, onSelectChat]);
 
   const [allDialogs, setAllDialogs] = useState([]);

@@ -9,17 +9,27 @@ type getAllDialogsTypeThunkCreator = InferActionsTypes<
   typeof dialogsActionsCreator
 >;
 
-type ProfileThunkCreatorType<RType> = ThunkAction<
+type GetAllDialogsThunkCreator<RType> = ThunkAction<
   RType,
   StateInterface,
   unknown,
   getAllDialogsTypeThunkCreator
 >;
 
-export const getAllDialogs = (): ProfileThunkCreatorType<
+export const getAllDialogs = (): GetAllDialogsThunkCreator<
   Promise<void>
 > => async (dispatch) => {
+  dispatch(dialogsActionsCreator.setLoadingAllDialogs());
   const dialogs = await dialogsAPI.getAllDialogs();
 
   dispatch(dialogsActionsCreator.getAllDialogsActionCreator(dialogs));
+};
+
+export const getSelectedDialog = (
+  id: string
+): GetAllDialogsThunkCreator<Promise<void>> => async (dispatch) => {
+  dispatch(dialogsActionsCreator.setLoadingSelectedDialog());
+  const selectedDialog = await dialogsAPI.getCurrentDialog(id);
+
+  dispatch(dialogsActionsCreator.setSelectedDialog(selectedDialog));
 };
