@@ -17,6 +17,7 @@ import {
   SendOutlined,
   SmileOutlined
 } from "@ant-design/icons";
+import FieldUpload, { FileAccept } from "../../primitives/FieldUpload";
 
 interface InputMessagePropsInterface {
   defaultInputValue?: string;
@@ -60,7 +61,6 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           styleModule.icon_common
         )}
       />
-
       {!!placeholder && !inputValue && (
         <span
           onClick={() => inputRef.current && inputRef.current.focus()}
@@ -82,19 +82,37 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           if (!isFocusInput) return;
           setIsFocusInput(false);
         }}
-        tabIndex={2}
       />
 
       <div className={styleModule.input__actionMessageWrap}>
-        <button className={styleModule.input__button}  disabled={true} onClick={() => console.log("click")}>
-          <PictureOutlined className={classNames(styleModule.icon_common)} />
-        </button>
+        <FieldUpload
+          onFilesLoaded={(files) => {
+            console.log("filesCheck => ", files);
+          }}
+          view={(openDialog) => {
+            return (
+              <button
+                onClick={openDialog}
+                className={styleModule.input__button}
+              >
+                <PictureOutlined
+                  className={classNames(styleModule.icon_common)}
+                />
+              </button>
+            );
+          }}
+          accept={FileAccept.IMAGE}
+          multiple
+        />
 
-        <button className={styleModule.input__button} onClick={() => console.log("click")}>
+        <button className={styleModule.input__button}>
           <AudioOutlined className={classNames(styleModule.icon_common)} />
         </button>
 
-        <button className={styleModule.input__button} onClick={() => console.log("click")}>
+        <button
+          className={styleModule.input__button}
+          onClick={() => console.log("click")}
+        >
           <SendOutlined className={classNames(styleModule.icon_common)} />
         </button>
       </div>
