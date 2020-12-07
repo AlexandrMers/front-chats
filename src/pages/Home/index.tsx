@@ -61,8 +61,6 @@ const Home: FC = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log("selectedChat => ", selectedChat);
-
   if (getAllDialogsLoading) {
     return (
       <Wrapper
