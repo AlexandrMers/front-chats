@@ -43,9 +43,7 @@ export default (
     case TypeActions.DIALOGS__SELECT_DIALOG:
       return {
         ...state,
-        selectedDialog: {
-          ...action.payload.selectedDialog
-        },
+        selectedDialog: action.payload.selectedDialog,
         selectedDialogLoading: false
       };
 

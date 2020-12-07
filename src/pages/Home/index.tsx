@@ -1,6 +1,7 @@
 import React, { FC, memo, useCallback, useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Empty } from "antd";
+
 import { WechatOutlined } from "@ant-design/icons";
 import { createSelector } from "reselect";
 
@@ -8,8 +9,8 @@ import { StateInterface } from "state/store";
 import { getAllDialogs, getSelectedDialog } from "state/dialogs/thunk";
 import { getCurrentUser as getCurrentUserThunk } from "state/user/thunk/getCurrentUser";
 
-import Wrapper from "primitives/Wrapper";
 import Loader from "primitives/Loader";
+import Wrapper from "primitives/Wrapper";
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 
@@ -59,6 +60,8 @@ const Home: FC = () => {
     onSelectChatDispatch(selectedChatId);
     // eslint-disable-next-line
   }, []);
+
+  console.log("selectedChat => ", selectedChat);
 
   if (getAllDialogsLoading) {
     return (

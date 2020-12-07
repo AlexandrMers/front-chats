@@ -29,7 +29,12 @@ export const getSelectedDialog = (
   id: string
 ): GetAllDialogsThunkCreator<Promise<void>> => async (dispatch) => {
   dispatch(dialogsActionsCreator.setLoadingSelectedDialog());
-  const selectedDialog = await dialogsAPI.getCurrentDialog(id);
 
+  if (!id) {
+    dispatch(dialogsActionsCreator.setSelectedDialog(null));
+    return;
+  }
+
+  const selectedDialog = await dialogsAPI.getCurrentDialog(id);
   dispatch(dialogsActionsCreator.setSelectedDialog(selectedDialog));
 };
