@@ -8,19 +8,20 @@ import React, {
 } from "react";
 import { Upload } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import classNames from "classnames";
+import { EmojiData } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 
 import Wrapper from "primitives/Wrapper";
 
 import styleModule from "./style.module.scss";
-import classNames from "classnames";
 import {
   AudioOutlined,
   PictureOutlined,
-  SendOutlined,
-  SmileOutlined
+  SendOutlined
 } from "@ant-design/icons";
 import FieldUpload, { FileAccept } from "../../primitives/FieldUpload";
 import { ExtendedFile } from "./types";
+import EmojiPicker from "../EmojiPicker";
 
 interface InputMessagePropsInterface {
   defaultInputValue?: string;
@@ -61,9 +62,11 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
   useEffect(() => {
     if (!inputRef.current) return undefined;
 
+    //@ts-ignore
     inputRef.current.textContent = inputValue;
+    focusDiv(inputRef.current);
     // eslint-disable-next-line
-  }, []);
+  }, [inputValue]);
 
   const changeFileList = useCallback((files) => {
     setFileList(formatFilesData(files));
@@ -74,6 +77,19 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
     setFileList(filterFileListById(data.uid));
   };
 
+  const focusDiv = (element: HTMLDivElement) => {
+    element.focus();
+    document.execCommand("selectAll", false, null);
+    document.getSelection().collapseToEnd();
+  };
+
+  const handlerEmoji = useCallback(
+    ({ colons }: EmojiData) => {
+      setInputValue((inpValue) => `${inpValue} ${colons} `.trim());
+    },
+    [setInputValue]
+  );
+
   return (
     <>
       <Wrapper
@@ -81,12 +97,14 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           [styleModule.input_focused]: isFocusInput
         })}
       >
-        <SmileOutlined
+        <EmojiPicker
+          addEmojiHandler={handlerEmoji}
           className={classNames(
             styleModule.input__smiles,
             styleModule.icon_common
           )}
         />
+
         {!!placeholder && !inputValue && (
           <span
             onClick={() => inputRef.current && inputRef.current.focus()}
