@@ -1,15 +1,10 @@
-import React, {
-  FC,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import React, { FC, FormEvent, useCallback, useRef, useState } from "react";
 import { Upload } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import classNames from "classnames";
 import { EmojiData } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
+
+import reactStringReplace from "react-string-replace";
 
 import Wrapper from "primitives/Wrapper";
 
@@ -22,9 +17,9 @@ import {
 import FieldUpload, { FileAccept } from "../../primitives/FieldUpload";
 import { ExtendedFile } from "./types";
 import EmojiPicker from "../EmojiPicker";
+import { Emoji } from "emoji-mart";
 
 interface InputMessagePropsInterface {
-  defaultInputValue?: string;
   placeholder?: string;
 }
 
@@ -36,37 +31,58 @@ const formatFilesData = (files: File[]): ExtendedFile[] =>
     uid: uuidv4()
   }));
 
+const getEmojiHtml = (colons: string) => {
+  return (
+    <span
+      dangerouslySetInnerHTML={{
+        // @ts-ignore
+        __html: Emoji({
+          html: true,
+          set: "apple",
+          emoji: colons,
+          size: 16
+        })
+      }}
+    />
+  ).toString();
+};
+
 const filterFileListById = (id: string) => (prevFileList: ExtendedFile[]) =>
   prevFileList.filter((file) => file.uid !== id);
 
-const InputMessage: FC<InputMessagePropsInterface> = ({
-  placeholder,
-  defaultInputValue
-}) => {
+const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
   const inputRef = useRef<HTMLDivElement>(null);
 
-  const [inputValue, setInputValue] = useState<string>(defaultInputValue);
+  const [value, setValue] = useState<string>();
+
+  const changeValueInput = useCallback(
+    (e: FormEvent<HTMLDivElement>) => {
+      const element = e.target as HTMLElement;
+      setValue(element.textContent);
+    },
+    [setValue]
+  );
+
+  console.log("value ", value);
 
   const [isFocusInput, setIsFocusInput] = useState(false);
 
   const [fileList, setFileList] = useState<ExtendedFile[]>([]);
 
-  const changeValueInput = useCallback(
-    (e: FormEvent<HTMLDivElement>) => {
-      const element = e.target as HTMLElement;
-      setInputValue(!element.textContent ? "" : element.innerText);
+  const focusInput = useCallback(() => {
+    if (!inputRef.current) return;
+    inputRef.current.focus();
+    document.execCommand("selectAll", false, null);
+    document.getSelection().collapseToEnd();
+  }, [inputRef]);
+
+  const handlerEmoji = useCallback(
+    ({ colons }: EmojiData) => {
+      setValue((prevVal = "") => `${prevVal} ${colons} `);
+      focusInput();
     },
-    [setInputValue]
+    [setValue, inputRef]
   );
-
-  useEffect(() => {
-    if (!inputRef.current) return undefined;
-
-    //@ts-ignore
-    inputRef.current.textContent = inputValue;
-    focusDiv(inputRef.current);
-    // eslint-disable-next-line
-  }, [inputValue]);
 
   const changeFileList = useCallback((files) => {
     setFileList(formatFilesData(files));
@@ -76,19 +92,6 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
   const removeFile = (data: ExtendedFile) => {
     setFileList(filterFileListById(data.uid));
   };
-
-  const focusDiv = (element: HTMLDivElement) => {
-    element.focus();
-    document.execCommand("selectAll", false, null);
-    document.getSelection().collapseToEnd();
-  };
-
-  const handlerEmoji = useCallback(
-    ({ colons }: EmojiData) => {
-      setInputValue((inpValue) => `${inpValue} ${colons} `.trim());
-    },
-    [setInputValue]
-  );
 
   return (
     <>
@@ -105,7 +108,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           )}
         />
 
-        {!!placeholder && !inputValue && (
+        {!!placeholder && !value && (
           <span
             onClick={() => inputRef.current && inputRef.current.focus()}
             className={styleModule.input__placeholder}
@@ -126,7 +129,22 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
             if (!isFocusInput) return;
             setIsFocusInput(false);
           }}
-        />
+        >
+          {reactStringReplace(value, /:(.+?):/g, (match, i) => (
+            <span
+              key={i}
+              dangerouslySetInnerHTML={{
+                //@ts-ignore
+                __html: Emoji({
+                  html: true,
+                  set: "apple",
+                  emoji: match,
+                  size: 16
+                })
+              }}
+            />
+          ))}
+        </div>
         <div className={styleModule.input__actionMessageWrap}>
           <FieldUpload
             onFilesLoaded={changeFileList}
