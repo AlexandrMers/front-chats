@@ -1,11 +1,17 @@
-import React, { FC, FormEvent, useCallback, useRef, useState } from "react";
+import React, {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import { Upload } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import classNames from "classnames";
-import { EmojiData } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
-
+import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 import reactStringReplace from "react-string-replace";
-
 import Wrapper from "primitives/Wrapper";
 
 import styleModule from "./style.module.scss";
@@ -31,39 +37,33 @@ const formatFilesData = (files: File[]): ExtendedFile[] =>
     uid: uuidv4()
   }));
 
-const getEmojiHtml = (colons: string) => {
-  return (
-    <span
-      dangerouslySetInnerHTML={{
-        // @ts-ignore
-        __html: Emoji({
-          html: true,
-          set: "apple",
-          emoji: colons,
-          size: 16
-        })
-      }}
-    />
-  ).toString();
-};
-
 const filterFileListById = (id: string) => (prevFileList: ExtendedFile[]) =>
   prevFileList.filter((file) => file.uid !== id);
 
 const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
   const inputRef = useRef<HTMLDivElement>(null);
 
-  const [value, setValue] = useState<string>();
+  const [valueForView, setValueForView] = useState<string>("🤣🤣🤣🤣🤣🤣🤣");
+  const [valueReal, setValueReal] = useState<string>();
+
+  const founded = useMemo(() => valueForView.indexOf("🤣"), [valueForView]);
+
+  console.log("value for view ", valueForView);
+  console.log("value for real ", valueReal);
+  console.log("founded", founded);
 
   const changeValueInput = useCallback(
     (e: FormEvent<HTMLDivElement>) => {
       const element = e.target as HTMLElement;
-      setValue(element.textContent);
-    },
-    [setValue]
-  );
 
-  console.log("value ", value);
+      console.log("");
+
+      // /:(.+?):/g
+
+      setValueReal(element.textContent);
+    },
+    [setValueReal]
+  );
 
   const [isFocusInput, setIsFocusInput] = useState(false);
 
@@ -77,11 +77,13 @@ const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
   }, [inputRef]);
 
   const handlerEmoji = useCallback(
-    ({ colons }: EmojiData) => {
-      setValue((prevVal = "") => `${prevVal} ${colons} `);
+    (emoji: BaseEmoji) => {
+      console.log(emoji);
+      setValueForView((prevVal = "") => `${prevVal} ${emoji.native}`);
+      setValueReal((prevVal = "") => `${prevVal} ${emoji.colons}`);
       focusInput();
     },
-    [setValue, inputRef]
+    [setValueForView, focusInput]
   );
 
   const changeFileList = useCallback((files) => {
@@ -108,7 +110,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
           )}
         />
 
-        {!!placeholder && !value && (
+        {!!placeholder && !valueForView && (
           <span
             onClick={() => inputRef.current && inputRef.current.focus()}
             className={styleModule.input__placeholder}
@@ -119,7 +121,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
         <div
           ref={inputRef}
           contentEditable
-          onInput={changeValueInput}
+          // onInput={changeValueInput}
           className={styleModule.input__input}
           onFocus={() => {
             if (isFocusInput) return;
@@ -130,20 +132,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({ placeholder }) => {
             setIsFocusInput(false);
           }}
         >
-          {reactStringReplace(value, /:(.+?):/g, (match, i) => (
-            <span
-              key={i}
-              dangerouslySetInnerHTML={{
-                //@ts-ignore
-                __html: Emoji({
-                  html: true,
-                  set: "apple",
-                  emoji: match,
-                  size: 16
-                })
-              }}
-            />
-          ))}
+          <Emoji set={"apple"} emoji={"shrug"} size={24} />
         </div>
         <div className={styleModule.input__actionMessageWrap}>
           <FieldUpload

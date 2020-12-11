@@ -4,14 +4,14 @@ import { Picker } from "emoji-mart";
 import { SmileOutlined } from "@ant-design/icons";
 import "emoji-mart/css/emoji-mart.css";
 
-import { EmojiData } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
+import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 
 import style from "./style.module.scss";
 import ClickOutside from "../../primitives/ClickOutside";
 
 interface EmojiPickerInterface {
   className: string;
-  addEmojiHandler: (emoji: EmojiData) => void;
+  addEmojiHandler: (emoji: BaseEmoji) => void;
 }
 
 const EmojiPicker = ({ className, addEmojiHandler }: EmojiPickerInterface) => {
