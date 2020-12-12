@@ -89,7 +89,12 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
       </ScrollBar>
 
       <Wrapper className={styleModule.chatWrapper__inputWrapper}>
-        <InputMessage placeholder="Введите текст сообщения..." />
+        <InputMessage
+          placeholder="Введите текст сообщения..."
+          sendMessage={(msg) => {
+            console.log("sent message => ", msg);
+          }}
+        />
       </Wrapper>
     </Wrapper>
   );

@@ -7,7 +7,7 @@ import "emoji-mart/css/emoji-mart.css";
 import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 
 import style from "./style.module.scss";
-import ClickOutside from "../../primitives/ClickOutside";
+import ClickOutside from "../../../primitives/ClickOutside";
 
 interface EmojiPickerInterface {
   className: string;
