@@ -17,6 +17,7 @@
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
+    "emoji-mart": "^3.0.0",
     "formik": "^2.1.5",
     "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
@@ -29,11 +30,15 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-spring": "^8.0.27",
+    "react-string-replace": "^0.4.4",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "@types/emoji-mart": "^3.0.4",
+    "@types/uuid": "^8.3.0",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
     "@types/classnames": "^2.2.10",

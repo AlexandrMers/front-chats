@@ -21,6 +21,7 @@ import {
   combineSelectorStateForHomeCmp,
   selectPropsFromStateForHomeCmp
 } from "./lib";
+import FlexContainer from "../../primitives/FlexContainer";
 
 const Home: FC = () => {
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ const Home: FC = () => {
   }
 
   return (
-    <Wrapper className={styleModule.homeWrapper}>
+    <FlexContainer className={styleModule.homeWrapper}>
       {!!allDialogs && (
         <DialogItemsWrapper chats={allDialogs} onSelectChat={onSelectChat} />
       )}
@@ -123,7 +124,7 @@ const Home: FC = () => {
           </Wrapper>
         )}
       </>
-    </Wrapper>
+    </FlexContainer>
   );
 };
 

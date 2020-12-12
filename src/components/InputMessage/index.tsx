@@ -1,122 +1,153 @@
 import React, {
+  ChangeEvent,
   FC,
-  FormEvent,
+  KeyboardEvent,
   useCallback,
   useEffect,
   useRef,
   useState
 } from "react";
-
-import Wrapper from "primitives/Wrapper";
-
-import styleModule from "./style.module.scss";
-import classNames from "classnames";
+import { Upload } from "antd";
 import {
   AudioOutlined,
   PictureOutlined,
-  SendOutlined,
-  SmileOutlined
+  SendOutlined
 } from "@ant-design/icons";
-import FieldUpload, { FileAccept } from "../../primitives/FieldUpload";
+import classNames from "classnames";
+import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
+
+import Wrapper from "primitives/Wrapper";
+import FieldUpload, { FileAccept } from "primitives/FieldUpload";
+import { ExtendedFile } from "./types";
+
+import EmojiPicker from "./EmojiPicker";
+import { filterFileListById, formatFilesData } from "./libs";
+
+import styleModule from "./style.module.scss";
+import { ENTER_KEY_UP_CODE } from "./constants";
 
 interface InputMessagePropsInterface {
-  defaultInputValue?: string;
   placeholder?: string;
+  sendMessage: (msg: string) => void;
 }
 
 const InputMessage: FC<InputMessagePropsInterface> = ({
   placeholder,
-  defaultInputValue
+  sendMessage
 }) => {
-  const inputRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    focusInput();
+  });
 
-  const [inputValue, setInputValue] = useState<string>(defaultInputValue);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const [isFocusInput, setIsFocusInput] = useState(false);
+  const [value, setValue] = useState("");
 
-  const changeValueInput = useCallback(
-    (e: FormEvent<HTMLDivElement>) => {
-      const element = e.target as HTMLElement;
-      setInputValue(!element.textContent ? "" : element.innerText);
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setValue(e.target.value);
     },
-    [setInputValue]
+    [setValue]
   );
 
-  useEffect(() => {
-    if (!inputRef.current) return undefined;
+  const [fileList, setFileList] = useState<ExtendedFile[]>([]);
 
-    inputRef.current.textContent = inputValue;
-    // eslint-disable-next-line
+  const handlerEmoji = useCallback(
+    (emoji: BaseEmoji) => {
+      setValue((prevVal) => prevVal + emoji.native);
+      focusInput();
+    },
+    [setValue]
+  );
+
+  const clearInputValue = useCallback(() => setValue(""), [setValue]);
+
+  const onSendMessage = useCallback(
+    (msg: string) => {
+      sendMessage(msg);
+      clearInputValue();
+    },
+    [sendMessage, clearInputValue]
+  );
+
+  const onKeyUp = useCallback(
+    (e: KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.keyCode !== ENTER_KEY_UP_CODE || e.shiftKey) return;
+      e.preventDefault();
+      onSendMessage(value);
+    },
+    [value, onSendMessage]
+  );
+
+  const focusInput = () => {
+    if (!inputRef.current) return;
+    inputRef.current.focus();
+  };
+
+  const changeFileList = useCallback((files) => {
+    setFileList(formatFilesData(files));
   }, []);
 
-  return (
-    <Wrapper
-      className={classNames(styleModule.input, {
-        [styleModule.input_focused]: isFocusInput
-      })}
-    >
-      <SmileOutlined
-        className={classNames(
-          styleModule.input__smiles,
-          styleModule.icon_common
-        )}
-      />
-      {!!placeholder && !inputValue && (
-        <span
-          onClick={() => inputRef.current && inputRef.current.focus()}
-          className={styleModule.input__placeholder}
-        >
-          {placeholder}
-        </span>
-      )}
-      <div
-        ref={inputRef}
-        contentEditable
-        onInput={changeValueInput}
-        className={styleModule.input__input}
-        onFocus={() => {
-          if (isFocusInput) return;
-          setIsFocusInput(true);
-        }}
-        onBlur={() => {
-          if (!isFocusInput) return;
-          setIsFocusInput(false);
-        }}
-      />
+  const removeFile = (data: ExtendedFile) => {
+    setFileList(filterFileListById(data.uid));
+  };
 
-      <div className={styleModule.input__actionMessageWrap}>
-        <FieldUpload
-          onFilesLoaded={(files) => {
-            console.log("filesCheck => ", files);
-          }}
-          view={(openDialog) => {
-            return (
-              <button
-                onClick={openDialog}
-                className={styleModule.input__button}
-              >
-                <PictureOutlined
-                  className={classNames(styleModule.icon_common)}
-                />
-              </button>
-            );
-          }}
-          accept={FileAccept.IMAGE}
-          multiple
+  const onSendClick = useCallback(() => {
+    onSendMessage(value);
+  }, [value, onSendMessage]);
+
+  return (
+    <>
+      <Wrapper className={classNames(styleModule.input)}>
+        <EmojiPicker
+          addEmojiHandler={handlerEmoji}
+          className={classNames(
+            styleModule.input__smiles,
+            styleModule.icon_common
+          )}
         />
 
-        <button className={styleModule.input__button}>
-          <AudioOutlined className={classNames(styleModule.icon_common)} />
-        </button>
+        <textarea
+          ref={inputRef}
+          onChange={onChange}
+          value={value}
+          className={styleModule.input__input}
+          placeholder={placeholder}
+          onKeyUp={onKeyUp}
+        />
+        <div className={styleModule.input__actionMessageWrap}>
+          <FieldUpload
+            onFilesLoaded={changeFileList}
+            view={(openDialog) => {
+              return (
+                <button
+                  onClick={openDialog}
+                  className={styleModule.input__button}
+                >
+                  <PictureOutlined
+                    className={classNames(styleModule.icon_common)}
+                  />
+                </button>
+              );
+            }}
+            accept={FileAccept.IMAGE}
+            multiple
+          />
 
-        <button
-          className={styleModule.input__button}
-          onClick={() => console.log("click")}
-        >
-          <SendOutlined className={classNames(styleModule.icon_common)} />
-        </button>
-      </div>
-    </Wrapper>
+          <button className={styleModule.input__button}>
+            <AudioOutlined className={classNames(styleModule.icon_common)} />
+          </button>
+
+          <button className={styleModule.input__button} onClick={onSendClick}>
+            <SendOutlined className={classNames(styleModule.icon_common)} />
+          </button>
+        </div>
+      </Wrapper>
+
+      {fileList.length > 0 && (
+        <Upload fileList={fileList} onRemove={removeFile} />
+      )}
+    </>
   );
 };
 
