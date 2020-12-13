@@ -5,13 +5,9 @@ export enum TypeActions {
   "CURRENT_USER__AUTH" = "CURRENT_USER:AUTH",
 
   "DIALOGS__LOADING" = "DIALOGS:LOADING",
-  "DIALOGS__SELECT_DIALOG_LOADING" = "DIALOGS:SELECT_DIALOG_LOADING"
+  "DIALOGS__SELECT_DIALOG_LOADING" = "DIALOGS:SELECT_DIALOG_LOADING",
+  "DIALOGS__SELECT_DIALOG__ADD_MESSAGE" = "DIALOGS:ADD_MESSAGE"
 }
-
-// export interface ActionInterface<R = TypeActions, T = any> {
-//   type: R;
-//   payload?: T;
-// }
 
 type PropertiesTypes<T> = T extends { [key: string]: infer U } ? U : never;
 

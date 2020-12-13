@@ -18,7 +18,7 @@ export interface AttachmentFileInterface {
 }
 
 export interface MessageInterface {
-  id: number;
+  id: string;
   audio?: string;
   isRead: boolean;
   text: string;

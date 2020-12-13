@@ -47,6 +47,18 @@ export default (
         selectedDialogLoading: false
       };
 
+    case TypeActions.DIALOGS__SELECT_DIALOG__ADD_MESSAGE:
+      return {
+        ...state,
+        selectedDialog: {
+          ...state.selectedDialog,
+          messages: [
+            ...state.selectedDialog.messages,
+            action.payload.newMessage
+          ]
+        }
+      };
+
     default:
       return state;
   }

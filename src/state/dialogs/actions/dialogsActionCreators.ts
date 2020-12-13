@@ -1,4 +1,4 @@
-import { ChatInterface } from "types/types";
+import { ChatInterface, MessageInterface } from "types/types";
 import { InferActionsTypes, TypeActions } from "../../types";
 
 export type dialogsActionCreatorType = InferActionsTypes<
@@ -29,5 +29,12 @@ export const dialogsActionsCreator = {
   setLoadingSelectedDialog: () =>
     ({
       type: TypeActions.DIALOGS__SELECT_DIALOG_LOADING
+    } as const),
+  addMessageIntoSelectedDialog: (newMessage: MessageInterface) =>
+    ({
+      type: TypeActions.DIALOGS__SELECT_DIALOG__ADD_MESSAGE,
+      payload: {
+        newMessage
+      }
     } as const)
 };
