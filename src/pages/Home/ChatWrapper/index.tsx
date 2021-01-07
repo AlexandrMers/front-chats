@@ -18,10 +18,8 @@ import {
   UserInterface
 } from "../../../types/types";
 import { useDispatch } from "react-redux";
-import { userActionsCreators } from "../../../state/user/actions/userActionsCreators";
 import { dialogsActionsCreator } from "../../../state/dialogs/actions/dialogsActionCreators";
 import { v4 as uuidv4 } from "uuid";
-import { scrollToBottom } from "../../../libs/scroll";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -100,6 +98,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
       });
       scrollToBottom();
     },
+    // eslint-disable-next-line
     [currentUser, scrollToBottom]
   );
 

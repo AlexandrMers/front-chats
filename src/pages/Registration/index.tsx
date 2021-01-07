@@ -9,7 +9,7 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 
-import styleModule from "pages/AuthPages/style.module.scss";
+import styleModule from "pages/style.module.scss";
 
 import WhiteBlock from "primitives/WhiteBlock";
 import Input from "primitives/Input/Input";
@@ -185,7 +185,7 @@ const RegistrationPage = () => {
             </Button>
           </Form>
           <Wrapper className={styleModule.authForm__linkWrapper}>
-            <Link to="/auth" className={styleModule.authForm__link}>
+            <Link to="/login" className={styleModule.authForm__link}>
               Войти в аккаунт
             </Link>
           </Wrapper>
