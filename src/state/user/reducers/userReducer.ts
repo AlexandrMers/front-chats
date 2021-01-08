@@ -24,10 +24,16 @@ export const userReducer = (
         ...action.payload
       };
 
-    case TypeActions.CURRENT_USER__AUTH:
+    case TypeActions.CURRENT_USER__LOGIN:
       return {
         ...state,
         isAuth: true
+      };
+
+    case TypeActions.CURRENT_USER__LOGOUT:
+      return {
+        ...state,
+        isAuth: false
       };
 
     default:

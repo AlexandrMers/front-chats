@@ -4,8 +4,6 @@ import { useFormik } from "formik";
 import { Form } from "antd";
 import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
 
-import { userActionsCreators } from "state/user/actions/userActionsCreators";
-
 import Wrapper from "primitives/Wrapper";
 import Button from "primitives/Button";
 import WhiteBlock from "primitives/WhiteBlock";
@@ -19,6 +17,7 @@ import {
 } from "libs/validators";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import { login } from "../../state/user/thunk/getCurrentUser";
 
 export interface AuthorizationInterface {
   username: string;
@@ -26,6 +25,8 @@ export interface AuthorizationInterface {
 }
 
 const LoginPage = withRouter(({ history }: RouteComponentProps) => {
+  const dispatch = useDispatch();
+
   const {
     handleSubmit,
     handleBlur,
@@ -33,23 +34,19 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
     values,
     errors,
     touched,
-    isValid
+    isValid,
+    isSubmitting
   } = useFormik<AuthorizationInterface>({
     initialValues: {
       username: "",
       password: ""
     },
     validate: validateAuthForm,
-    onSubmit: (_values: AuthorizationInterface) => {
-      login();
+    onSubmit: (values: AuthorizationInterface, { setSubmitting }) => {
+      dispatch(login(values));
+      setSubmitting(false);
     }
   });
-
-  const dispatch = useDispatch();
-
-  const login = () => {
-    dispatch(userActionsCreators.authUserActionCreator());
-  };
 
   return (
     <Wrapper className={styleModule.wrapperAuth}>
@@ -105,7 +102,7 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
             className={styleModule.authForm__button}
             type="primary"
             htmlType="submit"
-            disabled={!isValid}
+            disabled={!isValid || isSubmitting}
           >
             Войти в аккаунт
           </Button>

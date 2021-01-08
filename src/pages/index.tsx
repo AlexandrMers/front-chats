@@ -3,9 +3,11 @@ import { __RouterContext, Route, Switch } from "react-router";
 import { animated, useTransition } from "react-spring";
 
 import Home from "./Home";
-import PrivateRoute from "../hoc/PrivateRoute";
+
 import RegistrationPage from "./Registration";
-import AuthPage from "./Login";
+import LoginPage from "./Login";
+
+import ProtectedRoute from "../hoc/ProtectedRoute";
 
 function useRouter() {
   return useContext(__RouterContext);
@@ -41,9 +43,9 @@ const Routes = () => {
       }}
     >
       <Switch location={item}>
-        <Route exact path={["/", "/login"]} component={AuthPage} />
+        <Route exact path="/login" component={LoginPage} />
         <Route exact path="/registration" component={RegistrationPage} />
-        <PrivateRoute exact path="/home" component={Home} />
+        <ProtectedRoute exact path="/home" component={Home} />
       </Switch>
     </animated.div>
   ));

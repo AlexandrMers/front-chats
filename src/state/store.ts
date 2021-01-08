@@ -3,10 +3,12 @@ import thunkReact from "redux-thunk";
 
 import dialogsReducer from "./dialogs/reducers/dialogsReducer";
 import { userReducer } from "./user/reducers/userReducer";
+import { commonReducer } from "./common/reducers/commonReducer";
 
 const rootReducer = combineReducers({
   dialogs: dialogsReducer,
-  user: userReducer
+  user: userReducer,
+  common: commonReducer
 });
 
 export type StateInterface = ReturnType<typeof rootReducer>;

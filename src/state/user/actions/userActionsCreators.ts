@@ -7,8 +7,12 @@ export const userActionsCreators = {
       type: TypeActions.CURRENT_USER__GET_CURRENT_USER,
       payload: currentUserInfo
     } as const),
-  authUserActionCreator: () =>
+  loginUser: () =>
     ({
-      type: TypeActions.CURRENT_USER__AUTH
+      type: TypeActions.CURRENT_USER__LOGIN
+    } as const),
+  logoutUser: () =>
+    ({
+      type: TypeActions.CURRENT_USER__LOGOUT
     } as const)
 };

@@ -4,6 +4,7 @@ import { dialogsAPI } from "api/modules/dialogs";
 import { InferActionsTypes } from "../../types";
 import { StateInterface } from "../../store";
 import { dialogsActionsCreator } from "../actions/dialogsActionCreators";
+import { ChatInterface } from "../../../types/types";
 
 type getAllDialogsTypeThunkCreator = InferActionsTypes<
   typeof dialogsActionsCreator
@@ -20,7 +21,8 @@ export const getAllDialogs = (): GetAllDialogsThunkCreator<
   Promise<void>
 > => async (dispatch) => {
   dispatch(dialogsActionsCreator.setLoadingAllDialogs());
-  const dialogs = await dialogsAPI.getAllDialogs();
+  // const dialogs = await dialogsAPI.getAllDialogs();
+  const dialogs: ChatInterface[] = [];
 
   dispatch(dialogsActionsCreator.getAllDialogsActionCreator(dialogs));
 };
