@@ -128,7 +128,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
           className={classNames(styleModule.avatar_order, {
             [styleModule.avatar_order_me]: isMe
           })}
-          name={message.author.name}
+          name={message.author.fullName}
           avatar={message.author.avatar}
         />
 

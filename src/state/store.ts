@@ -1,24 +1,22 @@
-import { combineReducers, compose, createStore, applyMiddleware } from "redux";
-import thunkReact from "redux-thunk";
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { createBrowserHistory } from "history";
 
-import dialogsReducer from "./dialogs/reducers/dialogsReducer";
-import { userReducer } from "./user/reducers/userReducer";
-import { commonReducer } from "./common/reducers/commonReducer";
+import createRootReducer, { rootReducer } from "./reducers/rootReducer";
+import { routerMiddleware } from "connected-react-router";
 
-const rootReducer = combineReducers({
-  dialogs: dialogsReducer,
-  user: userReducer,
-  common: commonReducer
+export const history = createBrowserHistory();
+
+export const store = configureStore({
+  reducer: createRootReducer(history),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(routerMiddleware(history)),
+  devTools: process.env.NODE_ENV !== "production"
 });
 
 export type StateInterface = ReturnType<typeof rootReducer>;
 
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunkReact))
-);
-
-export default store;
+export const useTypedSelector: TypedUseSelectorHook<StateInterface> = useSelector;

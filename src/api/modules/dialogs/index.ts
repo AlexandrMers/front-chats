@@ -2,7 +2,7 @@ import { instanceApiRequest } from "api/tools/requestCreator";
 import { MethodType } from "api/tools/types";
 import { ChatInterface } from "types/types";
 
-export const dialogsAPI = {
+export const DialogsApi = {
   getAllDialogs() {
     return instanceApiRequest.createRequest<ChatInterface[]>(
       `/chats`,

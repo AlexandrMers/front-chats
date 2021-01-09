@@ -1,6 +1,13 @@
-import React, { ReactElement } from "react";
+import React, {
+  Component,
+  memo,
+  ReactComponentElement,
+  ReactElement,
+  ReactNode
+} from "react";
 import { compose, map } from "ramda";
 import { Empty } from "antd";
+import { shallowEqual } from "react-redux";
 
 import styleModule from "./style.module.scss";
 
@@ -10,7 +17,9 @@ import DialogItem from "components/DialogItem";
 
 import { OrderSort, sortByDate } from "libs/sorters";
 
-export function renderSortedDialogs({
+import { useTypedSelector } from "../../../state/store";
+
+function Dialogs({
   selectedDialogId,
   setSelectedDialogId,
   dialogItems
@@ -19,9 +28,16 @@ export function renderSortedDialogs({
   setSelectedDialogId: (value: string) => void;
   dialogItems: ChatInterface[];
 }) {
+  const { currentUser } = useTypedSelector(
+    (state) => ({
+      currentUser: state.user.userInfo
+    }),
+    shallowEqual
+  );
+
   return dialogItems.length > 0 ? (
     compose(
-      map<ChatInterface, ReactElement>((dialog) => {
+      map<ChatInterface, ReactNode>((dialog) => {
         const isSelected = selectedDialogId === dialog.id;
         return (
           <Wrapper key={dialog.id} className={styleModule.marginFromScroll}>
@@ -29,12 +45,7 @@ export function renderSortedDialogs({
               onSelect={setSelectedDialogId}
               chat={dialog}
               isSelected={isSelected}
-              isOnline={dialog.unreadCount > 0}
-              currentUser={{
-                id: "1",
-                name: "Александр Авдеев",
-                avatar: null
-              }}
+              currentUser={currentUser}
             />
           </Wrapper>
         );
@@ -48,3 +59,5 @@ export function renderSortedDialogs({
     <Empty description="Поиск не дал результатов" />
   );
 }
+
+export default memo(Dialogs as any);

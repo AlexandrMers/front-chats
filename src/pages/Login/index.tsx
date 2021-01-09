@@ -1,8 +1,9 @@
 import React, { memo } from "react";
-import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { Form } from "antd";
 import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
+import { shallowEqual } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router";
 
 import Wrapper from "primitives/Wrapper";
 import Button from "primitives/Button";
@@ -15,9 +16,9 @@ import {
   helpViewForFormik,
   validateAuthForm
 } from "libs/validators";
-import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { login } from "../../state/user/thunk/getCurrentUser";
+import { useAppDispatch, useTypedSelector } from "state/store";
+import { loginUser } from "../../state/reducers/user/userReducer";
 
 export interface AuthorizationInterface {
   username: string;
@@ -25,7 +26,13 @@ export interface AuthorizationInterface {
 }
 
 const LoginPage = withRouter(({ history }: RouteComponentProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  const { loginLoading } = useTypedSelector((state) => {
+    return {
+      loginLoading: state.user.loginLoading
+    };
+  }, shallowEqual);
 
   const {
     handleSubmit,
@@ -34,17 +41,17 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
     values,
     errors,
     touched,
-    isValid,
-    isSubmitting
+    isValid
   } = useFormik<AuthorizationInterface>({
     initialValues: {
       username: "",
       password: ""
     },
     validate: validateAuthForm,
-    onSubmit: (values: AuthorizationInterface, { setSubmitting }) => {
-      dispatch(login(values));
-      setSubmitting(false);
+    onSubmit: (values: AuthorizationInterface) => {
+      dispatch(loginUser(values)).then((data) => {
+        console.log("data request in cmp -> ", data.payload);
+      });
     }
   });
 
@@ -102,7 +109,7 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
             className={styleModule.authForm__button}
             type="primary"
             htmlType="submit"
-            disabled={!isValid || isSubmitting}
+            disabled={!isValid || loginLoading}
           >
             Войти в аккаунт
           </Button>

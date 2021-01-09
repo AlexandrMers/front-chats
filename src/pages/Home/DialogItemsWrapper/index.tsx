@@ -9,7 +9,7 @@ import { ChatInterface } from "../../../types/types";
 
 import styleModule from "./style.module.scss";
 
-import { renderSortedDialogs } from "./tools";
+import Dialogs from "./Dialogs";
 import { filterChange } from "./filter";
 import { debounce } from "lodash";
 import { LeftColumnHeader } from "./LeftColumnHeader";
@@ -104,11 +104,13 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
           autoHide
           hideTracksWhenNotNeeded
         >
-          {renderSortedDialogs({
-            dialogItems: filteredDialogs,
-            selectedDialogId,
-            setSelectedDialogId
-          })}
+          {/*//@ts-ignore*/}
+          <Dialogs
+            dialogItems={filteredDialogs}
+            selectedDialogId={selectedDialogId}
+            setSelectedDialogId={setSelectedDialogId}
+            key={1}
+          />
         </ScrollBar>
       </Wrapper>
     </Wrapper>

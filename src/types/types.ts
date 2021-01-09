@@ -1,8 +1,10 @@
 export interface UserInterface {
-  name: string;
-  avatar: string;
   id: string;
+  avatar?: string;
   isOnline?: boolean;
+  lastSeen: Date;
+  fullName: string;
+  email: string;
 }
 
 export interface ChatInterface {

@@ -12,14 +12,7 @@ import ChatHeader from "./ChatHeader";
 import InputMessage from "components/InputMessage";
 import { useChatScrollManager } from "../../../hooks/hooks";
 import { ScrollbarsOverrideType } from "../../../types/helpersType";
-import {
-  ChatInterface,
-  MessageInterface,
-  UserInterface
-} from "../../../types/types";
-import { useDispatch } from "react-redux";
-import { dialogsActionsCreator } from "../../../state/dialogs/actions/dialogsActionCreators";
-import { v4 as uuidv4 } from "uuid";
+import { ChatInterface, UserInterface } from "../../../types/types";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -65,14 +58,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
 
   const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const addMessage = useCallback(
-    (msg: MessageInterface) =>
-      dispatch(dialogsActionsCreator.addMessageIntoSelectedDialog(msg)),
-    [dispatch]
-  );
-
   const { scrollToBottom } = useChatScrollManager({
     observableElement: refMessagesWrapper,
     scrollRef,
@@ -88,14 +73,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
 
   const onSendMessage = useCallback(
     (msgText: string) => {
-      addMessage({
-        text: msgText,
-        attachments: [],
-        author: currentUser,
-        date: new Date().toString(),
-        id: uuidv4(),
-        isRead: false
-      });
       scrollToBottom();
     },
     // eslint-disable-next-line

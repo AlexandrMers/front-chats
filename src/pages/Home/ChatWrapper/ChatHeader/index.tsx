@@ -16,7 +16,7 @@ const ChatHeader: FC<ChatHeaderPropsInterface> = ({ user, onClick }) => {
   return (
     <header className={styleModule.chatHeader} onClick={onClick}>
       <div className={styleModule.chatHeader__info}>
-        <h2 className={styleModule.chatHeader__name}>{user.name}</h2>
+        <h2 className={styleModule.chatHeader__name}>{user.fullName}</h2>
         {user.isOnline && (
           <div className={styleModule.chatHeader__inner}>
             <Circle className={styleModule.chatHeader__circle} size={6} />

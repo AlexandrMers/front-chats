@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { RouteProps, Route, Redirect } from "react-router";
 
 interface PrivateRouteInterface extends RouteProps {}
@@ -7,8 +7,14 @@ const ProtectedRoute = ({
   component: Component,
   ...rest
 }: PrivateRouteInterface) => {
-  //TODO - здесь будет проверка авторизации (наличие актуального токена в localStorage)
-  const isAuth = false;
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("auth_token");
+    if (authToken) {
+      setIsAuth(true);
+    }
+  }, []);
 
   if (!isAuth) {
     return <Redirect to="/login" />;

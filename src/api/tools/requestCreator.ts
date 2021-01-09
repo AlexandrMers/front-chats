@@ -1,12 +1,15 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { MethodType, OptionsRequestInterface } from "./types";
+import axios from "axios";
 import { assoc, compose, identity, ifElse } from "ramda";
 
-export class ApiRequest {
-  //TODO - токен придется убрать !!!
-  // static token: string = localStorage.getItem("auth_token");
-  static token: string =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjMwMjA0ZDYwNTU5NWI0ZDliZmYyZSIsImNvbmZpcm1lZCI6ZmFsc2UsImxhc3RTZWVuIjoiMjAyMS0wMS0wOFQwOTowOToxOC45MDRaIiwiZnVsbE5hbWUiOiLQkNC70LXQutGB0LDQvdC00YAg0JDQstC00LXQtdCyIiwiZW1haWwiOiJicmF0dmFpbG9sY29AbWFpbC5ydSIsImlhdCI6MTYxMDA5OTc4MiwiZXhwIjoxNjEwMTAzMzgyfQ.6vqSs1N3epblJg9loCFQJgjUZSVMb7nsO14XA9T1wPE";
+import { MethodType, OptionsRequestInterface } from "./types";
+
+class ApiRequest {
+  private token: string = localStorage.getItem("auth_token");
+
+  public setToken(token: string) {
+    localStorage.setItem("auth_token", token);
+    this.token = token;
+  }
 
   completeRequest = (
     url: string,
@@ -17,8 +20,8 @@ export class ApiRequest {
 
     const preBuiltHeaders = compose(
       ifElse(
-        () => !!ApiRequest.token,
-        assoc("Authorization", `Bearer ${ApiRequest.token}`),
+        () => !!this.token,
+        assoc("Authorization", `Bearer ${this.token}`),
         identity
       )
     )({});
@@ -42,9 +45,14 @@ export class ApiRequest {
     options: OptionsRequestInterface
   ): Promise<T> => {
     return new Promise((resolve, reject) => {
-      this.completeRequest(url, method, options).then((resp) => {
-        resolve(resp.data.data);
-      }, reject);
+      this.completeRequest(url, method, options).then(
+        (resp) => {
+          resolve(resp.data.data);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
     });
   };
 }

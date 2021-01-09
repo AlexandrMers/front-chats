@@ -45,7 +45,7 @@ const Routes = () => {
       <Switch location={item}>
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/registration" component={RegistrationPage} />
-        <ProtectedRoute exact path="/home" component={Home} />
+        <ProtectedRoute exact path={["/", "/home"]} component={Home} />
       </Switch>
     </animated.div>
   ));
