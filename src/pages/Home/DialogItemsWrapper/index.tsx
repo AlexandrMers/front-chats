@@ -14,6 +14,7 @@ import { filterChange } from "./filter";
 import { debounce } from "lodash";
 import { LeftColumnHeader } from "./LeftColumnHeader";
 import { propEq } from "ramda";
+import { Empty } from "antd";
 
 const filterCallback = (field: string, matchField: string) => {
   const fieldLower = field.toLowerCase();
@@ -105,12 +106,15 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
           hideTracksWhenNotNeeded
         >
           {/*//@ts-ignore*/}
-          <Dialogs
-            dialogItems={filteredDialogs}
-            selectedDialogId={selectedDialogId}
-            setSelectedDialogId={setSelectedDialogId}
-            key={1}
-          />
+          {chats.length > 0 ? (
+            <Dialogs
+              dialogItems={filteredDialogs}
+              selectedDialogId={selectedDialogId}
+              setSelectedDialogId={setSelectedDialogId}
+            />
+          ) : (
+            <Empty description="Список диалогов пуст" />
+          )}
         </ScrollBar>
       </Wrapper>
     </Wrapper>

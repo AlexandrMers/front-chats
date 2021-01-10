@@ -1,7 +1,6 @@
 import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
 import { ru } from "date-fns/locale";
-import { last } from "ramda";
 
 import styleModule from "./style.module.scss";
 
@@ -26,17 +25,13 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
   onSelect,
   currentUser
 }) => {
-  const { messages, unreadCount, user } = chat;
-
-  const extractedLastMessage = useMemo(() => last(messages), [messages]);
-
   const date = useMemo(
     () =>
-      formatRelative(new Date(extractedLastMessage.date), "HH:mm:ss", {
+      formatRelative(new Date(chat.lastMessage.createdAt), "HH:mm:ss", {
         weekStartsOn: 1,
         locale: ru
       }),
-    [extractedLastMessage.date]
+    [chat]
   );
 
   return (
@@ -48,8 +43,9 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
     >
       <Avatar
         size={40}
-        avatar={user.avatar}
-        name={user.fullName}
+        //TODO - аватарок еще нет
+        avatar={null}
+        name={chat.partner.fullName}
         className={classNames(styleModule.dialogItem__avatar, {
           [styleModule.dialogItem__avatar_isOnline]: isOnline
         })}
@@ -61,13 +57,13 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
             className={styleModule.dialogItem__title}
             level={5}
           >
-            {user.fullName}
+            {chat.partner.fullName}
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>
         <DialogLastMessage
-          lastMessage={extractedLastMessage}
-          unreadCount={unreadCount}
+          lastMessage={chat.lastMessage}
+          unreadCount={0}
           currentUser={currentUser}
         />
       </div>

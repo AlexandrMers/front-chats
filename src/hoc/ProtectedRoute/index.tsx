@@ -1,5 +1,7 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import { RouteProps, Route, Redirect } from "react-router";
+import { useAppDispatch } from "../../state/store";
+import { setAuth } from "../../state/modules/auth";
 
 interface PrivateRouteInterface extends RouteProps {}
 
@@ -7,16 +9,20 @@ const ProtectedRoute = ({
   component: Component,
   ...rest
 }: PrivateRouteInterface) => {
-  const [isAuth, setIsAuth] = useState(false);
+  const isExistToken = useMemo(() => localStorage.getItem("auth_token"), []);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const authToken = localStorage.getItem("auth_token");
-    if (authToken) {
-      setIsAuth(true);
+    if (isExistToken) {
+      dispatch(setAuth(true));
+      return;
     }
-  }, []);
+    dispatch(setAuth(false));
+    // eslint-disable-next-line
+  }, [isExistToken]);
 
-  if (!isAuth) {
+  if (!isExistToken) {
     return <Redirect to="/login" />;
   }
 

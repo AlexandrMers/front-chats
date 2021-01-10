@@ -11,7 +11,7 @@ function renderLastMessage(
   lastMessage: MessageInterface,
   currentUser: UserInterface
 ) {
-  if (lastMessage.attachments.length > 0) {
+  if (lastMessage?.attachments?.length > 0) {
     return (
       <Typography.Paragraph
         style={{

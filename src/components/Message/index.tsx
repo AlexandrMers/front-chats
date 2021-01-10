@@ -16,7 +16,7 @@ import { MessagePropsInterface } from "./types";
 import ActionsMessage from "./ActionsMessage/ActionsMessage";
 
 const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
-  const { date } = useFormatRelativeDate(message.date);
+  const { date } = useFormatRelativeDate(message.createdAt);
 
   return (
     <Wrapper
@@ -36,7 +36,8 @@ const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
             [styleModule.avatar_order_me]: isMe
           })}
           name={message.author.fullName}
-          avatar={message.author.avatar}
+          //TODO - не реализован функционал аватаров
+          avatar={null}
         />
 
         {isTyping ? (

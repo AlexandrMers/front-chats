@@ -12,7 +12,11 @@ import ChatHeader from "./ChatHeader";
 import InputMessage from "components/InputMessage";
 import { useChatScrollManager } from "../../../hooks/hooks";
 import { ScrollbarsOverrideType } from "../../../types/helpersType";
-import { ChatInterface, UserInterface } from "../../../types/types";
+import {
+  ChatInterface,
+  MessageInterface,
+  UserInterface
+} from "../../../types/types";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -21,12 +25,13 @@ interface ChatWrapperPropsInterface {
 
 function renderMessages(
   isLoadedMessagesWrapper: boolean,
-  chat: ChatInterface,
   currentUser: UserInterface
 ) {
+  const messages: MessageInterface[] = [];
+
   return (
     isLoadedMessagesWrapper &&
-    chat.messages.map((message) => {
+    messages.map((message) => {
       const isAudioMsg = !!message.audio;
 
       return (
@@ -81,7 +86,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader onClick={onActionDialog} user={chat.user} />
+      <ChatHeader onClick={onActionDialog} user={chat?.author} />
 
       <ScrollBar
         style={{
@@ -97,7 +102,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
           }}
           className={classNames(styleModule.chatWrapper)}
         >
-          {renderMessages(isLoadedMessagesWrapper, chat, currentUser)}
+          {renderMessages(isLoadedMessagesWrapper, currentUser)}
         </Wrapper>
       </ScrollBar>
 

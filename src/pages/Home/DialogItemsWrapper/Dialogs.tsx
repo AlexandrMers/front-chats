@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  memo,
-  ReactComponentElement,
-  ReactElement,
-  ReactNode
-} from "react";
+import React, { memo, ReactNode } from "react";
 import { compose, map } from "ramda";
 import { Empty } from "antd";
 import { shallowEqual } from "react-redux";
@@ -30,7 +24,7 @@ function Dialogs({
 }) {
   const { currentUser } = useTypedSelector(
     (state) => ({
-      currentUser: state.user.userInfo
+      currentUser: state.userModule.userInfo
     }),
     shallowEqual
   );

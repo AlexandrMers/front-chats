@@ -1,7 +1,7 @@
 import { instanceApiRequest } from "../../tools/requestCreator";
 import { UserInterface } from "../../../types/types";
 import { MethodType } from "../../tools/types";
-import { AuthorizationInterface } from "../../../pages/Login";
+import { AuthorizationInterface } from "../../../pages/Login/types";
 
 export const UserAPI = {
   getCurrentUser() {

@@ -1,9 +1,10 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { useFormik } from "formik";
 import { Form } from "antd";
 import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
 import { shallowEqual } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router";
+import { Link } from "react-router-dom";
 
 import Wrapper from "primitives/Wrapper";
 import Button from "primitives/Button";
@@ -11,26 +12,24 @@ import WhiteBlock from "primitives/WhiteBlock";
 import Input from "primitives/Input/Input";
 
 import styleModule from "../style.module.scss";
+
 import {
   fieldValidate,
   helpViewForFormik,
   validateAuthForm
 } from "libs/validators";
-import { Link } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "state/store";
-import { loginUser } from "../../state/reducers/user/userReducer";
 
-export interface AuthorizationInterface {
-  username: string;
-  password: string;
-}
+import { login } from "../../state/modules/auth";
+import { AuthorizationInterface } from "./types";
 
 const LoginPage = withRouter(({ history }: RouteComponentProps) => {
   const dispatch = useAppDispatch();
 
-  const { loginLoading } = useTypedSelector((state) => {
+  const { loginLoading, loginError } = useTypedSelector((state) => {
     return {
-      loginLoading: state.user.loginLoading
+      loginLoading: state.authModule.loginLoading,
+      loginError: state.authModule.loginError
     };
   }, shallowEqual);
 
@@ -41,7 +40,8 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
     values,
     errors,
     touched,
-    isValid
+    isValid,
+    setFieldError
   } = useFormik<AuthorizationInterface>({
     initialValues: {
       username: "",
@@ -49,11 +49,15 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
     },
     validate: validateAuthForm,
     onSubmit: (values: AuthorizationInterface) => {
-      dispatch(loginUser(values)).then((data) => {
-        console.log("data request in cmp -> ", data.payload);
-      });
+      dispatch(login(values));
     }
   });
+
+  useEffect(() => {
+    if (!loginError) return undefined;
+
+    setFieldError("password", loginError.message);
+  }, [loginError, setFieldError]);
 
   return (
     <Wrapper className={styleModule.wrapperAuth}>
@@ -109,7 +113,8 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
             className={styleModule.authForm__button}
             type="primary"
             htmlType="submit"
-            disabled={!isValid || loginLoading}
+            disabled={!isValid}
+            loading={loginLoading}
           >
             Войти в аккаунт
           </Button>

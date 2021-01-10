@@ -20,7 +20,7 @@ interface FileRowPropsInterface {
 }
 
 const ImageFilesRow: FC<FileRowPropsInterface> = ({
-  message: { attachments, date, text },
+  message: { attachments, createdAt, text },
   alignRow = AlignRow.START
 }) => {
   const isOneAttachment = attachments.length === 1;
@@ -33,7 +33,7 @@ const ImageFilesRow: FC<FileRowPropsInterface> = ({
         classNames
       )}
     >
-      {attachments.length > 0 &&
+      {attachments?.length > 0 &&
         attachments.map((file, index) => (
           <Wrapper
             key={index}

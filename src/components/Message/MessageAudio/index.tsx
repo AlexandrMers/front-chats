@@ -36,7 +36,7 @@ const MessageAudio: FC<MessagePropsInterface> = ({
   isMe,
   isTyping
 }) => {
-  const { date } = useFormatRelativeDate(message.date);
+  const { date } = useFormatRelativeDate(message.createdAt);
   const [isPlay, setIsPlay] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -129,7 +129,8 @@ const MessageAudio: FC<MessagePropsInterface> = ({
             [styleModule.avatar_order_me]: isMe
           })}
           name={message.author.fullName}
-          avatar={message.author.avatar}
+          //TODO - не реализован функционал аватаров.
+          avatar={null}
         />
 
         {isTyping ? (

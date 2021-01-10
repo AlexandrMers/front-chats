@@ -7,11 +7,16 @@ export interface UserInterface {
   email: string;
 }
 
+export interface ShortUserInterface {
+  fullName: string;
+  id: string;
+}
+
 export interface ChatInterface {
   id: string;
-  user: UserInterface;
-  unreadCount: number;
-  messages: MessageInterface[];
+  author: ShortUserInterface;
+  partner: ShortUserInterface;
+  lastMessage: any;
 }
 
 export interface AttachmentFileInterface {
@@ -21,10 +26,12 @@ export interface AttachmentFileInterface {
 
 export interface MessageInterface {
   id: string;
+  chatId: string;
+  type: number;
   audio?: string;
   isRead: boolean;
   text: string;
-  date: string;
-  attachments: AttachmentFileInterface[];
-  author: UserInterface;
+  createdAt: string;
+  attachments?: AttachmentFileInterface[];
+  author: ShortUserInterface;
 }

@@ -4,7 +4,6 @@ import Wrapper from "../Wrapper";
 import classNames from "classnames";
 
 import styleModule from "./style.module.scss";
-import { isEmpty } from "ramda";
 
 interface AvatarPropsInterface {
   avatar: string;
@@ -19,8 +18,7 @@ const Avatar = ({
   className,
   size = 30
 }: AvatarPropsInterface) => {
-  const isEmptyAvatar = useMemo(() => isEmpty(avatar), [avatar]);
-
+  const isEmptyAvatar = useMemo(() => !avatar, [avatar]);
   return (
     <Wrapper
       styles={{
@@ -32,7 +30,7 @@ const Avatar = ({
       className={classNames(
         styleModule.avatar,
         {
-          [styleModule.avatar_isEmpty]: isEmptyAvatar,
+          [styleModule.avatar_isEmpty]: isEmptyAvatar
         },
         className
       )}
