@@ -2,18 +2,18 @@ import { path } from "ramda";
 
 export function filterChange<T, U>({
   pathToElem,
-  array,
+  elements,
   matchField,
   filterCallback
 }: {
   matchField: U;
   pathToElem: string[];
-  array: T[];
+  elements: T[];
   filterCallback: (field: U, matchField: U) => boolean;
 }) {
   return !matchField
-    ? array
-    : array.filter((item) => {
+    ? elements
+    : elements.filter((item) => {
         const filterField = path<U>(pathToElem, item);
         return !!filterField && filterCallback(filterField, matchField);
       });

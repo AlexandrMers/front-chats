@@ -1,14 +1,15 @@
 import React, { FC, memo, useMemo } from "react";
 import { Typography } from "antd";
 import { ru } from "date-fns/locale";
+import formatRelative from "date-fns/format";
+import classNames from "classnames";
 
 import styleModule from "./style.module.scss";
 
 import Avatar from "primitives/Avatar";
-import classNames from "classnames";
-import { ChatInterface, UserInterface } from "../../types/types";
-import formatRelative from "date-fns/format";
 import DialogLastMessage from "./DialogLastMessage";
+
+import { ChatInterface, UserInterface } from "../../types/types";
 
 interface DialogItemPropsInterface {
   chat: ChatInterface;
@@ -57,7 +58,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
             className={styleModule.dialogItem__title}
             level={5}
           >
-            {chat.partner.fullName}
+            {chat.name}
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>

@@ -22,7 +22,7 @@ import {
   sendMessage
 } from "state/modules/selectedChat/actions";
 
-import { selectChatInfo } from "./selectors";
+import { selectChatInfo, selectChatsSelector } from "./selectors";
 import { DataForSendMessageInterface } from "../../types/types";
 
 const Home: FC = () => {
@@ -47,7 +47,7 @@ const Home: FC = () => {
       isLoadingUser: state.userModule.loading,
       currentUser: state.userModule.userInfo,
       isLoadingChats: state.chatModule.chatsLoading,
-      chats: state.chatModule.chats,
+      chats: selectChatsSelector(state),
       selectedChatId: state.selectedChatModule.selectedChatId,
       selectedChatLoading: state.selectedChatModule.selectedChatLoading,
       selectedChatMessages: state.selectedChatModule.selectedChatMessages,

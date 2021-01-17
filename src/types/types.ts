@@ -14,6 +14,7 @@ export interface ShortUserInterface {
 
 export interface ChatInterface {
   id: string;
+  name?: string;
   author: ShortUserInterface;
   partner: ShortUserInterface;
   lastMessage: any;
