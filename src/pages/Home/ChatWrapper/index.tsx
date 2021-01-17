@@ -1,24 +1,26 @@
-import React, { FC, memo, useCallback, useMemo, useRef, useState } from "react";
+import React, { FC, memo, useCallback, useRef, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
+import { ScrollbarsOverrideType } from "types/helpersType";
+
 import styleModule from "./style.module.scss";
+
+import { useChatScrollManager } from "hooks/hooks";
 
 import MessageAudio from "components/Message/MessageAudio";
 import Message from "components/Message";
+import InputMessage from "components/InputMessage";
+
 import Wrapper from "primitives/Wrapper";
 import ChatHeader from "./ChatHeader";
 
-import InputMessage from "components/InputMessage";
-import { useChatScrollManager } from "../../../hooks/hooks";
-import { ScrollbarsOverrideType } from "../../../types/helpersType";
 import {
   ChatInterface,
   DataForSendMessageInterface,
   MessageInterface,
   UserInterface
-} from "../../../types/types";
-import { getHeaderChatName } from "./helpers";
+} from "types/types";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -75,11 +77,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
     console.log("click on action by dialog");
   }, []);
 
-  const titleHeader = useMemo(getHeaderChatName(chat, currentUser), [
-    chat,
-    currentUser
-  ]);
-
   const scrollRef = useRef<ScrollbarsOverrideType>(null);
   const refMessagesWrapper = useRef(null);
 
@@ -116,7 +113,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader onClick={onActionDialog} userName={titleHeader} />
+      <ChatHeader onClick={onActionDialog} name={chat?.name} />
 
       <ScrollBar
         style={{

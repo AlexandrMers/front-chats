@@ -4,15 +4,15 @@ import styleModule from "./style.module.scss";
 import classNames from "classnames";
 
 interface ChatHeaderPropsInterface {
-  userName: string;
+  name: string;
   onClick?: () => void;
 }
 
-const ChatHeader: FC<ChatHeaderPropsInterface> = ({ userName, onClick }) => {
+const ChatHeader: FC<ChatHeaderPropsInterface> = ({ name, onClick }) => {
   return (
     <header className={styleModule.chatHeader} onClick={onClick}>
       <div className={styleModule.chatHeader__info}>
-        <h2 className={styleModule.chatHeader__name}>{userName}</h2>
+        <h2 className={styleModule.chatHeader__name}>{name}</h2>
         {/* //TODO - не реализован функционал показа (онлайн или нет)*/}
 
         {/*{user?.isOnline && (*/}
