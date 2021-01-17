@@ -80,13 +80,11 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
     [allDialogs, setFilteredDialogs]
   );
 
-  const createNewChat = useCallback(() => {
-    console.log("create chat at");
-  }, []);
+
 
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
-      <LeftColumnHeader onNewChat={createNewChat} />
+      <LeftColumnHeader />
       <Wrapper className={styleModule.leftColumn__inner}>
         <Wrapper className={styleModule.searchInput_Wrapper}>
           <Input

@@ -5,12 +5,11 @@ import classNames from "classnames";
 
 interface ChatHeaderPropsInterface {
   name: string;
-  onClick?: () => void;
 }
 
-const ChatHeader: FC<ChatHeaderPropsInterface> = ({ name, onClick }) => {
+const ChatHeader: FC<ChatHeaderPropsInterface> = ({ name }) => {
   return (
-    <header className={styleModule.chatHeader} onClick={onClick}>
+    <header className={styleModule.chatHeader}>
       <div className={styleModule.chatHeader__info}>
         <h2 className={styleModule.chatHeader__name}>{name}</h2>
         {/* //TODO - не реализован функционал показа (онлайн или нет)*/}

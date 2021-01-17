@@ -73,10 +73,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   messages,
   onSendMessage: onSendMessageProp
 }) => {
-  const onActionDialog = useCallback(() => {
-    console.log("click on action by dialog");
-  }, []);
-
   const scrollRef = useRef<ScrollbarsOverrideType>(null);
   const refMessagesWrapper = useRef(null);
 
@@ -113,7 +109,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader onClick={onActionDialog} name={chat?.name} />
+      <ChatHeader name={chat?.name} />
 
       <ScrollBar
         style={{

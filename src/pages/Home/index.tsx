@@ -27,7 +27,6 @@ import { DataForSendMessageInterface } from "../../types/types";
 
 const Home: FC = () => {
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(getCurrentUser());
     dispatch(getChats());
