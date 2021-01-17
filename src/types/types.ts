@@ -19,6 +19,12 @@ export interface ChatInterface {
   lastMessage: any;
 }
 
+export interface DataForSendMessageInterface {
+  chatId: string;
+  text: string;
+  author?: ShortUserInterface;
+}
+
 export interface AttachmentFileInterface {
   name: string;
   url: string;
@@ -34,4 +40,5 @@ export interface MessageInterface {
   createdAt: string;
   attachments?: AttachmentFileInterface[];
   author: ShortUserInterface;
+  loading?: boolean;
 }

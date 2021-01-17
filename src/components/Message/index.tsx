@@ -68,7 +68,7 @@ const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
         )}
       </Wrapper>
 
-      {message.text && message?.attachments.length > 0 && (
+      {message.text && message?.attachments?.length > 0 && (
         <ImageFilesRow
           message={message}
           alignRow={isMe ? AlignRow.END : AlignRow.START}

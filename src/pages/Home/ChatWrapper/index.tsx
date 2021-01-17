@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useRef, useState } from "react";
+import React, { FC, memo, useCallback, useMemo, useRef, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -14,49 +14,71 @@ import { useChatScrollManager } from "../../../hooks/hooks";
 import { ScrollbarsOverrideType } from "../../../types/helpersType";
 import {
   ChatInterface,
+  DataForSendMessageInterface,
   MessageInterface,
   UserInterface
 } from "../../../types/types";
+import { getHeaderChatName } from "./helpers";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
   chat: ChatInterface;
+  messages: MessageInterface[];
+  onSendMessage: (message: DataForSendMessageInterface) => void;
 }
 
-function renderMessages(
-  isLoadedMessagesWrapper: boolean,
-  currentUser: UserInterface
-) {
-  const messages: MessageInterface[] = [];
-
+function MessagesWrapper({
+  isLoadedMessagesWrapper,
+  currentUser,
+  messages = []
+}: {
+  isLoadedMessagesWrapper: boolean;
+  currentUser: UserInterface;
+  messages: MessageInterface[];
+}) {
   return (
-    isLoadedMessagesWrapper &&
-    messages.map((message) => {
-      const isAudioMsg = !!message.audio;
+    isLoadedMessagesWrapper && (
+      <>
+        {messages.map((message) => {
+          //TODO - функционал аудио-сообщений не реализован на бекенде.
+          // const isAudioMsg = !!message?.audio;
+          const isAudioMsg = false;
 
-      return (
-        <Wrapper className={styleModule.messageWrapper} key={message.id}>
-          {isAudioMsg ? (
-            <MessageAudio
-              message={message}
-              isMe={currentUser.id === message.author.id}
-            />
-          ) : (
-            <Message
-              message={message}
-              isMe={currentUser.id === message.author.id}
-            />
-          )}
-        </Wrapper>
-      );
-    })
+          return (
+            <Wrapper className={styleModule.messageWrapper} key={message.id}>
+              {isAudioMsg ? (
+                <MessageAudio
+                  message={message}
+                  isMe={currentUser.id === message.author.id}
+                />
+              ) : (
+                <Message
+                  message={message}
+                  isMe={currentUser.id === message.author.id}
+                />
+              )}
+            </Wrapper>
+          );
+        })}
+      </>
+    )
   );
 }
 
-const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
+const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
+  currentUser,
+  chat,
+  messages,
+  onSendMessage: onSendMessageProp
+}) => {
   const onActionDialog = useCallback(() => {
     console.log("click on action by dialog");
   }, []);
+
+  const titleHeader = useMemo(getHeaderChatName(chat, currentUser), [
+    chat,
+    currentUser
+  ]);
 
   const scrollRef = useRef<ScrollbarsOverrideType>(null);
   const refMessagesWrapper = useRef(null);
@@ -79,14 +101,22 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
   const onSendMessage = useCallback(
     (msgText: string) => {
       scrollToBottom();
+      onSendMessageProp({
+        text: msgText,
+        chatId: chat.id,
+        author: {
+          fullName: currentUser.fullName,
+          id: currentUser.id
+        }
+      });
     },
     // eslint-disable-next-line
-    [currentUser, scrollToBottom]
+    [currentUser, scrollToBottom, onSendMessageProp, chat]
   );
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader onClick={onActionDialog} user={chat?.author} />
+      <ChatHeader onClick={onActionDialog} userName={titleHeader} />
 
       <ScrollBar
         style={{
@@ -102,7 +132,11 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({ currentUser, chat }) => {
           }}
           className={classNames(styleModule.chatWrapper)}
         >
-          {renderMessages(isLoadedMessagesWrapper, currentUser)}
+          <MessagesWrapper
+            currentUser={currentUser}
+            isLoadedMessagesWrapper={isLoadedMessagesWrapper}
+            messages={messages}
+          />
         </Wrapper>
       </ScrollBar>
 

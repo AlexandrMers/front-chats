@@ -1,51 +1,78 @@
-import React, { FC, memo, useEffect } from "react";
+import React, { FC, memo, useCallback, useEffect } from "react";
 import { Empty } from "antd";
+import { shallowEqual } from "react-redux";
 
 import { WechatOutlined } from "@ant-design/icons";
 
 import Loader from "primitives/Loader";
+import FlexContainer from "primitives/FlexContainer";
 import Wrapper from "primitives/Wrapper";
+
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 
 import styleModule from "./style.module.scss";
 
-import FlexContainer from "../../primitives/FlexContainer";
+import { useAppDispatch, useTypedSelector } from "state/store";
+import { getCurrentUser } from "state/modules/user";
+import { getChats } from "state/modules/chats/actions";
+import {
+  getMessagesByChatId,
+  selectChatId,
+  sendMessage
+} from "state/modules/selectedChat/actions";
 
-import { useAppDispatch, useTypedSelector } from "../../state/store";
-import { getCurrentUser } from "../../state/modules/user";
-import { shallowEqual } from "react-redux";
-import { ChatInterface } from "../../types/types";
-import { getChats } from "../../state/modules/chats";
+import { selectChatInfo } from "./selectors";
+import { DataForSendMessageInterface } from "../../types/types";
 
 const Home: FC = () => {
-  const chatLoading = false;
-  const selectedChat: ChatInterface = null;
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getCurrentUser());
     dispatch(getChats());
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
 
   const {
     isLoadingUser,
     currentUser,
     isLoadingChats,
-    chats
-  } = useTypedSelector(
-    (state) => ({
+    chats,
+    selectedChatId,
+    selectedChatLoading,
+    selectedChatMessages,
+    selectedChatInfo
+  } = useTypedSelector((state) => {
+    return {
       isLoadingUser: state.userModule.loading,
       currentUser: state.userModule.userInfo,
       isLoadingChats: state.chatModule.chatsLoading,
-      chats: state.chatModule.chats
-    }),
-    shallowEqual
+      chats: state.chatModule.chats,
+      selectedChatId: state.selectedChatModule.selectedChatId,
+      selectedChatLoading: state.selectedChatModule.selectedChatLoading,
+      selectedChatMessages: state.selectedChatModule.selectedChatMessages,
+      selectedChatInfo: selectChatInfo(state)
+    };
+  }, shallowEqual);
+
+  const onSelectChat = useCallback(
+    (selectedChatId: string) => {
+      dispatch(selectChatId(selectedChatId));
+    },
+    [dispatch]
   );
 
-  console.log("currentUser -> ", currentUser);
+  useEffect(() => {
+    if (!selectedChatId) return undefined;
+    dispatch(getMessagesByChatId(selectedChatId));
+  }, [dispatch, selectedChatId]);
+
+  const onSendMessage = useCallback(
+    (msgData: DataForSendMessageInterface) => {
+      dispatch(sendMessage(msgData));
+    },
+    [dispatch]
+  );
 
   if (isLoadingUser || isLoadingChats) {
     return (
@@ -65,14 +92,9 @@ const Home: FC = () => {
 
   return (
     <FlexContainer className={styleModule.homeWrapper}>
-      <DialogItemsWrapper
-        chats={chats}
-        onSelectChat={(selectedChatId) =>
-          console.log("selectedChatId -> ", selectedChatId)
-        }
-      />
+      <DialogItemsWrapper chats={chats} onSelectChat={onSelectChat} />
       <>
-        {chatLoading ? (
+        {selectedChatLoading ? (
           <Wrapper
             styles={{
               height: "100%",
@@ -84,8 +106,14 @@ const Home: FC = () => {
           >
             <Loader />
           </Wrapper>
-        ) : selectedChat ? (
-          <ChatWrapper key={null} chat={null} currentUser={null} />
+        ) : selectedChatMessages && selectedChatId ? (
+          <ChatWrapper
+            messages={selectedChatMessages}
+            key={selectedChatId}
+            chat={selectedChatInfo}
+            currentUser={currentUser}
+            onSendMessage={onSendMessage}
+          />
         ) : (
           <Wrapper className={styleModule.chatWrapper}>
             <Empty

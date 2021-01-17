@@ -1,7 +1,8 @@
 import { instanceApiRequest } from "../../tools/requestCreator";
+
 import { UserInterface } from "../../../types/types";
-import { MethodType } from "../../tools/types";
 import { AuthorizationInterface } from "../../../pages/Login/types";
+import { MethodType } from "../../tools/types";
 
 export const UserAPI = {
   getCurrentUser() {
@@ -21,11 +22,4 @@ export const UserAPI = {
       }
     });
   }
-  // login(_data: AuthorizationInterface) {
-  //   return instanceApiRequest.createRequest<any>(
-  //     "/users/5ff34249eb599cb218972caa111",
-  //     MethodType.GET,
-  //     {}
-  //   );
-  // }
 };

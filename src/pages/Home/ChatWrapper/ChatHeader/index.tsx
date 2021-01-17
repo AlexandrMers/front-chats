@@ -1,21 +1,20 @@
 import React, { FC, memo } from "react";
 
-import { ShortUserInterface } from "types/types";
-
 import styleModule from "./style.module.scss";
 import classNames from "classnames";
 
 interface ChatHeaderPropsInterface {
-  user: ShortUserInterface;
+  userName: string;
   onClick?: () => void;
 }
 
-const ChatHeader: FC<ChatHeaderPropsInterface> = ({ user, onClick }) => {
+const ChatHeader: FC<ChatHeaderPropsInterface> = ({ userName, onClick }) => {
   return (
     <header className={styleModule.chatHeader} onClick={onClick}>
       <div className={styleModule.chatHeader__info}>
-        <h2 className={styleModule.chatHeader__name}>{user?.fullName}</h2>\
-        //TODO - не реализован функционал показа (онлайн или нет)
+        <h2 className={styleModule.chatHeader__name}>{userName}</h2>
+        {/* //TODO - не реализован функционал показа (онлайн или нет)*/}
+
         {/*{user?.isOnline && (*/}
         {/*  <div className={styleModule.chatHeader__inner}>*/}
         {/*    <Circle className={styleModule.chatHeader__circle} size={6} />*/}
