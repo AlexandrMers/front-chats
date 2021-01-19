@@ -14,7 +14,7 @@ import DialogItemsWrapper from "./DialogItemsWrapper";
 import styleModule from "./style.module.scss";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
-import { getCurrentUser } from "state/modules/user";
+import { getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
 import {
   getMessagesByChatId,

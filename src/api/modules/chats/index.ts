@@ -17,6 +17,18 @@ export const ChatsApi = {
     );
   },
 
+  createChat(partnerId: string) {
+    return instanceApiRequest.createRequest<ChatInterface>(
+      `/chats/create`,
+      MethodType.PUT,
+      {
+        data: {
+          partnerId
+        }
+      }
+    );
+  },
+
   getMessagesByChatId(chatId: string) {
     return instanceApiRequest.createRequest<{
       chatId: string;

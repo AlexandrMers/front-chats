@@ -5,6 +5,13 @@ import { AuthorizationInterface } from "../../../pages/Login/types";
 import { MethodType } from "../../tools/types";
 
 export const UserAPI = {
+  getAllUsers() {
+    return instanceApiRequest.createRequest<UserInterface[]>(
+      "users",
+      MethodType.GET,
+      {}
+    );
+  },
   getCurrentUser() {
     return instanceApiRequest.createRequest<UserInterface>(
       `users/me`,

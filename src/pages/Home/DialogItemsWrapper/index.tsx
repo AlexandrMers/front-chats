@@ -80,8 +80,6 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
     [allDialogs, setFilteredDialogs]
   );
 
-
-
   return (
     <Wrapper className={classNames(styleModule.dialogItemsWrapper)}>
       <LeftColumnHeader />
@@ -103,7 +101,6 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
           autoHide
           hideTracksWhenNotNeeded
         >
-          {/*//@ts-ignore*/}
           {chats.length > 0 ? (
             <Dialogs
               dialogItems={filteredDialogs}

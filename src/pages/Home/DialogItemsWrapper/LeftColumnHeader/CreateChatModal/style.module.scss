@@ -1,0 +1,9 @@
+@import "../../../../../styles/tools/vars";
+@import "../../../../../styles/tools/mixins";
+
+.cmpCreateModal {
+  &__loaderWrapper {
+    width: 100%;
+    height: 100%;
+  }
+}

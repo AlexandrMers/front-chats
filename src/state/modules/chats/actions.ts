@@ -7,3 +7,8 @@ export const getChats = authGuardAsyncThunk<ChatInterface[]>({
   prefix: "chats/getAllChats",
   requestFunc: ChatsApi.getAllChats
 });
+
+export const createNewChat = authGuardAsyncThunk<ChatInterface, string>({
+  prefix: "chats/create",
+  requestFunc: ChatsApi.createChat
+});

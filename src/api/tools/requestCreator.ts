@@ -11,7 +11,7 @@ class ApiRequest {
     this.token = token;
   }
 
-  completeRequest = (
+  private completeRequest = (
     url: string,
     method: MethodType,
     options: OptionsRequestInterface
@@ -39,7 +39,7 @@ class ApiRequest {
     });
   };
 
-  createRequest = <T>(
+  public createRequest = <T>(
     url: string,
     method: MethodType,
     options: OptionsRequestInterface
