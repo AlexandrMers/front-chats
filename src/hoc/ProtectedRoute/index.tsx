@@ -27,7 +27,7 @@ const ProtectedRoute = ({
     return <Redirect to="/login" />;
   }
 
-  return <Route {...rest} render={(props) => <Component {...props} />} />;
+  return <Route render={(props) => <Component {...props} />} {...rest} />;
 };
 
 export default memo(ProtectedRoute);

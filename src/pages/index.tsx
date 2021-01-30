@@ -8,6 +8,7 @@ import RegistrationPage from "./Registration";
 import LoginPage from "./Login";
 
 import ProtectedRoute from "../hoc/ProtectedRoute";
+import SocketHOC from "./Home/SocketHandleHOC";
 
 function useRouter() {
   return useContext(__RouterContext);
@@ -45,7 +46,11 @@ const Routes = () => {
       <Switch location={item}>
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/registration" component={RegistrationPage} />
-        <ProtectedRoute exact path={["/", "/home"]} component={Home} />
+        <ProtectedRoute
+          exact
+          path={["/", "/home"]}
+          render={(props) => <SocketHOC component={Home} {...props} />}
+        />
       </Switch>
     </animated.div>
   ));
