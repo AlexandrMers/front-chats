@@ -1,8 +1,9 @@
 import React, { FC, memo, useCallback, useEffect } from "react";
-import { Empty } from "antd";
 import { shallowEqual } from "react-redux";
-
+import { Empty } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
+
+import io from "socket.io-client";
 
 import Loader from "primitives/Loader";
 import FlexContainer from "primitives/FlexContainer";
@@ -23,9 +24,14 @@ import {
 } from "state/modules/selectedChat/actions";
 
 import { selectChatInfo, selectChatsSelector } from "./selectors";
-import { DataForSendMessageInterface } from "../../types/types";
+import { DataForSendMessageInterface } from "types/types";
 
 const Home: FC = () => {
+  useEffect(() => {
+    const socketConnect = io("http://localhost:8080");
+    socketConnect.emit("msgFromClient", "hello 123123123");
+  }, []);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getCurrentUser());

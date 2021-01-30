@@ -1,0 +1,13 @@
+@import "src/styles/tools/vars";
+
+.systemMessage {
+  width: 100%;
+  padding-bottom: 15px;
+
+  &__innerText {
+    color: $white;
+    border-radius: 15px;
+    padding: 5px 15px;
+    background-color: $wave-bg-color;
+  }
+}

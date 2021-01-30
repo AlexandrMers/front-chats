@@ -31,10 +31,15 @@ export interface AttachmentFileInterface {
   url: string;
 }
 
+export enum MessageType {
+  SYSTEM,
+  USER
+}
+
 export interface MessageInterface {
   id: string;
   chatId: string;
-  type: number;
+  type: MessageType;
   audio?: string;
   isRead: boolean;
   text: string;

@@ -1,7 +1,8 @@
 import React, { memo, useEffect, useMemo } from "react";
 import { RouteProps, Route, Redirect } from "react-router";
-import { useAppDispatch } from "../../state/store";
-import { setAuth } from "../../state/modules/auth";
+
+import { useAppDispatch } from "state/store";
+import { setAuth } from "state/modules/auth";
 
 interface PrivateRouteInterface extends RouteProps {}
 

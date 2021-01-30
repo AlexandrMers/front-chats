@@ -9,16 +9,19 @@ import styleModule from "./style.module.scss";
 import { useChatScrollManager } from "hooks/hooks";
 
 import MessageAudio from "components/Message/MessageAudio";
-import Message from "components/Message";
 import InputMessage from "components/InputMessage";
+import Message from "components/Message";
+import SystemMessage from "components/Message/SystemMessage";
 
 import Wrapper from "primitives/Wrapper";
+
 import ChatHeader from "./ChatHeader";
 
 import {
   ChatInterface,
   DataForSendMessageInterface,
   MessageInterface,
+  MessageType,
   UserInterface
 } from "types/types";
 
@@ -53,6 +56,8 @@ function MessagesWrapper({
                   message={message}
                   isMe={currentUser.id === message.author.id}
                 />
+              ) : message.type === MessageType.SYSTEM ? (
+                <SystemMessage type={MessageType.SYSTEM} {...message} />
               ) : (
                 <Message
                   message={message}

@@ -1,6 +1,7 @@
 import { push } from "connected-react-router";
-import { createAsyncThunk, AsyncThunkOptions } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { instanceApiRequest } from "../api/tools/requestCreator";
+import { ThunkOptionsCustomTypes } from "../thunk";
 
 export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
   prefix,
@@ -9,7 +10,7 @@ export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
 }: {
   prefix: string;
   requestFunc: (data?: EnterType) => Promise<any>;
-  options?: AsyncThunkOptions<EnterType>;
+  options?: ThunkOptionsCustomTypes<EnterType>;
 }) =>
   createAsyncThunk(
     prefix,

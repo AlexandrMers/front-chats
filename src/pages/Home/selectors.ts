@@ -14,10 +14,15 @@ const getSelectedIdSelector = (state: StateInterface): string =>
 
 const getSelectedChatInfoSelector = (
   chats: ChatInterface[],
-  chatId: string
+  chatId: string,
+  userInfo: UserInterface
 ): ChatInterface | null => {
   const selectedChat = chats.find((chat) => chat.id === chatId);
-  return selectedChat ?? null;
+  if (!selectedChat) return null;
+  return {
+    ...selectedChat,
+    name: excludeCurrentUserName(userInfo.id, selectedChat)
+  };
 };
 
 function excludeCurrentUserName(currentUserId: string, chat: ChatInterface) {
@@ -42,6 +47,7 @@ const formatChatsSelector = (
 export const selectChatInfo = createSelector(
   getChatsSelector,
   getSelectedIdSelector,
+  getCurrentUserSelector,
   getSelectedChatInfoSelector
 );
 

@@ -60,12 +60,14 @@
   &:hover {
     opacity: 1;
   }
+  &[disabled] {
+    opacity: 0.1;
+  }
 }
 
 .input__button {
   &[disabled] {
      & > .icon_common:hover {
-      opacity: .3;
       cursor: initial;
     }
   }
