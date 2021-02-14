@@ -20,6 +20,9 @@ interface AuthModuleStateInterface {
   registrationLoading: boolean;
   registrationError: any;
   registrationSuccess: boolean;
+  confirmedRegistration: boolean;
+  confirmedRegistrationLoading: boolean;
+  confirmedRegistrationError: any;
 }
 
 const initialState: AuthModuleStateInterface = {
@@ -28,7 +31,10 @@ const initialState: AuthModuleStateInterface = {
   loginError: null,
   registrationError: null,
   registrationLoading: false,
-  registrationSuccess: false
+  registrationSuccess: false,
+  confirmedRegistration: false,
+  confirmedRegistrationLoading: false,
+  confirmedRegistrationError: null
 };
 
 export const setAuth = createAction<boolean>("SET_AUTH");
@@ -58,6 +64,18 @@ export const registerUser = createAsyncThunk<
 >("registerUser", async (data, { rejectWithValue }) => {
   try {
     return await UserAPI.register(data);
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const confirmRegistrationUser = createAsyncThunk<
+  string,
+  { hash: string },
+  { rejectValue: ErrorMainInterface }
+>("confirmRegistrationUser", async ({ hash }, { rejectWithValue }) => {
+  try {
+    return await UserAPI.confirmRegister(hash);
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
@@ -104,6 +122,27 @@ const AuthSlice = createSlice({
       state.registrationError = errorData;
       state.registrationSuccess = false;
     });
+
+    builder.addCase(confirmRegistrationUser.pending, (state) => {
+      state.confirmedRegistrationLoading = true;
+      state.confirmedRegistrationError = null;
+      state.confirmedRegistration = false;
+    });
+
+    builder.addCase(confirmRegistrationUser.fulfilled, (state) => {
+      state.confirmedRegistrationLoading = false;
+      state.confirmedRegistrationError = null;
+      state.confirmedRegistration = true;
+    });
+
+    builder.addCase(
+      confirmRegistrationUser.rejected,
+      (state, { payload: errorData }) => {
+        state.confirmedRegistrationLoading = false;
+        state.confirmedRegistrationError = errorData;
+        state.confirmedRegistration = false;
+      }
+    );
   }
 });
 
