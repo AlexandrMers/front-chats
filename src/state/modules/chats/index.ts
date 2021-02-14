@@ -41,10 +41,13 @@ const ChatsSlice = createSlice({
       state.createChatLoading = false;
     });
 
-    builder.addCase(createNewChat.fulfilled, (state, { payload: createdChat }) => {
-      state.chats.push(createdChat);
-      state.createChatLoading = false;
-    });
+    builder.addCase(
+      createNewChat.fulfilled,
+      (state, { payload: createdChat }) => {
+        state.chats.push(createdChat);
+        state.createChatLoading = false;
+      }
+    );
   }
 });
 

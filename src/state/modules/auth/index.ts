@@ -1,23 +1,34 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-import { UserAPI } from "../../../api/modules/user";
-
-import { AuthorizationInterface } from "../../../pages/Login/types";
-import { instanceApiRequest } from "../../../api/tools/requestCreator";
-import { ErrorMainInterface } from "../../types";
 import { push } from "connected-react-router";
 
-const initialState: {
+import { UserAPI } from "api/modules/user";
+
+import { instanceApiRequest } from "api/tools/requestCreator";
+
+import { AuthorizationInterface } from "pages/Login/types";
+import { RegistrationInterface } from "pages/Registration/types";
+import { UserInterface } from "types/types";
+import { ErrorMainInterface } from "../../types";
+
+interface AuthModuleStateInterface {
   isAuth: boolean;
   loginLoading: boolean;
   loginError: {
     status: string;
     message: string;
   };
-} = {
+  registrationLoading: boolean;
+  registrationError: any;
+  registrationSuccess: boolean;
+}
+
+const initialState: AuthModuleStateInterface = {
   isAuth: false,
   loginLoading: false,
-  loginError: null
+  loginError: null,
+  registrationError: null,
+  registrationLoading: false,
+  registrationSuccess: false
 };
 
 export const setAuth = createAction<boolean>("SET_AUTH");
@@ -35,6 +46,18 @@ export const login = createAsyncThunk<
     const dataToken = await UserAPI.login(data);
     instanceApiRequest.setToken(dataToken.token);
     dispatch(push("/home"));
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const registerUser = createAsyncThunk<
+  UserInterface,
+  RegistrationInterface,
+  { rejectValue: ErrorMainInterface }
+>("registerUser", async (data, { rejectWithValue }) => {
+  try {
+    return await UserAPI.register(data);
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
@@ -63,6 +86,23 @@ const AuthSlice = createSlice({
 
     builder.addCase(setAuth, (state, { payload: isAuth }) => {
       state.isAuth = isAuth;
+    });
+
+    builder.addCase(registerUser.pending, (state) => {
+      state.registrationLoading = true;
+      state.registrationError = null;
+    });
+
+    builder.addCase(registerUser.fulfilled, (state) => {
+      state.registrationSuccess = true;
+      state.registrationError = null;
+      state.registrationLoading = false;
+    });
+
+    builder.addCase(registerUser.rejected, (state, { payload: errorData }) => {
+      state.registrationLoading = false;
+      state.registrationError = errorData;
+      state.registrationSuccess = false;
     });
   }
 });

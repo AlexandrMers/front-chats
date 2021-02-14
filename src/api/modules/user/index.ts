@@ -3,6 +3,7 @@ import { instanceApiRequest } from "../../tools/requestCreator";
 import { UserInterface } from "../../../types/types";
 import { AuthorizationInterface } from "../../../pages/Login/types";
 import { MethodType } from "../../tools/types";
+import { RegistrationInterface } from "../../../pages/Registration/types";
 
 export const UserAPI = {
   getAllUsers() {
@@ -28,5 +29,14 @@ export const UserAPI = {
         password: data.password
       }
     });
+  },
+  register(data: RegistrationInterface) {
+    return instanceApiRequest.createRequest<UserInterface>(
+      "/register",
+      MethodType.POST,
+      {
+        data
+      }
+    );
   }
 };

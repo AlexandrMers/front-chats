@@ -1,7 +1,8 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { Form } from "antd";
+import { shallowEqual } from "react-redux";
 
 import {
   MailOutlined,
@@ -25,7 +26,21 @@ import {
 } from "libs/validators";
 import { configFormRegistrationFormik } from "./tools";
 
+import { useAppDispatch, useTypedSelector } from "state/store";
+import { registerUser } from "state/modules/auth";
+
 const RegistrationPage = () => {
+  const dispatch = useAppDispatch();
+
+  const { registrationLoading, registrationSuccess } = useTypedSelector(
+    (state) => ({
+      registrationError: state.authModule.registrationError,
+      registrationSuccess: state.authModule.registrationSuccess,
+      registrationLoading: state.authModule.registrationLoading
+    }),
+    shallowEqual
+  );
+
   const {
     handleSubmit,
     handleBlur,
@@ -37,11 +52,16 @@ const RegistrationPage = () => {
   } = useFormik<RegistrationFormInterface>({
     ...configFormRegistrationFormik,
     onSubmit: (values: RegistrationFormInterface) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(
+        registerUser({
+          email: values.email,
+          fullName: values.name,
+          password: values.password,
+          confirmedPassword: values.password2
+        })
+      );
     }
   });
-
-  const [isSuccessRegistration] = useState(false);
 
   const validateStatusEmail = useMemo(
     () => fieldValidate(touched.email, errors.email),
@@ -92,7 +112,7 @@ const RegistrationPage = () => {
         </p>
       </header>
 
-      {isSuccessRegistration ? (
+      {registrationSuccess ? (
         <SuccessNotifyRegistration />
       ) : (
         <WhiteBlock className={styleModule.wrapperAuth__form} withShadow>
@@ -179,7 +199,8 @@ const RegistrationPage = () => {
               className={styleModule.authForm__button}
               type="primary"
               htmlType="submit"
-              disabled={!isValid}
+              disabled={!isValid || registrationLoading}
+              loading={registrationLoading}
             >
               Зарегистрироваться
             </Button>
