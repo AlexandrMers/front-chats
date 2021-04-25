@@ -1,27 +1,32 @@
 import React, { FC, memo } from "react";
+import { Typography } from "antd";
 
-import styleModule from "./style.module.scss";
 import classNames from "classnames";
 
+import { AdditionalInfoChatInterface } from "types/types";
+
+import Circle from "primitives/Circle";
+
+import styleModule from "./style.module.scss";
+
 interface ChatHeaderPropsInterface {
-  name: string;
+  info: AdditionalInfoChatInterface;
 }
 
-const ChatHeader: FC<ChatHeaderPropsInterface> = ({ name }) => {
+const ChatHeader: FC<ChatHeaderPropsInterface> = ({ info }) => {
   return (
     <header className={styleModule.chatHeader}>
       <div className={styleModule.chatHeader__info}>
-        <h2 className={styleModule.chatHeader__name}>{name}</h2>
-        {/* //TODO - не реализован функционал показа (онлайн или нет)*/}
+        <h2 className={styleModule.chatHeader__name}>{info.name}</h2>
 
-        {/*{user?.isOnline && (*/}
-        {/*  <div className={styleModule.chatHeader__inner}>*/}
-        {/*    <Circle className={styleModule.chatHeader__circle} size={6} />*/}
-        {/*    <Typography.Text className={styleModule.chatHeader__title}>*/}
-        {/*      онлайн*/}
-        {/*    </Typography.Text>*/}
-        {/*  </div>*/}
-        {/*)}*/}
+        {info?.isOnline && (
+          <div className={styleModule.chatHeader__inner}>
+            <Circle className={styleModule.chatHeader__circle} size={6} />
+            <Typography.Text className={styleModule.chatHeader__title}>
+              онлайн
+            </Typography.Text>
+          </div>
+        )}
       </div>
       <div className={styleModule.chatHeader__buttonWrap}>
         <button

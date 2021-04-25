@@ -13,7 +13,7 @@ import DialogItemsWrapper from "./DialogItemsWrapper";
 import styleModule from "./style.module.scss";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
-import { getCurrentUser } from "state/modules/user/actions";
+import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
 import {
   getMessagesByChatId,
@@ -26,8 +26,10 @@ import { DataForSendMessageInterface } from "types/types";
 
 const Home: FC = () => {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(getCurrentUser());
+    dispatch(getAllUsers());
     dispatch(getChats());
   }, [dispatch]);
 

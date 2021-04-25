@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { UserInterface } from "../../../types/types";
-import { getAllUsers, getCurrentUser } from "./actions";
+import {
+  getAllUsers,
+  getCurrentUser,
+  setUserOfflineById,
+  setUserOnlineById
+} from "./actions";
 
 const initialState: {
   loading: boolean;
@@ -57,6 +62,38 @@ const UserSlice = createSlice({
     builder.addCase(getAllUsers.rejected, (state, { payload: errorInfo }) => {
       state.allUsersLoading = false;
       state.error = errorInfo;
+    });
+
+    builder.addCase(setUserOnlineById, (state, { payload: joinedUser }) => {
+      const indexUser = state.allUsers.findIndex(
+        (user) => user.id === joinedUser.id
+      );
+      const user = state.allUsers[indexUser];
+
+      if (indexUser === -1) {
+        return state;
+      }
+
+      state.allUsers[indexUser] = {
+        ...user,
+        isOnline: true
+      };
+    });
+
+    builder.addCase(setUserOfflineById, (state, { payload: leavedUser }) => {
+      const indexUser = state.allUsers.findIndex(
+        (user) => user.id === leavedUser.id
+      );
+      const user = state.allUsers[indexUser];
+
+      if (indexUser === -1) {
+        return state;
+      }
+
+      state.allUsers[indexUser] = {
+        ...user,
+        isOnline: false
+      };
     });
   }
 });

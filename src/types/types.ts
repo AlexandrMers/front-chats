@@ -12,12 +12,19 @@ export interface ShortUserInterface {
   id: string;
 }
 
+export interface AdditionalInfoChatInterface {
+  name: string;
+  id: string;
+  isOnline: boolean;
+}
+
 export interface ChatInterface {
   id: string;
   name?: string;
   author: ShortUserInterface;
   partner: ShortUserInterface;
   lastMessage: any;
+  additionalInfo?: AdditionalInfoChatInterface;
 }
 
 export interface DataForSendMessageInterface {

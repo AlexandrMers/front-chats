@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useState } from "react";
+import React, { FC, memo, useCallback, useState } from "react";
 import { Avatar, Card, Modal, Spin, Typography } from "antd";
 import Meta from "antd/lib/card/Meta";
 import ScrollBar from "react-custom-scrollbars";
@@ -15,7 +15,6 @@ import style from "./style.module.scss";
 
 import { CreateChatModalInterface } from "./types";
 import { useAppDispatch, useTypedSelector } from "../../../../../state/store";
-import { getAllUsers } from "../../../../../state/modules/user/actions";
 import { selectUsersForCreateChat } from "./selectors";
 import { createNewChat } from "../../../../../state/modules/chats/actions";
 
@@ -36,10 +35,6 @@ const CreateChatModal: FC<CreateChatModalInterface> = ({
     }),
     shallowEqual
   );
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
 
   const createChat = useCallback(() => {
     if (!selectedUserId) return;

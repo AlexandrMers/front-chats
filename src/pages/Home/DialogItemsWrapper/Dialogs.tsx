@@ -3,15 +3,17 @@ import { compose, map } from "ramda";
 import { Empty } from "antd";
 import { shallowEqual } from "react-redux";
 
-import styleModule from "./style.module.scss";
+import { useTypedSelector } from "state/store";
 
 import { ChatInterface } from "types/types";
-import Wrapper from "primitives/Wrapper";
+
 import DialogItem from "components/DialogItem";
+
+import Wrapper from "primitives/Wrapper";
 
 import { OrderSort, sortByDate } from "libs/sorters";
 
-import { useTypedSelector } from "../../../state/store";
+import styleModule from "./style.module.scss";
 
 function Dialogs({
   selectedDialogId,
@@ -22,9 +24,10 @@ function Dialogs({
   setSelectedDialogId: (value: string) => void;
   dialogItems: ChatInterface[];
 }) {
-  const { currentUser } = useTypedSelector(
+  const { currentUser, users = [] } = useTypedSelector(
     (state) => ({
-      currentUser: state.userModule.userInfo
+      currentUser: state.userModule.userInfo,
+      users: state.userModule.allUsers
     }),
     shallowEqual
   );
@@ -33,6 +36,7 @@ function Dialogs({
     compose(
       map<ChatInterface, ReactNode>((dialog) => {
         const isSelected = selectedDialogId === dialog.id;
+
         return (
           <Wrapper key={dialog.id} className={styleModule.marginFromScroll}>
             <DialogItem
@@ -40,6 +44,7 @@ function Dialogs({
               chat={dialog}
               isSelected={isSelected}
               currentUser={currentUser}
+              isOnline={dialog.additionalInfo.isOnline}
             />
           </Wrapper>
         );

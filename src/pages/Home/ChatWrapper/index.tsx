@@ -114,7 +114,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader name={chat?.name} />
+      <ChatHeader info={chat?.additionalInfo} />
 
       <ScrollBar
         style={{

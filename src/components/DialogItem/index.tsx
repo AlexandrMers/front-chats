@@ -58,7 +58,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
             className={styleModule.dialogItem__title}
             level={5}
           >
-            {chat.name}
+            {chat.additionalInfo.name}
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>
