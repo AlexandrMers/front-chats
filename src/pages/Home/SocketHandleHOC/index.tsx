@@ -30,25 +30,28 @@ const SocketHOC = ({
   );
 
   useEffect(() => {
-    socket.on(ChatEvent.USER_ONLINE, (joinedUserData: UserInterface) => {
-      if (!currentUserInfo || currentUserInfo?.id === joinedUserData?.id) {
-        return;
-      }
+    socket.connect();
 
-      dispatch(setUserOnlineById(joinedUserData));
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on(ChatEvent.USER_ONLINE, (joinedUserData: UserInterface) => {
+      if (currentUserInfo && currentUserInfo?.id !== joinedUserData?.id) {
+        dispatch(setUserOnlineById(joinedUserData));
+      }
     });
 
     socket.on(ChatEvent.USER_OFFLINE, (leftUser: UserInterface) => {
-      if (!currentUserInfo || currentUserInfo?.id === leftUser?.id) {
-        return;
+      if (currentUserInfo && currentUserInfo?.id !== leftUser?.id) {
+        dispatch(setUserOfflineById(leftUser));
       }
-
-      dispatch(setUserOfflineById(leftUser));
     });
 
     return () => {
-      socket.removeEventListener(ChatEvent.USER_ONLINE, () => {});
-      socket.removeEventListener(ChatEvent.USER_OFFLINE, () => {});
+      socket.removeAllListeners();
     };
   }, [currentUserInfo, dispatch]);
 

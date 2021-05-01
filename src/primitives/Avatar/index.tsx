@@ -1,9 +1,11 @@
 import React, { memo, useMemo } from "react";
-
-import Wrapper from "../Wrapper";
 import classNames from "classnames";
 
+import Avatar from "antd/lib/avatar";
+
 import styleModule from "./style.module.scss";
+
+import { shortName } from "./helpers";
 
 interface AvatarPropsInterface {
   avatar: string;
@@ -12,32 +14,34 @@ interface AvatarPropsInterface {
   size?: number;
 }
 
-const Avatar = ({
+const AvatarCmp = ({
   avatar,
   name,
   className,
   size = 30
 }: AvatarPropsInterface) => {
   const isEmptyAvatar = useMemo(() => !avatar, [avatar]);
+
   return (
-    <Wrapper
-      styles={{
+    <Avatar
+      style={{
         width: size,
         height: size,
         minWidth: size,
-        minHeight: size
+        minHeight: size,
+
+        color: "#ffffff",
+        backgroundColor: "#9E9EA1"
       }}
-      className={classNames(
-        styleModule.avatar,
-        {
-          [styleModule.avatar_isEmpty]: isEmptyAvatar
-        },
-        className
-      )}
+      className={classNames(styleModule.avatar, className)}
     >
-      {!isEmptyAvatar && <img src={avatar} alt={`avatar ${name}`} />}
-    </Wrapper>
+      {!isEmptyAvatar ? (
+        <img src={avatar} alt={`avatar ${name}`} />
+      ) : (
+        shortName(name)
+      )}
+    </Avatar>
   );
 };
 
-export default memo(Avatar);
+export default memo(AvatarCmp);

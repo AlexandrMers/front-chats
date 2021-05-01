@@ -69,6 +69,11 @@ export const registerUser = createAsyncThunk<
   }
 });
 
+export const logout = createAsyncThunk("logout", async (data, { dispatch }) => {
+  instanceApiRequest.deleteToken();
+  dispatch(push("/login"));
+});
+
 export const confirmRegistrationUser = createAsyncThunk<
   string,
   { hash: string },
@@ -104,6 +109,10 @@ const AuthSlice = createSlice({
 
     builder.addCase(setAuth, (state, { payload: isAuth }) => {
       state.isAuth = isAuth;
+    });
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.isAuth = false;
     });
 
     builder.addCase(registerUser.pending, (state) => {

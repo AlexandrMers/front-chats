@@ -43,7 +43,6 @@ function Dialogs({
               chat={dialog}
               isSelected={isSelected}
               currentUser={currentUser}
-              isOnline={dialog?.additionalInfo.isOnline}
             />
           </Wrapper>
         );

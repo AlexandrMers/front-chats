@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useState } from "react";
+import React, { FC, memo, useCallback, useEffect, useState } from "react";
 import { Avatar, Card, Modal, Spin, Typography } from "antd";
 import Meta from "antd/lib/card/Meta";
 import ScrollBar from "react-custom-scrollbars";
@@ -17,15 +17,20 @@ import { CreateChatModalInterface } from "./types";
 import { useAppDispatch, useTypedSelector } from "../../../../../state/store";
 import { selectUsersForCreateChat } from "./selectors";
 import { createNewChat } from "../../../../../state/modules/chats/actions";
+import { getAllUsers } from "../../../../../state/modules/user/actions";
 
 const CreateChatModal: FC<CreateChatModalInterface> = ({
   visible,
   onCancel,
   onSuccess
 }) => {
-  const [selectedUserId, setSelectedUserId] = useState<string>(null);
-
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
+  const [selectedUserId, setSelectedUserId] = useState<string>(null);
 
   const { users, usersLoading, loadingCreateChat } = useTypedSelector(
     (state) => ({

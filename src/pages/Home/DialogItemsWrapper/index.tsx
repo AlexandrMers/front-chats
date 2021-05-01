@@ -67,11 +67,11 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
   }, [onKeyDown, selectedDialogId]);
 
   const onChangeSearch = useCallback(
-    (value: string) => {
+    (matchField: string) => {
       const filteredData = filterChange<ChatInterface, string>({
         elements: allDialogs,
-        pathToElem: ["name"],
-        matchField: value,
+        pathToElem: ["additionalInfo", "name"],
+        matchField,
         filterCallback
       });
 

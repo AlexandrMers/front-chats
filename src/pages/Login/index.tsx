@@ -1,10 +1,12 @@
-import React, { memo, useEffect } from "react";
-import { useFormik } from "formik";
-import { Form } from "antd";
-import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
+import React, { memo, useEffect, useState } from "react";
 import { shallowEqual } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router";
+import { Redirect, withRouter } from "react-router";
 import { Link } from "react-router-dom";
+
+import { useFormik } from "formik";
+
+import { SecurityScanOutlined, UserOutlined } from "@ant-design/icons";
+import { Form } from "antd";
 
 import Wrapper from "primitives/Wrapper";
 import Button from "primitives/Button";
@@ -23,7 +25,9 @@ import { useAppDispatch, useTypedSelector } from "state/store";
 import { login } from "../../state/modules/auth";
 import { AuthorizationInterface } from "./types";
 
-const LoginPage = withRouter(({ history }: RouteComponentProps) => {
+const LoginPage = withRouter(() => {
+  const [isLogged, setIsLogged] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const { loginLoading, loginError } = useTypedSelector((state) => {
@@ -58,6 +62,16 @@ const LoginPage = withRouter(({ history }: RouteComponentProps) => {
 
     setFieldError("password", loginError.message);
   }, [loginError, setFieldError]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    const isAuthToken = JSON.parse(JSON.stringify(token));
+    setIsLogged(isAuthToken);
+  }, []);
+
+  if (isLogged) {
+    return <Redirect to="/home" />;
+  }
 
   return (
     <Wrapper className={styleModule.wrapperAuth}>

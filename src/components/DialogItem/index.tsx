@@ -15,13 +15,11 @@ interface DialogItemPropsInterface {
   chat: ChatInterface;
   onSelect: (dialogId: string) => void;
   isSelected?: boolean;
-  isOnline: boolean;
   currentUser?: UserInterface;
 }
 
 const DialogItem: FC<DialogItemPropsInterface> = ({
   isSelected,
-  isOnline,
   chat,
   onSelect,
   currentUser
@@ -48,9 +46,11 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
         avatar={null}
         name={chat.partner.fullName}
         className={classNames(styleModule.dialogItem__avatar, {
-          [styleModule.dialogItem__avatar_isOnline]: isOnline
+          [styleModule.dialogItem__avatar_isOnline]:
+            chat.additionalInfo.isOnline
         })}
       />
+
       <div className={styleModule.dialogItem__content}>
         <header className={styleModule.dialogItem__header}>
           <Typography.Title

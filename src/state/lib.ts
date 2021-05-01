@@ -5,6 +5,16 @@ import { instanceApiRequest } from "../api/tools/requestCreator";
 
 import { ThunkOptionsCustomTypes } from "../thunk";
 
+const STATUSES_ERRORS = [401, 404];
+
+function isErrorAuth(error: {
+  response: {
+    status: number;
+  };
+}) {
+  return STATUSES_ERRORS.includes(error.response.status);
+}
+
 export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
   prefix,
   requestFunc,
@@ -20,8 +30,8 @@ export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
       try {
         return (await requestFunc(data)) as ReturnType;
       } catch (error) {
-        if (error.response.status === 401) {
-          instanceApiRequest.setToken(null);
+        if (isErrorAuth(error)) {
+          instanceApiRequest.deleteToken();
           thunkAPI.dispatch(push("/login"));
         }
         console.error(error);

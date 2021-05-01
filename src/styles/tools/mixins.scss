@@ -1,8 +1,10 @@
 @mixin online-indicator {
   position: relative;
+  overflow: initial;
 
   &::after {
     content: "";
+    z-index: 10;
     position: absolute;
     bottom: 0;
     right: 0;

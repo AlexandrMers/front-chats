@@ -11,6 +11,11 @@ class ApiRequest {
     this.token = token;
   }
 
+  public deleteToken() {
+    localStorage.removeItem("auth_token");
+    this.token = null;
+  }
+
   private completeRequest = (
     url: string,
     method: MethodType,
