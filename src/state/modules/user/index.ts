@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { UserInterface } from "../../../types/types";
 import {
   getAllUsers,
   getCurrentUser,
   setUserOfflineById,
   setUserOnlineById
 } from "./actions";
+
+import { setIsOnlineUserStatus } from "./helpers";
+
+import { UserInterface } from "../../../types/types";
 
 const initialState: {
   loading: boolean;
@@ -64,36 +67,12 @@ const UserSlice = createSlice({
       state.error = errorInfo;
     });
 
-    builder.addCase(setUserOnlineById, (state, { payload: joinedUser }) => {
-      const indexUser = state.allUsers.findIndex(
-        (user) => user.id === joinedUser.id
-      );
-      const user = state.allUsers[indexUser];
-
-      if (indexUser === -1) {
-        return state;
-      }
-
-      state.allUsers[indexUser] = {
-        ...user,
-        isOnline: true
-      };
+    builder.addCase(setUserOnlineById, (state, { payload: userData }) => {
+      setIsOnlineUserStatus(state.allUsers, userData, true);
     });
 
-    builder.addCase(setUserOfflineById, (state, { payload: leavedUser }) => {
-      const indexUser = state.allUsers.findIndex(
-        (user) => user.id === leavedUser.id
-      );
-      const user = state.allUsers[indexUser];
-
-      if (indexUser === -1) {
-        return state;
-      }
-
-      state.allUsers[indexUser] = {
-        ...user,
-        isOnline: false
-      };
+    builder.addCase(setUserOfflineById, (state, { payload: userData }) => {
+      setIsOnlineUserStatus(state.allUsers, userData, false);
     });
   }
 });

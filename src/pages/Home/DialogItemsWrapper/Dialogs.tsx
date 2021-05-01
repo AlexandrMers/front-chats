@@ -1,7 +1,7 @@
 import React, { memo, ReactNode } from "react";
+import { shallowEqual } from "react-redux";
 import { compose, map } from "ramda";
 import { Empty } from "antd";
-import { shallowEqual } from "react-redux";
 
 import { useTypedSelector } from "state/store";
 
@@ -24,10 +24,9 @@ function Dialogs({
   setSelectedDialogId: (value: string) => void;
   dialogItems: ChatInterface[];
 }) {
-  const { currentUser, users = [] } = useTypedSelector(
+  const { currentUser } = useTypedSelector(
     (state) => ({
-      currentUser: state.userModule.userInfo,
-      users: state.userModule.allUsers
+      currentUser: state.userModule.userInfo
     }),
     shallowEqual
   );
@@ -44,7 +43,7 @@ function Dialogs({
               chat={dialog}
               isSelected={isSelected}
               currentUser={currentUser}
-              isOnline={dialog.additionalInfo.isOnline}
+              isOnline={dialog?.additionalInfo.isOnline}
             />
           </Wrapper>
         );

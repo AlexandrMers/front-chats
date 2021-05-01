@@ -2,7 +2,7 @@ export interface UserInterface {
   id: string;
   avatar?: string;
   isOnline?: boolean;
-  lastSeen: Date;
+  lastSeen: string;
   fullName: string;
   email: string;
 }

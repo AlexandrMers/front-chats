@@ -1,8 +1,8 @@
 import React, { FC, memo, useMemo } from "react";
-import { Typography } from "antd";
-import { ru } from "date-fns/locale";
 import formatRelative from "date-fns/format";
+import { ru } from "date-fns/locale";
 import classNames from "classnames";
+import { Typography } from "antd";
 
 import styleModule from "./style.module.scss";
 
@@ -15,7 +15,7 @@ interface DialogItemPropsInterface {
   chat: ChatInterface;
   onSelect: (dialogId: string) => void;
   isSelected?: boolean;
-  isOnline?: boolean;
+  isOnline: boolean;
   currentUser?: UserInterface;
 }
 

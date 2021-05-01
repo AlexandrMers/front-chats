@@ -24,7 +24,7 @@ const SocketHOC = ({
 
   const { currentUserInfo } = useTypedSelector(
     (state) => ({
-      currentUserInfo: state.userModule.userInfo
+      currentUserInfo: state?.userModule?.userInfo
     }),
     shallowEqual
   );
@@ -50,7 +50,7 @@ const SocketHOC = ({
       socket.removeEventListener(ChatEvent.USER_ONLINE, () => {});
       socket.removeEventListener(ChatEvent.USER_OFFLINE, () => {});
     };
-  }, [currentUserInfo]);
+  }, [currentUserInfo, dispatch]);
 
   useEffect(() => {
     if (!currentUserInfo) return undefined;
