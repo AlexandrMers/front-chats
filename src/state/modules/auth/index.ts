@@ -9,6 +9,7 @@ import { AuthorizationInterface } from "pages/Login/types";
 import { RegistrationInterface } from "pages/Registration/types";
 import { UserInterface } from "types/types";
 import { ErrorMainInterface } from "../../types";
+import { CLEAR_STATE } from "../../constants";
 
 interface AuthModuleStateInterface {
   isAuth: boolean;
@@ -71,6 +72,9 @@ export const registerUser = createAsyncThunk<
 
 export const logout = createAsyncThunk("logout", async (data, { dispatch }) => {
   instanceApiRequest.deleteToken();
+  dispatch({
+    type: CLEAR_STATE
+  });
   dispatch(push("/login"));
 });
 
@@ -107,12 +111,10 @@ const AuthSlice = createSlice({
       state.loginError = errorData;
     });
 
+    builder.addCase(logout.fulfilled, () => {});
+
     builder.addCase(setAuth, (state, { payload: isAuth }) => {
       state.isAuth = isAuth;
-    });
-
-    builder.addCase(logout.fulfilled, (state) => {
-      state.isAuth = false;
     });
 
     builder.addCase(registerUser.pending, (state) => {

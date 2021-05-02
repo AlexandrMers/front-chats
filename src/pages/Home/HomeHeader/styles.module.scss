@@ -1,0 +1,17 @@
+.homeHeaderWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1143px;
+  margin: 0 auto;
+  padding: 25px 0;
+  width: 100%;
+
+  &__Title {
+    font-size: 20px;
+  }
+
+  &__LogoutButton {
+    width: 100px;
+  }
+}

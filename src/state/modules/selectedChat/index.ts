@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { SelectedChatInitialStateInterface } from "./types";
 import { getMessagesByChatId, selectChatId, sendMessage } from "./actions";
+
+import { SelectedChatInitialStateInterface } from "./types";
 import {
   DataForSendMessageInterface,
   MessageInterface

@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useEffect } from "react";
 import { shallowEqual } from "react-redux";
+
 import { Empty } from "antd";
-import { LogoutOutlined, WechatOutlined } from "@ant-design/icons";
+import { WechatOutlined } from "@ant-design/icons";
 
 import Loader from "primitives/Loader";
 import FlexContainer from "primitives/FlexContainer";
 import Wrapper from "primitives/Wrapper";
-import Button from "../../primitives/Button";
 
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
@@ -16,16 +16,17 @@ import styleModule from "./style.module.scss";
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
+import { logout } from "../../state/modules/auth";
 import {
   getMessagesByChatId,
   selectChatId,
   sendMessage
 } from "state/modules/selectedChat/actions";
-import { logout } from "../../state/modules/auth";
 
 import { selectChatInfo, selectChatsSelector } from "./selectors";
 
 import { DataForSendMessageInterface } from "types/types";
+import HomeHeader from "./HomeHeader";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -91,15 +92,10 @@ const Home = () => {
 
   return (
     <>
-      <div className={styleModule.homeHeaderWrapper}>
-        <Button
-          className={styleModule.homeHeaderWrapper__LogoutButton}
-          icon={<LogoutOutlined />}
-          onClick={onLogout}
-        >
-          Выйти
-        </Button>
-      </div>
+      {currentUser && (
+        <HomeHeader onLogout={onLogout} name={currentUser.fullName} />
+      )}
+
       <FlexContainer className={styleModule.homeWrapper}>
         <DialogItemsWrapper chats={chats} onSelectChat={onSelectChat} />
         <>

@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect } from "react";
+import React, { FC, memo, useEffect, useRef } from "react";
 import { shallowEqual } from "react-redux";
 import io from "socket.io-client";
 
@@ -12,14 +12,14 @@ import { UserInterface } from "types/types";
 
 import { ChatEvent } from "./types";
 
-const socket = io(process.env.REACT_APP_SOCKET_URL);
-
 const SocketHOC = ({
   component: Component,
   ...otherProps
 }: {
   component: FC;
 }) => {
+  const socket = useRef(null);
+
   const dispatch = useAppDispatch();
 
   const { currentUserInfo } = useTypedSelector(
@@ -30,35 +30,39 @@ const SocketHOC = ({
   );
 
   useEffect(() => {
-    socket.connect();
+    socket.current = io(process.env.REACT_APP_SOCKET_URL);
+    socket.current.connect();
 
     return () => {
-      socket.disconnect();
+      socket.current.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    socket.on(ChatEvent.USER_ONLINE, (joinedUserData: UserInterface) => {
-      if (currentUserInfo && currentUserInfo?.id !== joinedUserData?.id) {
-        dispatch(setUserOnlineById(joinedUserData));
+    socket.current.on(
+      ChatEvent.USER_ONLINE,
+      (joinedUserData: UserInterface) => {
+        if (currentUserInfo && currentUserInfo?.id !== joinedUserData?.id) {
+          dispatch(setUserOnlineById(joinedUserData));
+        }
       }
-    });
+    );
 
-    socket.on(ChatEvent.USER_OFFLINE, (leftUser: UserInterface) => {
+    socket.current.on(ChatEvent.USER_OFFLINE, (leftUser: UserInterface) => {
       if (currentUserInfo && currentUserInfo?.id !== leftUser?.id) {
         dispatch(setUserOfflineById(leftUser));
       }
     });
 
     return () => {
-      socket.removeAllListeners();
+      socket.current.removeAllListeners();
     };
   }, [currentUserInfo, dispatch]);
 
   useEffect(() => {
     if (!currentUserInfo) return undefined;
 
-    socket.emit(ChatEvent.CONNECT_USER, currentUserInfo);
+    socket.current.emit(ChatEvent.CONNECT_USER, currentUserInfo);
   }, [currentUserInfo]);
 
   return <Component {...otherProps} />;
