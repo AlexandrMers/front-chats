@@ -10,6 +10,7 @@ import Wrapper from "primitives/Wrapper";
 
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
+import HomeHeader from "./HomeHeader";
 
 import styleModule from "./style.module.scss";
 
@@ -26,7 +27,6 @@ import {
 import { selectChatInfo, selectChatsSelector } from "./selectors";
 
 import { DataForSendMessageInterface } from "types/types";
-import HomeHeader from "./HomeHeader";
 
 const Home = () => {
   const dispatch = useAppDispatch();

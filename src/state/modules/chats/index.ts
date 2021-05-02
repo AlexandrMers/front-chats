@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { InitialStateChatsInterface } from "./types";
 import { createNewChat, getChats } from "./actions";
+
+import { InitialStateChatsInterface } from "./types";
 
 const initialState: InitialStateChatsInterface = {
   chats: [],
