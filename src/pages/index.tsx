@@ -8,7 +8,7 @@ import RegistrationPage from "./Registration";
 import LoginPage from "./Login";
 
 import ProtectedRoute from "../hoc/ProtectedRoute";
-import SocketHOC from "./Home/SocketHandleHOC";
+import SocketHOC from "../hoc/SocketHandleHOC";
 import ConfirmedPage from "./ConfirmedPage";
 
 function useRouter() {

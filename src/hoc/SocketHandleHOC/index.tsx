@@ -8,7 +8,7 @@ import {
   setUserOnlineById
 } from "state/modules/user/actions";
 
-import { UserInterface } from "types/types";
+import { ChatInterface, UserInterface } from "types/types";
 
 import { ChatEvent } from "./types";
 
@@ -52,6 +52,10 @@ const SocketHOC = ({
       if (currentUserInfo && currentUserInfo?.id !== leftUser?.id) {
         dispatch(setUserOfflineById(leftUser));
       }
+    });
+
+    socket.current.on(ChatEvent.CREATED_CHAT, (createdChat: ChatInterface) => {
+      console.log("created chat -> ", createdChat);
     });
 
     return () => {
