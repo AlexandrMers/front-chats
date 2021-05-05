@@ -8,7 +8,8 @@ import WhiteBlock from "primitives/WhiteBlock";
 import Wrapper from "primitives/Wrapper";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
-import { confirmRegistrationUser } from "state/modules/auth";
+
+import { confirmRegistrationUser } from "state/modules/auth/actions";
 
 import style from "./style.module.scss";
 

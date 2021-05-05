@@ -13,17 +13,19 @@ import Button from "primitives/Button";
 import WhiteBlock from "primitives/WhiteBlock";
 import Input from "primitives/Input/Input";
 
-import styleModule from "../style.module.scss";
-
 import {
   fieldValidate,
   helpViewForFormik,
   validateAuthForm
 } from "libs/validators";
+
 import { useAppDispatch, useTypedSelector } from "state/store";
 
-import { login } from "../../state/modules/auth";
+import { login } from "../../state/modules/auth/actions";
+
 import { AuthorizationInterface } from "./types";
+
+import styleModule from "../style.module.scss";
 
 const LoginPage = withRouter(() => {
   const [isLogged, setIsLogged] = useState(false);

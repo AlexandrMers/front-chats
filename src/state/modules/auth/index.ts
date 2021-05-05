@@ -1,30 +1,13 @@
-import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { push } from "connected-react-router";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 
-import { UserAPI } from "api/modules/user";
+import {
+  confirmRegistrationUser,
+  login,
+  logout,
+  registerUser
+} from "./actions";
 
-import { instanceApiRequest } from "api/tools/requestCreator";
-
-import { AuthorizationInterface } from "pages/Login/types";
-import { RegistrationInterface } from "pages/Registration/types";
-import { UserInterface } from "types/types";
-import { ErrorMainInterface } from "../../types";
-import { CLEAR_STATE } from "../../constants";
-
-interface AuthModuleStateInterface {
-  isAuth: boolean;
-  loginLoading: boolean;
-  loginError: {
-    status: string;
-    message: string;
-  };
-  registrationLoading: boolean;
-  registrationError: any;
-  registrationSuccess: boolean;
-  confirmedRegistration: boolean;
-  confirmedRegistrationLoading: boolean;
-  confirmedRegistrationError: any;
-}
+import { AuthModuleStateInterface } from "./types";
 
 const initialState: AuthModuleStateInterface = {
   isAuth: false,
@@ -39,56 +22,6 @@ const initialState: AuthModuleStateInterface = {
 };
 
 export const setAuth = createAction<boolean>("SET_AUTH");
-
-export const login = createAsyncThunk<
-  {
-    token: string;
-  },
-  AuthorizationInterface,
-  {
-    rejectValue: ErrorMainInterface;
-  }
->("login", async (data, { rejectWithValue, dispatch }) => {
-  try {
-    const dataToken = await UserAPI.login(data);
-    instanceApiRequest.setToken(dataToken.token);
-    dispatch(push("/home"));
-  } catch (error) {
-    return rejectWithValue(error.response.data);
-  }
-});
-
-export const registerUser = createAsyncThunk<
-  UserInterface,
-  RegistrationInterface,
-  { rejectValue: ErrorMainInterface }
->("registerUser", async (data, { rejectWithValue }) => {
-  try {
-    return await UserAPI.register(data);
-  } catch (error) {
-    return rejectWithValue(error.response.data);
-  }
-});
-
-export const logout = createAsyncThunk("logout", async (data, { dispatch }) => {
-  instanceApiRequest.deleteToken();
-  dispatch({
-    type: CLEAR_STATE
-  });
-  dispatch(push("/login"));
-});
-
-export const confirmRegistrationUser = createAsyncThunk<
-  string,
-  { hash: string },
-  { rejectValue: ErrorMainInterface }
->("confirmRegistrationUser", async ({ hash }, { rejectWithValue }) => {
-  try {
-    return await UserAPI.confirmRegister(hash);
-  } catch (error) {
-    return rejectWithValue(error.response.data);
-  }
-});
 
 const AuthSlice = createSlice({
   name: "auth",

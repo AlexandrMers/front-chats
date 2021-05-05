@@ -17,7 +17,7 @@ import styleModule from "./style.module.scss";
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
-import { logout } from "../../state/modules/auth";
+import { logout } from "../../state/modules/auth/actions";
 import {
   getMessagesByChatId,
   selectChatId,

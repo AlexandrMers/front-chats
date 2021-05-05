@@ -27,7 +27,7 @@ import {
 import { configFormRegistrationFormik } from "./tools";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
-import { registerUser } from "state/modules/auth";
+import { registerUser } from "state/modules/auth/actions";
 
 const RegistrationPage = () => {
   const dispatch = useAppDispatch();
