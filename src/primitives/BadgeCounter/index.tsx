@@ -13,7 +13,7 @@ const Counter: FC<CounterPropsInterface> = ({ value, size = 18 }) => (
       width: size,
       minWidth: size,
       height: size,
-      minHeight: size,
+      minHeight: size
     }}
     className={styleModule.badgeCounter}
   >

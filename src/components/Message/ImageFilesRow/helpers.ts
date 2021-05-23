@@ -16,6 +16,6 @@ export function calculateAlignForAttachments(
     [styleModule.attachmentsWrapper_end_big_withText]:
       alignRow === AlignRow.END && isOneAttachment && isExistText,
     [styleModule.attachmentsWrapper_start_big_withText]:
-      alignRow === AlignRow.START && isOneAttachment && isExistText,
+      alignRow === AlignRow.START && isOneAttachment && isExistText
   };
 }

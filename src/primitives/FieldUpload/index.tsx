@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 export enum FileAccept {
   ALL = "*",
@@ -20,7 +20,7 @@ const FieldUpload = ({
 }: FileInterface) => {
   const fileInput = useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fileInput.current = document.createElement("input");
     fileInput.current.accept = accept;
     fileInput.current.type = "file";
@@ -34,7 +34,9 @@ const FieldUpload = ({
       onFilesLoaded(selectedFiles);
     };
     document.body.appendChild(fileInput.current);
-    return () => document.body.removeChild(fileInput.current);
+    return () => {
+      document.body.removeChild(fileInput.current);
+    };
     // eslint-disable-next-line
   }, [multiple]);
 

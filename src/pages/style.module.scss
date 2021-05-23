@@ -50,7 +50,6 @@
 }
 
 .authForm {
-
   &__button {
     text-transform: uppercase;
     font-weight: 500;
@@ -70,15 +69,15 @@
     font-size: 16px;
     line-height: 19px;
     letter-spacing: 0.114px;
-    color: #ADADAD;
+    color: #adadad;
 
     &:hover {
-      color: #ADADAD;
+      color: #adadad;
       background: transparent;
     }
 
     &:active {
-      color: #ADADAD;
+      color: #adadad;
       background: transparent;
     }
   }
@@ -98,15 +97,14 @@
   text-align: center;
 }
 
-
 .confirmBlock {
   min-height: 430px;
-  justify-content: center;;
+  justify-content: center;
 
   &__iconConfirm {
     width: 55px;
     height: 61px;
-    background-image: url('../assets/icons/confirm.png');
+    background-image: url("../assets/icons/confirm.png");
 
     margin-bottom: 14px;
   }

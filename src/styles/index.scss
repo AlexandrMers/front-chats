@@ -3,8 +3,9 @@
 @import "./tools/vars.scss";
 @import "./tools/common.scss";
 
-
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
@@ -16,7 +17,12 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   padding: 0;
 }
@@ -32,7 +38,8 @@ button {
   outline: none;
   background: transparent;
 
-  &:focus, &:active {
+  &:focus,
+  &:active {
     outline: none;
   }
 }

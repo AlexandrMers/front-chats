@@ -12,14 +12,14 @@ interface WhiteBlockPropsInterface {
 const WhiteBlock = ({
   children,
   className,
-  withShadow,
+  withShadow
 }: WhiteBlockPropsInterface) => {
   return (
     <div
       className={classNames(
         "white-block",
         {
-          "white-block_with-shadow": withShadow,
+          "white-block_with-shadow": withShadow
         },
         className
       )}

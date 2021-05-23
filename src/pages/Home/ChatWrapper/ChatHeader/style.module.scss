@@ -1,6 +1,5 @@
 @import "src/styles/tools/vars";
 
-
 .chatHeader {
   height: 68px;
   padding-top: 13px;
@@ -54,11 +53,9 @@
     height: 100%;
     flex-direction: column;
     justify-content: center;
-
   }
 
   &__button {
     padding: 10px;
   }
-
 }

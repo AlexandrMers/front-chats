@@ -15,6 +15,5 @@ export const getAllUsers = authGuardAsyncThunk<UserInterface[]>({
 
 export const setUserOnlineById = createAction<UserInterface>("SET_USER_ONLINE");
 
-export const setUserOfflineById = createAction<UserInterface>(
-  "SET_USER_OFFLINE"
-);
+export const setUserOfflineById =
+  createAction<UserInterface>("SET_USER_OFFLINE");

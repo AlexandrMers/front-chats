@@ -9,6 +9,6 @@ export const formatFilesData = (files: File[]): ExtendedFile[] =>
     uid: uuidv4()
   }));
 
-export const filterFileListById = (id: string) => (
-  prevFileList: ExtendedFile[]
-) => prevFileList.filter((file) => file.uid !== id);
+export const filterFileListById =
+  (id: string) => (prevFileList: ExtendedFile[]) =>
+    prevFileList.filter((file) => file.uid !== id);

@@ -14,7 +14,7 @@
     top: 50%;
     transform: translateY(-50%);
     left: 40px;
-    opacity: .3;
+    opacity: 0.3;
 
     font-size: 14px;
     line-height: 16px;
@@ -34,7 +34,6 @@
     }
   }
 
-
   &__actionMessageWrap {
     position: absolute;
     right: 16px;
@@ -48,15 +47,13 @@
       margin-right: 10px;
     }
   }
-
 }
-
 
 .icon_common {
   font-size: 18px;
-  opacity: .3;
+  opacity: 0.3;
   cursor: pointer;
-  transition: opacity .1s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
   &:hover {
     opacity: 1;
   }
@@ -67,7 +64,7 @@
 
 .input__button {
   &[disabled] {
-     & > .icon_common:hover {
+    & > .icon_common:hover {
       cursor: initial;
     }
   }

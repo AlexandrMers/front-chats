@@ -21,16 +21,14 @@
   }
 
   &__icon {
-
     &_newChat {
       cursor: pointer;
-      transition: opacity ease .3s;
+      transition: opacity ease 0.3s;
 
       margin-left: auto;
       &:hover {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
   }
-
 }

@@ -10,7 +10,7 @@ interface UploadFilePropsInterface {
     | ((file: RcFile) => PromiseLike<string>);
 }
 
-const UploadFile: FC<UploadFilePropsInterface> = ({
+const UploadFileComponent: FC<UploadFilePropsInterface> = ({
   children,
   onChange,
   onAction
@@ -33,4 +33,4 @@ const UploadFile: FC<UploadFilePropsInterface> = ({
   );
 };
 
-export default memo(UploadFile);
+export default memo(UploadFileComponent);

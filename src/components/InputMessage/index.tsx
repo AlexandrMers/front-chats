@@ -16,15 +16,19 @@ import {
 import classNames from "classnames";
 import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 
-import Wrapper from "primitives/Wrapper";
-import FieldUpload, { FileAccept } from "primitives/FieldUpload";
 import { ExtendedFile } from "./types";
+import { UploadFile } from "antd/lib/upload/interface";
 
-import EmojiPicker from "./EmojiPicker";
+import { ENTER_KEY_UP_CODE } from "./constants";
+
 import { filterFileListById, formatFilesData } from "./libs";
 
+import Wrapper from "primitives/Wrapper";
+import FieldUpload, { FileAccept } from "primitives/FieldUpload";
+
+import EmojiPicker from "./EmojiPicker";
+
 import styleModule from "./style.module.scss";
-import { ENTER_KEY_UP_CODE } from "./constants";
 
 interface InputMessagePropsInterface {
   placeholder?: string;
@@ -88,7 +92,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
     setFileList(formatFilesData(files));
   }, []);
 
-  const removeFile = (data: ExtendedFile) => {
+  const removeFile = (data: UploadFile) => {
     setFileList(filterFileListById(data.uid));
   };
 

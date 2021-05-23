@@ -13,9 +13,7 @@ const SystemMessage = (message: MessageInterface) => {
       jc={JustifyContentTypes.CENTER}
       className={style.systemMessage}
     >
-      <span className={style.systemMessage__innerText}>
-          {message.text}
-      </span>
+      <span className={style.systemMessage__innerText}>{message.text}</span>
     </FlexContainer>
   );
 };

@@ -21,11 +21,11 @@
   border-style: solid;
   opacity: 1;
   border-radius: 50%;
-  animation: loaderAnimation 1s cubic-bezier(0,0.2,0.8,1) infinite;
+  animation: loaderAnimation 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
 .loader div:nth-child(1) {
-  border-color: #e90c59
+  border-color: #e90c59;
 }
 
 .loader div:nth-child(2) {
@@ -48,4 +48,6 @@
   backface-visibility: hidden;
   transform-origin: 0 0;
 }
-.loader div { box-sizing: content-box; }
+.loader div {
+  box-sizing: content-box;
+}
