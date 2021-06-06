@@ -8,7 +8,7 @@ import {
   setUserOnlineById
 } from "state/modules/user/actions";
 
-import { ChatInterface, UserInterface } from "types/types";
+import { ChatInterface, MessageInterface, UserInterface } from "types/types";
 
 import { ChatEvent } from "./types";
 
@@ -58,10 +58,14 @@ const SocketHOC = ({
       console.log("created chat -> ", createdChat);
     });
 
+    socket.current.on(ChatEvent.NEW_MESSAGE, (message: MessageInterface) => {
+      console.log("new message -> ", message);
+    });
+
     return () => {
       socket.current.removeAllListeners();
     };
-  }, [currentUserInfo, dispatch]);
+  }, [currentUserInfo]);
 
   useEffect(() => {
     if (!currentUserInfo) return undefined;
