@@ -8,11 +8,9 @@ import {
 } from "./actions";
 
 import { SelectedChatInitialStateInterface } from "./types";
-import {
-  DataForSendMessageInterface,
-  MessageInterface
-} from "../../../types/types";
-import { compose, uniq, uniqWith } from "ramda";
+import { DataForSendMessageInterface, MessageInterface } from "types/types";
+
+import { compose, uniq } from "ramda";
 
 const initialState: SelectedChatInitialStateInterface = {
   selectedChatError: null,

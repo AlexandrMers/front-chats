@@ -69,7 +69,7 @@ const SocketHOC = ({
     return () => {
       socket.current.removeAllListeners();
     };
-  }, [currentUserInfo]);
+  }, [currentUserInfo, dispatch]);
 
   useEffect(() => {
     if (!currentUserInfo) return undefined;
