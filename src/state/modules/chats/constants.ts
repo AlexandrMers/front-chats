@@ -1,0 +1,3 @@
+export enum CHATS_ACTIONS {
+  ADD_NEW_CHAT = "ADD_NEW_CHAT"
+}

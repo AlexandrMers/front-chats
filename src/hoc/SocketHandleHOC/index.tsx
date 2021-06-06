@@ -3,6 +3,8 @@ import { shallowEqual } from "react-redux";
 import io from "socket.io-client";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
+import { addNewChat } from "state/modules/chats/actions";
+
 import {
   setUserOfflineById,
   setUserOnlineById
@@ -11,6 +13,7 @@ import {
 import { ChatInterface, MessageInterface, UserInterface } from "types/types";
 
 import { ChatEvent } from "./types";
+import { addNewMessage } from "../../state/modules/selectedChat/actions";
 
 const SocketHOC = ({
   component: Component,
@@ -55,11 +58,12 @@ const SocketHOC = ({
     });
 
     socket.current.on(ChatEvent.CREATED_CHAT, (createdChat: ChatInterface) => {
-      console.log("created chat -> ", createdChat);
+      dispatch(addNewChat(createdChat));
     });
 
-    socket.current.on(ChatEvent.NEW_MESSAGE, (message: MessageInterface) => {
-      console.log("new message -> ", message);
+    socket.current.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
+      if (currentUserInfo.id === newMessage.author.id) return;
+      dispatch(addNewMessage(newMessage));
     });
 
     return () => {

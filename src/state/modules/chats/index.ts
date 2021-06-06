@@ -1,15 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { createNewChat, getChats } from "./actions";
+import { addNewChat, createNewChat, getChats } from "./actions";
 
-import { InitialStateChatsInterface } from "./types";
+import { ChatsSliceInterface } from "./types";
+import { ChatInterface } from "../../../types/types";
 
-const initialState: InitialStateChatsInterface = {
+const initialState: ChatsSliceInterface = {
   chats: [],
   chatsLoading: false,
   chatsError: null,
   createChatLoading: false,
   createChatError: null
+};
+
+const addChat = (state: ChatsSliceInterface, newChat: ChatInterface) => {
+  const isExistChat = !!state.chats.find((chat) => chat.id === newChat.id);
+
+  if (isExistChat) {
+    return;
+  }
+
+  state.chats.push(newChat);
 };
 
 const ChatsSlice = createSlice({
@@ -45,10 +56,14 @@ const ChatsSlice = createSlice({
     builder.addCase(
       createNewChat.fulfilled,
       (state, { payload: createdChat }) => {
-        state.chats.push(createdChat);
+        addChat(state, createdChat);
         state.createChatLoading = false;
       }
     );
+
+    builder.addCase(addNewChat, (state, { payload: createdChat }) => {
+      addChat(state, createdChat);
+    });
   }
 });
 

@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getMessagesByChatId, selectChatId, sendMessage } from "./actions";
+import {
+  addNewMessage,
+  getMessagesByChatId,
+  selectChatId,
+  sendMessage
+} from "./actions";
 
 import { SelectedChatInitialStateInterface } from "./types";
 import {
   DataForSendMessageInterface,
   MessageInterface
 } from "../../../types/types";
+import { compose, uniq, uniqWith } from "ramda";
 
 const initialState: SelectedChatInitialStateInterface = {
   selectedChatError: null,
@@ -32,6 +38,16 @@ function createNotSentMessage(meta: {
     loading: true
   };
 }
+
+const addMessage = (
+  state: SelectedChatInitialStateInterface,
+  newMessage: MessageInterface
+) => {
+  state.selectedChatMessages = state.selectedChatMessages = compose(
+    uniq,
+    (messages: MessageInterface[]) => [...messages, newMessage]
+  )(state.selectedChatMessages);
+};
 
 const SelectedChatSlice = createSlice({
   name: "selectedChat",
@@ -65,8 +81,7 @@ const SelectedChatSlice = createSlice({
 
     builder.addCase(sendMessage.pending, (state, { payload, meta }) => {
       const newMessage = createNotSentMessage(meta);
-      state.sendMessageError = null;
-      state.selectedChatMessages.push(newMessage);
+      addMessage(state, newMessage);
     });
 
     builder.addCase(
@@ -86,6 +101,10 @@ const SelectedChatSlice = createSlice({
         };
       }
     );
+
+    builder.addCase(addNewMessage, (state, { payload: newMessage }) => {
+      addMessage(state, newMessage);
+    });
   }
 });
 

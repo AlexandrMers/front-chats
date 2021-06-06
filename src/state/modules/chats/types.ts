@@ -1,6 +1,6 @@
 import { ChatInterface } from "../../../types/types";
 
-export interface InitialStateChatsInterface {
+export interface ChatsSliceInterface {
   chatsLoading: boolean;
   chatsError: any;
   chats: ChatInterface[];

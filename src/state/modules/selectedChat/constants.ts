@@ -1,0 +1,3 @@
+export enum ACTIONS_MESSAGE {
+  NEW_MESSAGE = "NEW_MESSAGE"
+}

@@ -60,7 +60,7 @@ const formatChatsSelector = (
   allUsers: UserInterface[]
 ): ChatInterface[] => {
   return chats.map((chat) => {
-    const currentUserId = userInfo.id;
+    const currentUserId = userInfo?.id;
     return {
       ...chat,
       additionalInfo: buildAdditionalDataForChats(currentUserId, chat, allUsers)

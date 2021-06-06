@@ -1,10 +1,14 @@
+import { createAction } from "@reduxjs/toolkit";
+
+import { ACTIONS_MESSAGE } from "./constants";
 import { authGuardAsyncThunk } from "../../lib";
+
+import { ChatsApi } from "api/modules/chats";
+
 import {
   DataForSendMessageInterface,
   MessageInterface
 } from "../../../types/types";
-import { ChatsApi } from "../../../api/modules/chats";
-import { createAction } from "@reduxjs/toolkit";
 
 export const getMessagesByChatId = authGuardAsyncThunk<
   {
@@ -26,3 +30,7 @@ export const sendMessage = authGuardAsyncThunk<
 });
 
 export const selectChatId = createAction<string>("CHATS/SELECT_CHAT");
+
+export const addNewMessage = createAction<MessageInterface>(
+  ACTIONS_MESSAGE.NEW_MESSAGE
+);
