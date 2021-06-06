@@ -2,15 +2,18 @@ import { createSelector } from "@reduxjs/toolkit";
 import { prop, uniqBy } from "ramda";
 
 import { StateInterface } from "state/store";
-import { ChatInterface, UserInterface } from "types/types";
+import { ChatInterface, ShortUserInterface, UserInterface } from "types/types";
 
-function getUsersIdsByProp(chats: ChatInterface[], prop: keyof ChatInterface) {
+function getUsersIdsByProp(
+  chats: ChatInterface[],
+  prop: "author" | "partner"
+): (ShortUserInterface | UserInterface)[] {
   return chats.map((chat) => chat[prop]);
 }
 
 const selectExistedUsersFromChats = (
   state: StateInterface
-): UserInterface[] => {
+): (UserInterface | ShortUserInterface)[] => {
   const authorsChats = getUsersIdsByProp(state.chatModule.chats, "author");
   const partnersChats = getUsersIdsByProp(state.chatModule.chats, "partner");
   const concatedUsers = authorsChats.concat(partnersChats);
@@ -22,13 +25,14 @@ const selectCurrentUser = (state: StateInterface): UserInterface => {
   return state.userModule.userInfo;
 };
 
-const selectAllUsers = (state: StateInterface): UserInterface[] =>
-  state.userModule.allUsers;
+const selectAllUsers = (
+  state: StateInterface
+): (UserInterface | ShortUserInterface)[] => state.userModule.allUsers;
 
 const selectExcludeExistedUsersFromAllUsers = (
-  allUsers: UserInterface[],
-  excludeUsers: UserInterface[],
-  currentUser: UserInterface
+  allUsers: (UserInterface | ShortUserInterface)[],
+  excludeUsers: (UserInterface | ShortUserInterface)[],
+  currentUser: UserInterface | ShortUserInterface
 ) => {
   const excludeUsersIds = excludeUsers.map(prop("id"));
   return allUsers.filter(

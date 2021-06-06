@@ -23,7 +23,7 @@ export interface ChatInterface {
   name?: string;
   author: ShortUserInterface;
   partner: ShortUserInterface;
-  lastMessage: any;
+  lastMessage?: MessageInterface;
   additionalInfo?: AdditionalInfoChatInterface;
 }
 

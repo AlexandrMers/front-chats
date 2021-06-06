@@ -77,7 +77,7 @@ const SelectedChatSlice = createSlice({
       }
     );
 
-    builder.addCase(sendMessage.pending, (state, { payload, meta }) => {
+    builder.addCase(sendMessage.pending, (state, { meta }) => {
       const newMessage = createNotSentMessage(meta);
       addMessage(state, newMessage);
     });
