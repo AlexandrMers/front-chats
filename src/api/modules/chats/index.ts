@@ -43,14 +43,15 @@ export const ChatsApi = {
     });
   },
 
-  sendMessage({ chatId, text }: DataForSendMessageInterface) {
+  sendMessage({ chatId, text, attachments }: DataForSendMessageInterface) {
     return instanceApiRequest.createRequest<MessageInterface>(
       `/messages/create`,
       MethodType.PUT,
       {
         data: {
           chatId,
-          text
+          text,
+          attachments
         }
       }
     );

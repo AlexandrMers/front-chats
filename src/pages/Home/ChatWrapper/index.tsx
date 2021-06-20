@@ -29,6 +29,8 @@ import Wrapper from "primitives/Wrapper";
 
 // Styles
 import styleModule from "./style.module.scss";
+import { UploadFile } from "antd/lib/upload/interface";
+import { FileInterface } from "../../../state/modules/selectedChat/types";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -102,7 +104,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   });
 
   const onSendMessage = useCallback(
-    (msgText: string) => {
+    (msgText: string, fileList) => {
       scrollToBottom();
       onSendMessageProp({
         text: msgText,
@@ -110,7 +112,8 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
         author: {
           fullName: currentUser.fullName,
           id: currentUser.id
-        }
+        },
+        attachments: fileList.map((file: UploadFile & FileInterface) => file.id)
       });
     },
     // eslint-disable-next-line

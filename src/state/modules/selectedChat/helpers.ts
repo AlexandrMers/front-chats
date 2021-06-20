@@ -1,4 +1,4 @@
-import { FileInterface } from "./types";
+import { FileInterface, SelectedChatInitialStateInterface } from "./types";
 import { DataForSendMessageInterface, MessageInterface } from "types/types";
 
 const createEmptyFile = (file: File, uid: string): FileInterface => ({
@@ -14,11 +14,14 @@ const createEmptyFile = (file: File, uid: string): FileInterface => ({
   originalName: file.name
 });
 
-function createNotSentMessage(meta: {
-  arg: DataForSendMessageInterface;
-  requestId: string;
-  requestStatus: "pending";
-}): MessageInterface {
+function createNotSentMessage(
+  meta: {
+    arg: DataForSendMessageInterface;
+    requestId: string;
+    requestStatus: "pending";
+  },
+  state: SelectedChatInitialStateInterface
+): MessageInterface {
   return {
     text: meta.arg.text,
     id: meta.requestId,
@@ -27,7 +30,8 @@ function createNotSentMessage(meta: {
     isRead: false,
     type: 1,
     createdAt: new Date().toString(),
-    loading: true
+    loading: true,
+    attachments: state.attachedFiles
   };
 }
 

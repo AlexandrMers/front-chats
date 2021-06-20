@@ -48,6 +48,8 @@ export const deleteFile = authGuardAsyncThunk<
 
 export const selectChatId = createAction<string>("CHATS/SELECT_CHAT");
 
+export const clearFiles = createAction("CHATS/CLEAR_FILES");
+
 export const addNewMessage = createAction<MessageInterface>(
   ACTIONS_MESSAGE.NEW_MESSAGE
 );

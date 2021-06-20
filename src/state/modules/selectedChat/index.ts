@@ -4,6 +4,7 @@ import { compose, uniq } from "ramda";
 // Actions
 import {
   addNewMessage,
+  clearFiles,
   deleteFile,
   getMessagesByChatId,
   loadFile,
@@ -71,7 +72,7 @@ const SelectedChatSlice = createSlice({
     );
 
     builder.addCase(sendMessage.pending, (state, { meta }) => {
-      const newMessage = createNotSentMessage(meta);
+      const newMessage = createNotSentMessage(meta, state);
       addMessage(state, newMessage);
     });
 
@@ -164,6 +165,10 @@ const SelectedChatSlice = createSlice({
         deleteOneFileFromState(state, fileInfo);
       }
     );
+
+    builder.addCase(clearFiles, (state) => {
+      state.attachedFiles = [];
+    });
   }
 });
 

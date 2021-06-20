@@ -1,3 +1,5 @@
+import { FileInterface } from "../state/modules/selectedChat/types";
+
 export interface UserInterface {
   id: string;
   avatar?: string;
@@ -31,6 +33,7 @@ export interface DataForSendMessageInterface {
   chatId: string;
   text: string;
   author?: ShortUserInterface;
+  attachments: string[];
 }
 
 export interface AttachmentFileInterface {
@@ -51,7 +54,7 @@ export interface MessageInterface {
   isRead: boolean;
   text: string;
   createdAt: string;
-  attachments?: AttachmentFileInterface[];
+  attachments?: FileInterface[];
   author: ShortUserInterface;
   loading?: boolean;
 }

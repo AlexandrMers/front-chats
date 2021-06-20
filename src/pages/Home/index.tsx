@@ -19,6 +19,7 @@ import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
 import { logout } from "../../state/modules/auth/actions";
 import {
+  clearFiles,
   getMessagesByChatId,
   selectChatId,
   sendMessage
@@ -73,7 +74,9 @@ const Home = () => {
 
   const onSendMessage = useCallback(
     (msgData: DataForSendMessageInterface) => {
-      dispatch(sendMessage(msgData));
+      dispatch(sendMessage(msgData)).then((data) => {
+        dispatch(clearFiles());
+      });
     },
     [dispatch]
   );

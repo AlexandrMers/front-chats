@@ -16,10 +16,15 @@ import { FileFromServerInterface } from "state/modules/selectedChat/types";
 interface InputMessageContainerInterface
   extends Omit<
     InputMessagePropsInterface,
-    "removeFile" | "fileList" | "onLoadFiles"
-  > {}
+    "removeFile" | "fileList" | "onLoadFiles" | "sendMessage"
+  > {
+  sendMessage: (msg: string, files: UploadFile[]) => void;
+}
 
-const InputMessageContainer: FC<InputMessageContainerInterface> = (props) => {
+const InputMessageContainer: FC<InputMessageContainerInterface> = ({
+  sendMessage,
+  ...otherProps
+}) => {
   const fileList = useTypedSelector(selectFilesSelector, shallowEqual);
 
   const dispatch = useAppDispatch();
@@ -37,12 +42,17 @@ const InputMessageContainer: FC<InputMessageContainerInterface> = (props) => {
     dispatch(deleteFile({ uid: data.uid, publicId: data.publicId }));
   };
 
+  const onSendMessage = (message: string) => {
+    sendMessage(message, fileList);
+  };
+
   return (
     <InputMessage
-      {...props}
+      {...otherProps}
       onLoadFiles={onLoadFiles}
       fileList={fileList}
       removeFile={removeFile}
+      sendMessage={onSendMessage}
     />
   );
 };
