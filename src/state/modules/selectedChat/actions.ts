@@ -1,14 +1,18 @@
 import { createAction } from "@reduxjs/toolkit";
 
+// Constants
 import { ACTIONS_MESSAGE } from "./constants";
-import { authGuardAsyncThunk } from "../../lib";
 
+// Libs
+import { authGuardAsyncThunk } from "state/lib";
+
+// Api
 import { ChatsApi } from "api/modules/chats";
+import { FileUploadApi } from "api/modules/files";
 
-import {
-  DataForSendMessageInterface,
-  MessageInterface
-} from "../../../types/types";
+// Types
+import { DataForSendMessageInterface, MessageInterface } from "types/types";
+import { FileInterface } from "./types";
 
 export const getMessagesByChatId = authGuardAsyncThunk<
   {
@@ -27,6 +31,19 @@ export const sendMessage = authGuardAsyncThunk<
 >({
   prefix: "chats/sendMessage",
   requestFunc: ChatsApi.sendMessage
+});
+
+export const loadFile = authGuardAsyncThunk<Omit<FileInterface, "uid">, File>({
+  prefix: "upload-files/upload",
+  requestFunc: FileUploadApi.loadFile
+});
+
+export const deleteFile = authGuardAsyncThunk<
+  any,
+  { publicId: string; uid: string }
+>({
+  prefix: "upload-files/delete",
+  requestFunc: FileUploadApi.deleteFile
 });
 
 export const selectChatId = createAction<string>("CHATS/SELECT_CHAT");

@@ -2,21 +2,8 @@ import React, { FC, memo, useCallback, useRef, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
+// Types
 import { ScrollbarsOverrideType } from "types/helpersType";
-
-import styleModule from "./style.module.scss";
-
-import { useChatScrollManager } from "hooks/hooks";
-
-import MessageAudio from "components/Message/MessageAudio";
-import InputMessage from "components/InputMessage";
-import Message from "components/Message";
-import SystemMessage from "components/Message/SystemMessage";
-
-import Wrapper from "primitives/Wrapper";
-
-import ChatHeader from "./ChatHeader";
-
 import {
   ChatInterface,
   DataForSendMessageInterface,
@@ -24,6 +11,24 @@ import {
   MessageType,
   UserInterface
 } from "types/types";
+
+// Hooks
+import { useChatScrollManager } from "hooks/hooks";
+
+// Container
+import InputMessageContainer from "components/InputMessage/container";
+
+// Components
+import MessageAudio from "components/Message/MessageAudio";
+import Message from "components/Message";
+import SystemMessage from "components/Message/SystemMessage";
+import ChatHeader from "./ChatHeader";
+
+// Primitives
+import Wrapper from "primitives/Wrapper";
+
+// Styles
+import styleModule from "./style.module.scss";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
@@ -115,7 +120,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   return (
     <Wrapper className={styleModule.mainWrapper}>
       <ChatHeader info={chat?.additionalInfo} />
-
       <ScrollBar
         style={{
           height: "100%",
@@ -139,7 +143,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
       </ScrollBar>
 
       <Wrapper className={styleModule.chatWrapper__inputWrapper}>
-        <InputMessage
+        <InputMessageContainer
           placeholder="Введите текст сообщения..."
           sendMessage={onSendMessage}
         />

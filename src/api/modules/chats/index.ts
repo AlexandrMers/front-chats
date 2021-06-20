@@ -1,12 +1,13 @@
-import { instanceApiRequest } from "../../tools/requestCreator";
-
+// Types
 import {
   ChatInterface,
   DataForSendMessageInterface,
   MessageInterface
-} from "../../../types/types";
+} from "types/types";
+import { MethodType } from "api/tools/types";
 
-import { MethodType } from "../../tools/types";
+// Tools
+import { instanceApiRequest } from "api/tools/requestCreator";
 
 export const ChatsApi = {
   getAllChats() {
@@ -41,6 +42,7 @@ export const ChatsApi = {
       }
     });
   },
+
   sendMessage({ chatId, text }: DataForSendMessageInterface) {
     return instanceApiRequest.createRequest<MessageInterface>(
       `/messages/create`,

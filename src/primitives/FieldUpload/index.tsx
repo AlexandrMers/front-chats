@@ -5,7 +5,7 @@ export enum FileAccept {
   IMAGE = ".jpeg, .jpg, .png, .bmp"
 }
 
-export interface FileInterface {
+export interface FileComponentInterface {
   accept?: FileAccept;
   multiple?: boolean;
   onFilesLoaded?: (files: File[]) => void;
@@ -17,7 +17,7 @@ const FieldUpload = ({
   accept,
   multiple,
   onFilesLoaded
-}: FileInterface) => {
+}: FileComponentInterface) => {
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

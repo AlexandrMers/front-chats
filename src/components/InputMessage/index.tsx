@@ -7,45 +7,56 @@ import React, {
   useRef,
   useState
 } from "react";
-import { Upload } from "antd";
+import classNames from "classnames";
+
+// Types
+import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
+import { UploadFile } from "antd/lib/upload/interface";
+
+// Constants
+import { ENTER_KEY_UP_CODE } from "./constants";
+
+// Primitives
+import Wrapper from "primitives/Wrapper";
+import FieldUpload, { FileAccept } from "primitives/FieldUpload";
 import {
   AudioOutlined,
   PictureOutlined,
   SendOutlined
 } from "@ant-design/icons";
-import classNames from "classnames";
-import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 
-import { ExtendedFile } from "./types";
-import { UploadFile } from "antd/lib/upload/interface";
-
-import { ENTER_KEY_UP_CODE } from "./constants";
-
-import { filterFileListById, formatFilesData } from "./libs";
-
-import Wrapper from "primitives/Wrapper";
-import FieldUpload, { FileAccept } from "primitives/FieldUpload";
-
+// Components
 import EmojiPicker from "./EmojiPicker";
+import { Upload } from "antd";
+import ScrollBar from "react-custom-scrollbars";
 
+// Styles
 import styleModule from "./style.module.scss";
+import { FileFromServerInterface } from "../../state/modules/selectedChat/types";
 
-interface InputMessagePropsInterface {
+export interface InputMessagePropsInterface {
   placeholder?: string;
+  fileList: UploadFile[];
+
   sendMessage: (msg: string) => void;
+  onLoadFiles: (files: File[]) => void;
+  removeFile: (file: UploadFile & Partial<FileFromServerInterface>) => void;
 }
 
 const InputMessage: FC<InputMessagePropsInterface> = ({
   placeholder,
-  sendMessage
+  fileList,
+  sendMessage,
+  onLoadFiles,
+  removeFile
 }) => {
   useEffect(() => {
     focusInput();
   });
 
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
   const [value, setValue] = useState("");
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const onChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -53,8 +64,6 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
     },
     [setValue]
   );
-
-  const [fileList, setFileList] = useState<ExtendedFile[]>([]);
 
   const handlerEmoji = useCallback(
     (emoji: BaseEmoji) => {
@@ -88,14 +97,6 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
     inputRef.current.focus();
   };
 
-  const changeFileList = useCallback((files) => {
-    setFileList(formatFilesData(files));
-  }, []);
-
-  const removeFile = (data: UploadFile) => {
-    setFileList(filterFileListById(data.uid));
-  };
-
   const onSendClick = useCallback(() => {
     onSendMessage(value);
   }, [value, onSendMessage]);
@@ -121,7 +122,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
         />
         <div className={styleModule.input__actionMessageWrap}>
           <FieldUpload
-            onFilesLoaded={changeFileList}
+            onFilesLoaded={onLoadFiles}
             view={(openDialog) => {
               return (
                 <button
@@ -156,7 +157,17 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
       </Wrapper>
 
       {fileList.length > 0 && (
-        <Upload fileList={fileList} onRemove={removeFile} />
+        <ScrollBar
+          style={{
+            height: "150px"
+          }}
+        >
+          <Upload
+            fileList={fileList}
+            onRemove={removeFile}
+            listType="picture"
+          />
+        </ScrollBar>
       )}
     </>
   );

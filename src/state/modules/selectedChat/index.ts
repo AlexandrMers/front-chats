@@ -1,41 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { compose, uniq } from "ramda";
 
+// Actions
 import {
   addNewMessage,
+  deleteFile,
   getMessagesByChatId,
+  loadFile,
   selectChatId,
   sendMessage
 } from "./actions";
 
+// Types
 import { SelectedChatInitialStateInterface } from "./types";
-import { DataForSendMessageInterface, MessageInterface } from "types/types";
+import { MessageInterface } from "types/types";
 
-import { compose, uniq } from "ramda";
+// Helpers
+import { createNotSentMessage, createEmptyFile } from "./helpers";
+
+// Libs
+import { deleteOneFileFromState, updateFileIntoState } from "./libsForState";
 
 const initialState: SelectedChatInitialStateInterface = {
   selectedChatError: null,
   selectedChatId: null,
   selectedChatLoading: false,
   selectedChatMessages: null,
-  sendMessageError: null
+  sendMessageError: null,
+  attachedFiles: []
 };
-
-function createNotSentMessage(meta: {
-  arg: DataForSendMessageInterface;
-  requestId: string;
-  requestStatus: "pending";
-}): MessageInterface {
-  return {
-    text: meta.arg.text,
-    id: meta.requestId,
-    author: meta.arg.author,
-    chatId: meta.arg.chatId,
-    isRead: false,
-    type: 1,
-    createdAt: new Date().toString(),
-    loading: true
-  };
-}
 
 const addMessage = (
   state: SelectedChatInitialStateInterface,
@@ -103,6 +96,74 @@ const SelectedChatSlice = createSlice({
     builder.addCase(addNewMessage, (state, { payload: newMessage }) => {
       addMessage(state, newMessage);
     });
+
+    builder.addCase(
+      loadFile.pending,
+      (state, { meta: { arg: file, requestId: uid } }) => {
+        const newEmptyFile = createEmptyFile(file, uid);
+        state.attachedFiles.push(newEmptyFile);
+      }
+    );
+
+    builder.addCase(
+      loadFile.fulfilled,
+      (state, { payload: uploadedFile, meta: { requestId: uid } }) => {
+        updateFileIntoState({
+          state,
+          uid,
+          rewriteFields: {
+            ...uploadedFile,
+            status: "success"
+          }
+        });
+      }
+    );
+
+    builder.addCase(
+      loadFile.rejected,
+      (state, { meta: { requestId: uid } }) => {
+        updateFileIntoState({
+          state,
+          uid,
+          rewriteFields: {
+            status: "error"
+          }
+        });
+      }
+    );
+
+    builder.addCase(
+      deleteFile.pending,
+      (state, { meta: { arg: fileInfo } }) => {
+        updateFileIntoState({
+          state,
+          uid: fileInfo.uid,
+          rewriteFields: {
+            status: "uploading"
+          }
+        });
+      }
+    );
+
+    builder.addCase(
+      deleteFile.rejected,
+      (state, { meta: { arg: fileInfo } }) => {
+        updateFileIntoState({
+          state,
+          uid: fileInfo.uid,
+          rewriteFields: {
+            status: "error"
+          }
+        });
+      }
+    );
+
+    builder.addCase(
+      deleteFile.fulfilled,
+      (state, { meta: { arg: fileInfo } }) => {
+        deleteOneFileFromState(state, fileInfo);
+      }
+    );
   }
 });
 

@@ -45,12 +45,12 @@ function buildAdditionalDataForChats(
     ? {
         name: chat.partner.fullName,
         id: chat.partner.id,
-        isOnline: partnerUser.isOnline
+        isOnline: partnerUser?.isOnline
       }
     : {
         name: chat.author.fullName,
         id: chat.author.id,
-        isOnline: authorUser.isOnline
+        isOnline: authorUser?.isOnline
       };
 }
 
