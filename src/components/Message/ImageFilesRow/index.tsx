@@ -1,12 +1,10 @@
-import React, { FC, memo } from "react";
-import classNames from "classnames";
+import React, { FC, memo, useMemo, useState } from "react";
+import { Modal, Upload } from "antd";
 
-import styleModule from "./style.module.scss";
+import { UploadFile } from "antd/lib/upload/interface";
 import { MessageInterface } from "types/types";
 
-import Wrapper from "primitives/Wrapper";
-
-import { calculateAlignForAttachments } from "./helpers";
+import { getBase64 } from "./helpers";
 
 export enum AlignRow {
   START = "start",
@@ -20,31 +18,44 @@ interface FileRowPropsInterface {
 }
 
 const ImageFilesRow: FC<FileRowPropsInterface> = ({
-  message: { attachments, createdAt, text },
-  alignRow = AlignRow.START
+  message: { attachments }
 }) => {
-  const isOneAttachment = attachments.length === 1;
+  const [previewImage, setPreviewImage] = useState("");
+
+  const fileList = useMemo(
+    () =>
+      attachments.map((file) => ({
+        name: file.fileName,
+        size: file.size,
+        uid: file.publicId,
+        url: file.url
+      })),
+    [attachments]
+  );
+
+  const handlePreview = async (file: UploadFile<any>) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+  };
+
+  const handleClose = () => {
+    setPreviewImage("");
+  };
 
   return (
-    <Wrapper
-      className={classNames(
-        styleModule.attachmentsWrapper,
-        calculateAlignForAttachments(alignRow, isOneAttachment, !!text),
-        classNames
-      )}
-    >
-      {attachments?.length > 0 &&
-        attachments.map((file, index) => (
-          <Wrapper
-            key={index}
-            className={classNames(styleModule.attachmentsWrapper__attachment, {
-              [styleModule.attachmentsWrapper__attachment_big]: isOneAttachment
-            })}
-          >
-            <img src={file.url} alt="file" />
-          </Wrapper>
-        ))}
-    </Wrapper>
+    <>
+      <Upload
+        listType="picture-card"
+        fileList={fileList}
+        onPreview={handlePreview}
+      />
+      <Modal visible={!!previewImage} footer={null} onCancel={handleClose}>
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+    </>
   );
 };
 
