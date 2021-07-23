@@ -65,9 +65,9 @@ const SocketHOC = ({
     });
 
     socket.current.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
+      dispatch(updateLastMessage(newMessage));
       if (currentUserInfo.id === newMessage.author.id) return;
       dispatch(addNewMessage(newMessage));
-      dispatch(updateLastMessage(newMessage));
     });
 
     return () => {

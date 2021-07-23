@@ -35,7 +35,10 @@ const addMessage = (
   state: SelectedChatInitialStateInterface,
   newMessage: MessageInterface
 ) => {
-  if (state.selectedChatMessages) {
+  if (
+    state.selectedChatId === newMessage.chatId &&
+    state.selectedChatMessages
+  ) {
     state.selectedChatMessages = compose(
       uniq,
       (messages: MessageInterface[]) => [...messages, newMessage]
@@ -75,7 +78,7 @@ const SelectedChatSlice = createSlice({
 
     builder.addCase(sendMessage.pending, (state, { meta }) => {
       const newMessage = createNotSentMessage(meta, state);
-      addMessage(state, newMessage);
+      state.selectedChatMessages = [...state.selectedChatMessages, newMessage];
     });
 
     builder.addCase(
