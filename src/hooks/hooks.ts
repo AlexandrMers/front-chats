@@ -44,12 +44,11 @@ export function useChatScrollManager({
   scrollRef: React.RefObject<ScrollViewRefInterface>;
   callback?: (isLoaded: boolean) => void;
 }) {
-  const initialScrolledBottom = useRef(false);
-  const isPined = useRef(true);
   const observer = useRef<MutationObserver>();
 
+  const initialScrolledBottom = useRef(false);
+  const isPined = useRef(true);
   const initializeObserver = useRef(false);
-
   const isUpPosition = useRef(false);
 
   const oldHeightScroll = useRef(0);
@@ -116,9 +115,9 @@ export function useChatScrollManager({
   ]);
 
   return {
-    scrollToBottom: () => {
+    scrollToBottom: (behavior: "auto" | "smooth" = "smooth") => {
       isPined.current = true;
-      scrollToBottom(scrollRef.current.view, "smooth");
+      scrollToBottom(scrollRef.current.view, behavior);
     }
   };
 }

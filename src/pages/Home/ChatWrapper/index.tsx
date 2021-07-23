@@ -1,4 +1,11 @@
-import React, { FC, memo, useCallback, useRef, useState } from "react";
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -102,6 +109,10 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
       setIsLoadedMessagesWrapper(isLoaded);
     }
   });
+
+  useEffect(() => {
+    scrollToBottom("auto");
+  }, [scrollToBottom]);
 
   const onSendMessage = useCallback(
     (msgText: string, fileList) => {
