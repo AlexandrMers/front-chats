@@ -30,17 +30,28 @@ export const ChatsApi = {
     );
   },
 
-  getMessagesByChatId(chatId: string) {
-    return instanceApiRequest.createRequest<{
-      chatId: string;
-      messages: MessageInterface[];
-    }>(`/messages`, MethodType.GET, {
-      config: {
-        params: {
-          chatId
-        }
-      }
-    });
+  getMessagesByChatId(fakeDuration = 500) {
+    return (chatId: string) =>
+      new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const response = await instanceApiRequest.createRequest<{
+              chatId: string;
+              messages: MessageInterface[];
+            }>(`/messages`, MethodType.GET, {
+              config: {
+                params: {
+                  chatId
+                }
+              }
+            });
+
+            resolve(response);
+          } catch (error) {
+            reject(error);
+          }
+        }, fakeDuration);
+      });
   },
 
   sendMessage({ chatId, text, attachments }: DataForSendMessageInterface) {

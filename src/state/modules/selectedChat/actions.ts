@@ -22,7 +22,7 @@ export const getMessagesByChatId = authGuardAsyncThunk<
   string
 >({
   prefix: "chats/getMessages",
-  requestFunc: ChatsApi.getMessagesByChatId
+  requestFunc: ChatsApi.getMessagesByChatId(500)
 });
 
 export const sendMessage = authGuardAsyncThunk<
