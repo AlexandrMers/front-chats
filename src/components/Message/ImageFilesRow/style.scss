@@ -1,0 +1,13 @@
+.ImageFilesRow {
+
+  button {
+    display: none !important;
+  }
+
+  &.isMe .ant-upload-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+  }
+}
+

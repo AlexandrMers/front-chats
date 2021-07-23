@@ -4,8 +4,10 @@ import classNames from "classnames";
 import styleModule from "../style.module.scss";
 
 import Wrapper from "primitives/Wrapper";
+
 import checkDoubleIcon from "assets/icons/check-double.svg";
 import checkOnceIcon from "assets/icons/check-once.svg";
+
 import { ActionsMessagePropsInterface } from "../types";
 
 const ActionsMessage: FC<ActionsMessagePropsInterface> = ({ isMe, isRead }) => {

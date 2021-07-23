@@ -60,6 +60,7 @@ const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
           <ImageFilesRow
             message={message}
             alignRow={isMe ? AlignRow.END : AlignRow.START}
+            isMe={isMe}
           />
         )}
 
@@ -72,6 +73,7 @@ const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
         <ImageFilesRow
           message={message}
           alignRow={isMe ? AlignRow.END : AlignRow.START}
+          isMe={isMe}
         />
       )}
 
