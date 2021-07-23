@@ -18,6 +18,8 @@ import {
   MessageType,
   UserInterface
 } from "types/types";
+import { UploadFile } from "antd/lib/upload/interface";
+import { FileInterface } from "state/modules/selectedChat/types";
 
 // Hooks
 import { useChatScrollManager } from "hooks/hooks";
@@ -36,8 +38,6 @@ import Wrapper from "primitives/Wrapper";
 
 // Styles
 import styleModule from "./style.module.scss";
-import { UploadFile } from "antd/lib/upload/interface";
-import { FileInterface } from "../../../state/modules/selectedChat/types";
 
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
