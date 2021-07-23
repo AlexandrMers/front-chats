@@ -53,3 +53,7 @@ export const clearFiles = createAction("CHATS/CLEAR_FILES");
 export const addNewMessage = createAction<MessageInterface>(
   ACTIONS_MESSAGE.NEW_MESSAGE
 );
+
+export const updateLastMessage = createAction<MessageInterface>(
+  ACTIONS_MESSAGE.UPDATE_LAST_MESSAGE
+);

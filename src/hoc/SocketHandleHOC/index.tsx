@@ -13,7 +13,10 @@ import {
 import { ChatInterface, MessageInterface, UserInterface } from "types/types";
 
 import { ChatEvent } from "./types";
-import { addNewMessage } from "../../state/modules/selectedChat/actions";
+import {
+  addNewMessage,
+  updateLastMessage
+} from "../../state/modules/selectedChat/actions";
 
 const SocketHOC = ({
   component: Component,
@@ -64,6 +67,7 @@ const SocketHOC = ({
     socket.current.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
       if (currentUserInfo.id === newMessage.author.id) return;
       dispatch(addNewMessage(newMessage));
+      dispatch(updateLastMessage(newMessage));
     });
 
     return () => {

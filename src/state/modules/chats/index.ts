@@ -4,6 +4,7 @@ import { addNewChat, createNewChat, getChats } from "./actions";
 
 import { ChatsSliceInterface } from "./types";
 import { ChatInterface } from "../../../types/types";
+import { updateLastMessage } from "../selectedChat/actions";
 
 const initialState: ChatsSliceInterface = {
   chats: [],
@@ -63,6 +64,15 @@ const ChatsSlice = createSlice({
 
     builder.addCase(addNewChat, (state, { payload: createdChat }) => {
       addChat(state, createdChat);
+    });
+
+    builder.addCase(updateLastMessage, (state, { payload: newMessage }) => {
+      const foundChat = state.chats.find(
+        (chat) => chat.id === newMessage.chatId
+      );
+      if (foundChat) {
+        foundChat.lastMessage = newMessage;
+      }
     });
   }
 });

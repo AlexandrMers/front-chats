@@ -22,12 +22,13 @@ import {
   clearFiles,
   getMessagesByChatId,
   selectChatId,
-  sendMessage
+  sendMessage,
+  updateLastMessage
 } from "state/modules/selectedChat/actions";
 
 import { selectChatInfo, selectChatsSelector } from "./selectors";
 
-import { DataForSendMessageInterface } from "types/types";
+import { DataForSendMessageInterface, MessageInterface } from "types/types";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -76,6 +77,7 @@ const Home = () => {
     (msgData: DataForSendMessageInterface) => {
       dispatch(sendMessage(msgData)).then((data) => {
         dispatch(clearFiles());
+        dispatch(updateLastMessage(data.payload as MessageInterface));
       });
     },
     [dispatch]

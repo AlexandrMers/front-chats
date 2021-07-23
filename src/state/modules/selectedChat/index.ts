@@ -35,10 +35,12 @@ const addMessage = (
   state: SelectedChatInitialStateInterface,
   newMessage: MessageInterface
 ) => {
-  state.selectedChatMessages = state.selectedChatMessages = compose(
-    uniq,
-    (messages: MessageInterface[]) => [...messages, newMessage]
-  )(state.selectedChatMessages);
+  if (state.selectedChatMessages) {
+    state.selectedChatMessages = compose(
+      uniq,
+      (messages: MessageInterface[]) => [...messages, newMessage]
+    )(state.selectedChatMessages);
+  }
 };
 
 const SelectedChatSlice = createSlice({
