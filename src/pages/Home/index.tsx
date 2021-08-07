@@ -17,7 +17,7 @@ import styleModule from "./style.module.scss";
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
-import { logout } from "../../state/modules/auth/actions";
+import { logout } from "state/modules/auth/actions";
 import {
   clearFiles,
   getMessagesByChatId,
@@ -68,10 +68,22 @@ const Home = () => {
     [dispatch]
   );
 
+  const getMessagesByChatIdHandler = useCallback(
+    ({ selectedChatId, page = 1 }) => {
+      dispatch(
+        getMessagesByChatId({
+          selectedChatId,
+          page
+        })
+      );
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     if (!selectedChatId) return undefined;
-    dispatch(getMessagesByChatId(selectedChatId));
-  }, [dispatch, selectedChatId]);
+    getMessagesByChatIdHandler({ selectedChatId });
+  }, [selectedChatId, getMessagesByChatIdHandler]);
 
   const onSendMessage = useCallback(
     (msgData: DataForSendMessageInterface) => {
@@ -80,6 +92,7 @@ const Home = () => {
         dispatch(updateLastMessage(data.payload as MessageInterface));
       });
     },
+    // eslint-disable-next-line
     [dispatch]
   );
 
@@ -115,6 +128,7 @@ const Home = () => {
               chat={selectedChatInfo}
               currentUser={currentUser}
               onSendMessage={onSendMessage}
+              getMessagesByChatIdHandler={getMessagesByChatIdHandler}
             />
           ) : (
             <Wrapper className={styleModule.chatWrapper}>

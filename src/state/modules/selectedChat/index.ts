@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { compose, uniq } from "ramda";
+import { compose, uniq, reverse } from "ramda";
 
 // Actions
 import {
@@ -55,8 +55,10 @@ const SelectedChatSlice = createSlice({
       state.selectedChatId = selectedChatId;
     });
 
-    builder.addCase(getMessagesByChatId.pending, (state) => {
-      state.selectedChatLoading = true;
+    builder.addCase(getMessagesByChatId.pending, (state, { meta }) => {
+      if (meta.arg.page === 1) {
+        state.selectedChatLoading = true;
+      }
       state.selectedChatError = null;
     });
 
@@ -70,9 +72,19 @@ const SelectedChatSlice = createSlice({
 
     builder.addCase(
       getMessagesByChatId.fulfilled,
-      (state, { payload: selectedChatInfo }) => {
+      (state, { payload: selectedChatInfo, meta }) => {
         state.selectedChatLoading = false;
-        state.selectedChatMessages = selectedChatInfo.messages;
+
+        const reversedGotMessages = reverse(selectedChatInfo.messages);
+
+        if (meta.arg.page > 1) {
+          state.selectedChatMessages = [
+            ...reversedGotMessages,
+            ...state.selectedChatMessages
+          ];
+          return;
+        }
+        state.selectedChatMessages = reversedGotMessages;
       }
     );
 

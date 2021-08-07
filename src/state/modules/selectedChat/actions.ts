@@ -19,7 +19,10 @@ export const getMessagesByChatId = authGuardAsyncThunk<
     chatId: string;
     messages: MessageInterface[];
   },
-  string
+  {
+    selectedChatId: string;
+    page: number;
+  }
 >({
   prefix: "chats/getMessages",
   requestFunc: ChatsApi.getMessagesByChatId(500)

@@ -15,23 +15,20 @@ import {
   ChatInterface,
   DataForSendMessageInterface,
   MessageInterface,
-  MessageType,
   UserInterface
 } from "types/types";
 import { UploadFile } from "antd/lib/upload/interface";
 import { FileInterface } from "state/modules/selectedChat/types";
 
 // Hooks
-import { useChatScrollManager } from "hooks/hooks";
+import { useChatScrollManager, useScrollObserver } from "hooks/hooks";
 
 // Container
 import InputMessageContainer from "components/InputMessage/container";
 
 // Components
-import MessageAudio from "components/Message/MessageAudio";
-import Message from "components/Message";
-import SystemMessage from "components/Message/SystemMessage";
 import ChatHeader from "./ChatHeader";
+import MessagesWrapper from "./MessagesWrapper";
 
 // Primitives
 import Wrapper from "primitives/Wrapper";
@@ -39,59 +36,31 @@ import Wrapper from "primitives/Wrapper";
 // Styles
 import styleModule from "./style.module.scss";
 
+const POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE = 50;
+
 interface ChatWrapperPropsInterface {
   currentUser: UserInterface;
   chat: ChatInterface;
   messages: MessageInterface[];
   onSendMessage: (message: DataForSendMessageInterface) => void;
-}
-
-function MessagesWrapper({
-  isLoadedMessagesWrapper,
-  currentUser,
-  messages = []
-}: {
-  isLoadedMessagesWrapper: boolean;
-  currentUser: UserInterface;
-  messages: MessageInterface[];
-}) {
-  return (
-    isLoadedMessagesWrapper && (
-      <>
-        {messages.map((message) => {
-          //TODO - функционал аудио-сообщений не реализован на бекенде.
-          // const isAudioMsg = !!message?.audio;
-          const isAudioMsg = false;
-
-          return (
-            <Wrapper className={styleModule.messageWrapper} key={message.id}>
-              {isAudioMsg ? (
-                <MessageAudio
-                  message={message}
-                  isMe={currentUser.id === message.author.id}
-                />
-              ) : message.type === MessageType.SYSTEM ? (
-                <SystemMessage type={MessageType.SYSTEM} {...message} />
-              ) : (
-                <Message
-                  message={message}
-                  isMe={currentUser.id === message.author.id}
-                />
-              )}
-            </Wrapper>
-          );
-        })}
-      </>
-    )
-  );
+  getMessagesByChatIdHandler: ({
+    selectedChatId,
+    page
+  }: {
+    selectedChatId: string;
+    page: number;
+  }) => void;
 }
 
 const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   currentUser,
   chat,
   messages,
-  onSendMessage: onSendMessageProp
+  onSendMessage: onSendMessageProp,
+  getMessagesByChatIdHandler
 }) => {
+  const page = useRef(1);
+
   const scrollRef = useRef<ScrollbarsOverrideType>(null);
   const refMessagesWrapper = useRef(null);
 
@@ -110,9 +79,24 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
     }
   });
 
+  useScrollObserver({
+    debounceDelay: 500,
+    scroll: scrollRef.current?.view,
+    callback: ({ target }) => {
+      if (target.scrollTop < POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE) {
+        page.current = page.current + 1;
+        getMessagesByChatIdHandler({
+          selectedChatId: chat.id,
+          page: page.current
+        });
+      }
+    }
+  });
+
   useEffect(() => {
     scrollToBottom("auto");
-  }, [scrollToBottom]);
+    // eslint-disable-next-line
+  }, []);
 
   const onSendMessage = useCallback(
     (msgText: string, fileList) => {

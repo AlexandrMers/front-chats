@@ -31,7 +31,13 @@ export const ChatsApi = {
   },
 
   getMessagesByChatId(fakeDuration = 500) {
-    return (chatId: string) =>
+    return ({
+      selectedChatId: chatId,
+      page = 1
+    }: {
+      selectedChatId: string;
+      page: number;
+    }) =>
       new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
@@ -41,7 +47,8 @@ export const ChatsApi = {
             }>(`/messages`, MethodType.GET, {
               config: {
                 params: {
-                  chatId
+                  chatId,
+                  page
                 }
               }
             });
