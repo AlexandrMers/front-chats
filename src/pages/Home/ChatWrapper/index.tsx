@@ -108,9 +108,11 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   );
 
   useEffect(() => {
-    scrollToBottom("auto");
+    if (isLoadedMessagesWrapper) {
+      scrollToBottom("auto");
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [isLoadedMessagesWrapper]);
 
   const onSendMessage = useCallback(
     (msgText: string, fileList) => {

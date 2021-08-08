@@ -12,6 +12,7 @@ import classNames from "classnames";
 // Types
 import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
 import { UploadFile } from "antd/lib/upload/interface";
+import { FileFromServerInterface } from "../../state/modules/selectedChat/types";
 
 // Constants
 import { ENTER_KEY_UP_CODE } from "./constants";
@@ -32,7 +33,7 @@ import ScrollBar from "react-custom-scrollbars";
 
 // Styles
 import styleModule from "./style.module.scss";
-import { FileFromServerInterface } from "../../state/modules/selectedChat/types";
+import { useSendDisabledByMessageAndFilesList } from "./hooks/useSendDisabledByMessageAndFilesList";
 
 export interface InputMessagePropsInterface {
   placeholder?: string;
@@ -50,56 +51,54 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
   onLoadFiles,
   removeFile
 }) => {
+  const [value, setValue] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isDisabledSendMessage = useSendDisabledByMessageAndFilesList({
+    messageText: value,
+    fileList
+  });
+
   useEffect(() => {
     focusInput();
   });
 
-  const [value, setValue] = useState("");
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+  };
 
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  const onChange = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setValue(e.target.value);
-    },
-    [setValue]
-  );
-
-  const handlerEmoji = useCallback(
-    (emoji: BaseEmoji) => {
-      setValue((prevVal) => prevVal + emoji.native);
-      focusInput();
-    },
-    [setValue]
-  );
-
-  const clearInputValue = useCallback(() => setValue(""), [setValue]);
-
-  const onSendMessage = useCallback(
-    (msg: string) => {
-      sendMessage(msg);
-      clearInputValue();
-    },
-    [sendMessage, clearInputValue]
-  );
-
-  const onKeyUp = useCallback(
-    (e: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.keyCode !== ENTER_KEY_UP_CODE || e.shiftKey) return;
-      e.preventDefault();
-      onSendMessage(value);
-    },
-    [value, onSendMessage]
-  );
+  const handlerEmoji = (emoji: BaseEmoji) => {
+    setValue((prevVal) => prevVal + emoji.native);
+    focusInput();
+  };
 
   const focusInput = () => {
     if (!inputRef.current) return;
     inputRef.current.focus();
   };
 
-  const onSendClick = useCallback(() => {
+  const clearInputValue = useCallback(() => setValue(""), [setValue]);
+
+  const onSendMessage = (msg: string) => {
+    sendMessage(msg);
+    clearInputValue();
+  };
+
+  const onKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (isDisabledSendMessage) {
+      if (e.key === ENTER_KEY_UP_CODE) {
+        return e.preventDefault();
+      }
+      return;
+    }
+
+    if (e.key !== ENTER_KEY_UP_CODE || e.shiftKey) return;
+    e.preventDefault();
     onSendMessage(value);
-  }, [value, onSendMessage]);
+  };
+
+  const onSendClick = () => {
+    onSendMessage(value);
+  };
 
   return (
     <>
@@ -118,7 +117,7 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           value={value}
           className={styleModule.input__input}
           placeholder={placeholder}
-          onKeyUp={onKeyUp}
+          onKeyPress={onKeyPress}
         />
         <div className={styleModule.input__actionMessageWrap}>
           <FieldUpload
@@ -146,11 +145,11 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
           <button
             className={styleModule.input__button}
             onClick={onSendClick}
-            disabled={!value}
+            disabled={isDisabledSendMessage}
           >
             <SendOutlined
               className={classNames(styleModule.icon_common)}
-              disabled={!value}
+              disabled={isDisabledSendMessage}
             />
           </button>
         </div>
