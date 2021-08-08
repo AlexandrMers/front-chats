@@ -28,7 +28,8 @@ const initialState: SelectedChatInitialStateInterface = {
   selectedChatLoading: false,
   selectedChatMessages: null,
   sendMessageError: null,
-  attachedFiles: []
+  attachedFiles: [],
+  isHasMoreMessagesSelectedChat: true
 };
 
 const addMessage = (
@@ -77,6 +78,10 @@ const SelectedChatSlice = createSlice({
 
         const reversedGotMessages = reverse(selectedChatInfo.messages);
 
+        if (selectedChatInfo.messages.length === 0) {
+          state.isHasMoreMessagesSelectedChat = false;
+        }
+
         if (meta.arg.page > 1) {
           state.selectedChatMessages = [
             ...reversedGotMessages,
@@ -84,6 +89,7 @@ const SelectedChatSlice = createSlice({
           ];
           return;
         }
+        state.isHasMoreMessagesSelectedChat = true;
         state.selectedChatMessages = reversedGotMessages;
       }
     );

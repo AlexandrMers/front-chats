@@ -4,16 +4,10 @@ import { shallowEqual } from "react-redux";
 import { Empty } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 
-import Loader from "primitives/Loader";
-import FlexContainer from "primitives/FlexContainer";
-import Wrapper from "primitives/Wrapper";
+// Types
+import { DataForSendMessageInterface, MessageInterface } from "types/types";
 
-import ChatWrapper from "./ChatWrapper";
-import DialogItemsWrapper from "./DialogItemsWrapper";
-import HomeHeader from "./HomeHeader";
-
-import styleModule from "./style.module.scss";
-
+// State
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { getAllUsers, getCurrentUser } from "state/modules/user/actions";
 import { getChats } from "state/modules/chats/actions";
@@ -25,10 +19,19 @@ import {
   sendMessage,
   updateLastMessage
 } from "state/modules/selectedChat/actions";
-
 import { selectChatInfo, selectChatsSelector } from "./selectors";
 
-import { DataForSendMessageInterface, MessageInterface } from "types/types";
+// Primitives
+import Loader from "primitives/Loader";
+import FlexContainer from "primitives/FlexContainer";
+import Wrapper from "primitives/Wrapper";
+
+// Components
+import ChatWrapper from "./ChatWrapper";
+import DialogItemsWrapper from "./DialogItemsWrapper";
+import HomeHeader from "./HomeHeader";
+
+import styleModule from "./style.module.scss";
 
 const Home = () => {
   const dispatch = useAppDispatch();

@@ -23,4 +23,5 @@ export interface SelectedChatInitialStateInterface {
   selectedChatError: any;
   sendMessageError: any;
   attachedFiles: FileInterface[];
+  isHasMoreMessagesSelectedChat: boolean;
 }

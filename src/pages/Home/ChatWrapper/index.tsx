@@ -20,6 +20,10 @@ import {
 import { UploadFile } from "antd/lib/upload/interface";
 import { FileInterface } from "state/modules/selectedChat/types";
 
+// State
+import { useTypedSelector } from "state/store";
+import { isHasMoreSelectedChatMessagesSelector } from "../selectors";
+
 // Hooks
 import { useChatScrollManager, useScrollObserver } from "hooks/hooks";
 
@@ -59,6 +63,10 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   onSendMessage: onSendMessageProp,
   getMessagesByChatIdHandler
 }) => {
+  const { isHasMoreMessagesSelectedChat } = useTypedSelector((state) => ({
+    isHasMoreMessagesSelectedChat: isHasMoreSelectedChatMessagesSelector(state)
+  }));
+
   const page = useRef(1);
 
   const scrollRef = useRef<ScrollbarsOverrideType>(null);
@@ -79,19 +87,25 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
     }
   });
 
-  useScrollObserver({
-    debounceDelay: 500,
-    scroll: scrollRef.current?.view,
-    callback: ({ target }) => {
-      if (target.scrollTop < POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE) {
-        page.current = page.current + 1;
-        getMessagesByChatIdHandler({
-          selectedChatId: chat.id,
-          page: page.current
-        });
+  useScrollObserver(
+    {
+      debounceDelay: 500,
+      scroll: scrollRef.current?.view,
+      callback: ({ target }) => {
+        if (
+          isHasMoreMessagesSelectedChat &&
+          target.scrollTop < POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE
+        ) {
+          page.current = page.current + 1;
+          getMessagesByChatIdHandler({
+            selectedChatId: chat.id,
+            page: page.current
+          });
+        }
       }
-    }
-  });
+    },
+    [isHasMoreMessagesSelectedChat]
+  );
 
   useEffect(() => {
     scrollToBottom("auto");

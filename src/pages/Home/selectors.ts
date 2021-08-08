@@ -3,6 +3,10 @@ import { createSelector } from "reselect";
 import { StateInterface } from "../../state/store";
 import { ChatInterface, UserInterface } from "../../types/types";
 
+const getIsHasMoreSelectedChatMessagesSelector = (
+  state: StateInterface
+): boolean => state.selectedChatModule.isHasMoreMessagesSelectedChat;
+
 const getChatsSelector = (state: StateInterface): ChatInterface[] =>
   state.chatModule.chats;
 
@@ -81,4 +85,9 @@ export const selectChatsSelector = createSelector(
   getCurrentUserSelector,
   getAllUsersSelector,
   formatChatsSelector
+);
+
+export const isHasMoreSelectedChatMessagesSelector = createSelector(
+  getIsHasMoreSelectedChatMessagesSelector,
+  (_) => _
 );
