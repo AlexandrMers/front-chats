@@ -16,13 +16,15 @@ import { OrderSort, sortByDate } from "libs/sorters";
 import styleModule from "./style.module.scss";
 
 function Dialogs({
+  dialogItems,
+  unreadCountMessages,
   selectedDialogId,
-  setSelectedDialogId,
-  dialogItems
+  setSelectedDialogId
 }: {
+  dialogItems: ChatInterface[];
+  unreadCountMessages: { [key: string]: number };
   selectedDialogId: string;
   setSelectedDialogId: (value: string) => void;
-  dialogItems: ChatInterface[];
 }) {
   const { currentUser } = useTypedSelector(
     (state) => ({
@@ -36,6 +38,8 @@ function Dialogs({
       map<ChatInterface, ReactNode>((dialog) => {
         const isSelected = selectedDialogId === dialog.id;
 
+        const countUnreadMessages = unreadCountMessages[dialog.id];
+
         return (
           <Wrapper key={dialog.id} className={styleModule.marginFromScroll}>
             <DialogItem
@@ -43,6 +47,7 @@ function Dialogs({
               chat={dialog}
               isSelected={isSelected}
               currentUser={currentUser}
+              countUnreadMessages={countUnreadMessages}
             />
           </Wrapper>
         );

@@ -24,12 +24,14 @@ const filterCallback = (field: string, matchField: string) => {
 
 interface DialogItemsWrapperPropsInterface {
   chats: ChatInterface[];
+  unreadCountMessages: { [key: string]: number };
   onSelectChat: (selectedChatId: string) => void;
 }
 
 const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
-  onSelectChat,
-  chats
+  unreadCountMessages,
+  chats,
+  onSelectChat
 }) => {
   const [selectedDialogId, setSelectedDialogId] = useState<string>(null);
 
@@ -106,6 +108,7 @@ const DialogItemsWrapper: FC<DialogItemsWrapperPropsInterface> = ({
               dialogItems={filteredDialogs}
               selectedDialogId={selectedDialogId}
               setSelectedDialogId={setSelectedDialogId}
+              unreadCountMessages={unreadCountMessages}
             />
           ) : (
             <Empty description="Список диалогов пуст" />

@@ -27,6 +27,7 @@ export interface ChatInterface {
   partner: ShortUserInterface;
   lastMessage?: MessageInterface;
   additionalInfo?: AdditionalInfoChatInterface;
+  unreadCountMessages: number;
 }
 
 export interface DataForSendMessageInterface {

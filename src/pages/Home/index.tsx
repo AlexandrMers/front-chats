@@ -19,7 +19,11 @@ import {
   sendMessage,
   updateLastMessage
 } from "state/modules/selectedChat/actions";
-import { selectChatInfo, selectChatsSelector } from "./selectors";
+import {
+  selectChatInfo,
+  selectChatsSelector,
+  selectUnreadCountMessages
+} from "./selectors";
 
 // Primitives
 import Loader from "primitives/Loader";
@@ -50,7 +54,8 @@ const Home = () => {
     selectedChatId,
     selectedChatLoading,
     selectedChatMessages,
-    selectedChatInfo
+    selectedChatInfo,
+    unreadCountMessages
   } = useTypedSelector((state) => {
     return {
       isLoadingUser: state.userModule.loading,
@@ -60,7 +65,8 @@ const Home = () => {
       selectedChatId: state.selectedChatModule.selectedChatId,
       selectedChatLoading: state.selectedChatModule.selectedChatLoading,
       selectedChatMessages: state.selectedChatModule.selectedChatMessages,
-      selectedChatInfo: selectChatInfo(state)
+      selectedChatInfo: selectChatInfo(state),
+      unreadCountMessages: selectUnreadCountMessages(state)
     };
   }, shallowEqual);
 
@@ -118,7 +124,11 @@ const Home = () => {
       )}
 
       <FlexContainer className={styleModule.homeWrapper}>
-        <DialogItemsWrapper chats={chats} onSelectChat={onSelectChat} />
+        <DialogItemsWrapper
+          chats={chats}
+          onSelectChat={onSelectChat}
+          unreadCountMessages={unreadCountMessages}
+        />
         <>
           {selectedChatLoading ? (
             <Wrapper className={styleModule.loaderWrapper}>

@@ -91,3 +91,19 @@ export const isHasMoreSelectedChatMessagesSelector = createSelector(
   getIsHasMoreSelectedChatMessagesSelector,
   (_) => _
 );
+
+// For Unread Messages
+const getUnreadMessagesByChatsSelector = (
+  state: StateInterface
+): { [key: string]: number } => {
+  const chats = state.chatModule?.chats;
+  return chats.reduce<{ [key: string]: number }>((acc, chat) => {
+    acc[chat.id] = chat.unreadCountMessages;
+    return acc;
+  }, {});
+};
+
+export const selectUnreadCountMessages = createSelector(
+  getUnreadMessagesByChatsSelector,
+  (_) => _
+);

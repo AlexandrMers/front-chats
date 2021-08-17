@@ -2,27 +2,30 @@ import React, { FC, memo, useMemo } from "react";
 import formatRelative from "date-fns/format";
 import { ru } from "date-fns/locale";
 import classNames from "classnames";
-import { Typography } from "antd";
+import { Badge, Typography, Avatar } from "antd";
 
 import styleModule from "./style.module.scss";
 
-import Avatar from "primitives/Avatar";
+// import Avatar from "primitives/Avatar";
 import DialogLastMessage from "./DialogLastMessage";
 
 import { ChatInterface, UserInterface } from "../../types/types";
+import { shortName } from "../../primitives/Avatar/helpers";
 
 interface DialogItemPropsInterface {
   chat: ChatInterface;
-  onSelect: (dialogId: string) => void;
   isSelected?: boolean;
   currentUser?: UserInterface;
+  countUnreadMessages: number;
+  onSelect: (dialogId: string) => void;
 }
 
 const DialogItem: FC<DialogItemPropsInterface> = ({
   isSelected,
   chat,
-  onSelect,
-  currentUser
+  currentUser,
+  countUnreadMessages,
+  onSelect
 }) => {
   const date = useMemo(
     () =>
@@ -40,16 +43,30 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
       })}
       onClick={() => onSelect(chat.id)}
     >
-      <Avatar
-        size={40}
-        //TODO - аватарок еще нет
-        avatar={null}
-        name={chat.partner.fullName}
-        className={classNames(styleModule.dialogItem__avatar, {
-          [styleModule.dialogItem__avatar_isOnline]:
-            chat.additionalInfo.isOnline
-        })}
-      />
+      <Badge
+        size="small"
+        count={countUnreadMessages > 100 ? "99+" : countUnreadMessages}
+        style={{
+          zIndex: 100
+        }}
+      >
+        <Avatar
+          alt="123"
+          size="large"
+          shape="circle"
+          style={{
+            zIndex: 100
+          }}
+          // TODO - не реализован функционал аватарок...
+          src={null}
+          className={classNames(styleModule.dialogItem__avatar, {
+            [styleModule.dialogItem__avatar_isOnline]:
+              chat.additionalInfo.isOnline
+          })}
+        >
+          {shortName(chat.partner.fullName)}
+        </Avatar>
+      </Badge>
 
       <div className={styleModule.dialogItem__content}>
         <header className={styleModule.dialogItem__header}>
