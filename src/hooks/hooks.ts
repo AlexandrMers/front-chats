@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef } from "react";
+import { useEffect, useMemo, useReducer, useRef, useLayoutEffect } from "react";
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
 import debounce from "lodash/debounce";
@@ -68,7 +68,7 @@ export function useChatScrollManager({
     }
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!observableElement.current || !scrollRef.current?.view) {
       return undefined;
     }
@@ -136,7 +136,7 @@ export const useScrollObserver = (
 ) => {
   const debouncedRefScroll = useRef<any>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!scroll) return undefined;
 
     debouncedRefScroll.current = debounce(callback, debounceDelay);
