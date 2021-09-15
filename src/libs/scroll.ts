@@ -14,9 +14,9 @@ export const calculateScrollBottom = (element: HTMLElement) => {
 
 export function saveScrollPosition(
   element: HTMLElement,
-  oldHeightScroll: React.MutableRefObject<number>
+  oldHeightScroll: number
 ) {
   element.scrollTo({
-    top: Math.abs(element.scrollHeight - oldHeightScroll.current)
+    top: Math.abs(element.scrollHeight - oldHeightScroll)
   });
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useLayoutEffect } from "react";
+import { useLayoutEffect, useMemo, useReducer, useRef } from "react";
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
 import debounce from "lodash/debounce";
@@ -7,7 +7,6 @@ import {
   saveScrollPosition,
   scrollToBottom
 } from "../libs/scroll";
-import { ScrollViewRefInterface } from "../types/helpersType";
 
 export function useFormatRelativeDate(date: string) {
   const dateFormatted = useMemo(
@@ -36,12 +35,12 @@ export const useForceUpdate = () => {
 export function useChatScrollManager({
   observableElement,
   observerConfig,
-  scrollRef,
+  scroll,
   callback
 }: {
   observableElement: React.RefObject<HTMLElement>;
   observerConfig: MutationObserverInit;
-  scrollRef: React.RefObject<ScrollViewRefInterface>;
+  scroll: HTMLElement;
   callback?: (isLoaded: boolean) => void;
 }) {
   const observer = useRef<MutationObserver>();
@@ -54,7 +53,7 @@ export function useChatScrollManager({
   const oldHeightScroll = useRef(0);
 
   useScrollObserver({
-    scroll: scrollRef.current?.view,
+    scroll,
     debounceDelay: 200,
     callback: ({ target }) => {
       const pinned = calculateScrollBottom(target) === 0;
@@ -69,32 +68,28 @@ export function useChatScrollManager({
   });
 
   useLayoutEffect(() => {
-    if (!observableElement.current || !scrollRef.current?.view) {
+    if (!observableElement.current || !scroll) {
       return undefined;
     }
-
-    const element = scrollRef.current?.view;
-
-    oldHeightScroll.current = element.scrollHeight;
+    oldHeightScroll.current = scroll.scrollHeight;
 
     observer.current = new MutationObserver(() => {
       if (!initialScrolledBottom.current) {
-        scrollToBottom(element, "auto");
+        scrollToBottom(scroll, "auto");
         initialScrolledBottom.current = true;
         return;
       }
 
       if (isUpPosition.current) {
-        saveScrollPosition(element, oldHeightScroll);
-
-        oldHeightScroll.current = element.scrollHeight;
+        saveScrollPosition(scroll, oldHeightScroll.current);
+        oldHeightScroll.current = scroll.scrollHeight;
       }
 
       if (!isPined.current) {
         return;
       }
 
-      scrollToBottom(element, "smooth");
+      scrollToBottom(scroll, "smooth");
     });
 
     observer.current.observe(observableElement.current, observerConfig);
@@ -106,18 +101,12 @@ export function useChatScrollManager({
 
     return () => observer.current.disconnect();
     // eslint-disable-next-line
-  }, [
-    scrollRef.current,
-    observableElement.current,
-    isPined.current,
-    initialScrolledBottom.current,
-    isUpPosition.current
-  ]);
+  }, [scroll?.scrollHeight]);
 
   return {
     scrollToBottom: (behavior: "auto" | "smooth" = "smooth") => {
       isPined.current = true;
-      scrollToBottom(scrollRef.current.view, behavior);
+      scrollToBottom(scroll, behavior);
     }
   };
 }

@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import React, { FC, memo, useCallback, useRef, useState } from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -69,14 +62,14 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   const page = useRef(1);
 
-  const scrollRef = useRef<ScrollbarsOverrideType>(null);
+  const scrollRef = useRef<ScrollbarsOverrideType>();
   const refMessagesWrapper = useRef(null);
 
   const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);
 
   const { scrollToBottom } = useChatScrollManager({
     observableElement: refMessagesWrapper,
-    scrollRef,
+    scroll: scrollRef.current?.view,
     observerConfig: {
       childList: true,
       subtree: false,
@@ -106,13 +99,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
     },
     [isHasMoreMessagesSelectedChat]
   );
-
-  useEffect(() => {
-    if (isLoadedMessagesWrapper) {
-      scrollToBottom("auto");
-    }
-    // eslint-disable-next-line
-  }, [isLoadedMessagesWrapper]);
 
   const onSendMessage = useCallback(
     (msgText: string, fileList) => {
