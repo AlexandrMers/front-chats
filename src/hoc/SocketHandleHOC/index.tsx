@@ -18,12 +18,17 @@ import {
   updateLastMessage
 } from "../../state/modules/selectedChat/actions";
 
-const SocketHOC = ({
+export type SocketHocTypeComponent<T = {}> = T & {
+  emitEventToSocket: (event: typeof ChatEvent, payload: any) => void;
+};
+
+function SocketHOC({
   component: Component,
   ...otherProps
 }: {
-  component: FC;
-}) => {
+  component: FC<any>;
+  [key: string]: any;
+}) {
   const socket = useRef(null);
 
   const dispatch = useAppDispatch();
@@ -81,7 +86,11 @@ const SocketHOC = ({
     socket.current.emit(ChatEvent.CONNECT_USER, currentUserInfo);
   }, [currentUserInfo]);
 
-  return <Component {...otherProps} />;
-};
+  const emitEventToSocket = (event: typeof ChatEvent, payload: any) => {
+    socket.current.emit(event, payload);
+  };
+
+  return <Component {...otherProps} emitEventToSocket={emitEventToSocket} />;
+}
 
 export default memo(SocketHOC);

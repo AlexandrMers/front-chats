@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from "react";
+import React, { FC, memo, useCallback, useEffect } from "react";
 import { shallowEqual } from "react-redux";
 
 import { Empty } from "antd";
@@ -36,8 +36,13 @@ import DialogItemsWrapper from "./DialogItemsWrapper";
 import HomeHeader from "./HomeHeader";
 
 import styleModule from "./style.module.scss";
+import { RouteComponentProps } from "react-router";
 
-const Home = () => {
+import { SocketHocTypeComponent } from "../../hoc/SocketHandleHOC";
+
+type MyType = SocketHocTypeComponent<RouteComponentProps>;
+
+const Home: FC<MyType> = ({ emitEventToSocket }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
