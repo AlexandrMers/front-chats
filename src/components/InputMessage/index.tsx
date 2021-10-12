@@ -20,20 +20,18 @@ import { ENTER_KEY_UP_CODE } from "./constants";
 // Primitives
 import Wrapper from "primitives/Wrapper";
 import FieldUpload, { FileAccept } from "primitives/FieldUpload";
-import {
-  AudioOutlined,
-  PictureOutlined,
-  SendOutlined
-} from "@ant-design/icons";
+import { PictureOutlined, SendOutlined } from "@ant-design/icons";
 
 // Components
 import EmojiPicker from "./EmojiPicker";
 import { Upload } from "antd";
 import ScrollBar from "react-custom-scrollbars";
 
+// Hooks
+import { useSendDisabledByMessageAndFilesList } from "./hooks/useSendDisabledByMessageAndFilesList";
+
 // Styles
 import styleModule from "./style.module.scss";
-import { useSendDisabledByMessageAndFilesList } from "./hooks/useSendDisabledByMessageAndFilesList";
 
 export interface InputMessagePropsInterface {
   placeholder?: string;
@@ -138,9 +136,9 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
             multiple
           />
 
-          <button className={styleModule.input__button}>
-            <AudioOutlined className={classNames(styleModule.icon_common)} />
-          </button>
+          {/*<button className={styleModule.input__button}>*/}
+          {/*  <AudioOutlined className={classNames(styleModule.icon_common)} />*/}
+          {/*</button>*/}
 
           <button
             className={styleModule.input__button}
