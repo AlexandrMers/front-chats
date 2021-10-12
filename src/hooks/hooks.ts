@@ -1,4 +1,11 @@
-import { useLayoutEffect, useMemo, useReducer, useRef } from "react";
+import {
+  RefObject,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useReducer,
+  useRef
+} from "react";
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
 import debounce from "lodash/debounce";
@@ -7,6 +14,17 @@ import {
   saveScrollPosition,
   scrollToBottom
 } from "../libs/scroll";
+
+type HookWithRefCallbackInterface = () => Array<[number, any]>;
+
+export const useHookWithRefCallback: HookWithRefCallbackInterface = <T>() => {
+  const ref = useRef<T>(null);
+  const setRef = useCallback((node: any) => {
+    ref.current = node;
+  }, []);
+
+  return [ref as RefObject<T>, setRef as any];
+};
 
 export function useFormatRelativeDate(date: string) {
   const dateFormatted = useMemo(
@@ -71,6 +89,7 @@ export function useChatScrollManager({
     if (!observableElement.current || !scroll) {
       return undefined;
     }
+
     oldHeightScroll.current = scroll.scrollHeight;
 
     observer.current = new MutationObserver(() => {
@@ -101,7 +120,7 @@ export function useChatScrollManager({
 
     return () => observer.current.disconnect();
     // eslint-disable-next-line
-  }, [scroll?.scrollHeight]);
+  }, [scroll]);
 
   return {
     scrollToBottom: (behavior: "auto" | "smooth" = "smooth") => {
@@ -134,5 +153,5 @@ export const useScrollObserver = (
     return () =>
       scroll.removeEventListener("scroll", debouncedRefScroll.current);
     // eslint-disable-next-line
-  }, [scroll, ...deps]);
+  }, [...deps]);
 };

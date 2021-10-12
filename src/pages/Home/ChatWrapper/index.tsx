@@ -18,7 +18,11 @@ import { useTypedSelector } from "state/store";
 import { isHasMoreSelectedChatMessagesSelector } from "../selectors";
 
 // Hooks
-import { useChatScrollManager, useScrollObserver } from "hooks/hooks";
+import {
+  useChatScrollManager,
+  // useHookWithRefCallback,
+  useScrollObserver
+} from "hooks/hooks";
 
 // Container
 import InputMessageContainer from "components/InputMessage/container";
@@ -63,6 +67,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   const page = useRef(1);
 
   const scrollRef = useRef<ScrollbarsOverrideType>();
+
   const refMessagesWrapper = useRef(null);
 
   const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);

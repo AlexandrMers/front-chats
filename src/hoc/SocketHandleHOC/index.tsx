@@ -1,6 +1,6 @@
-import React, { FC, memo, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { shallowEqual } from "react-redux";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { addNewChat } from "state/modules/chats/actions";
@@ -29,7 +29,15 @@ function SocketHOC({
   component: FC<any>;
   [key: string]: any;
 }) {
-  const socket = useRef(null);
+  const socket =
+    useRef<
+      typeof Socket & {
+        emit(
+          event: string | typeof ChatEvent,
+          ...args: any[]
+        ): typeof io.Socket;
+      }
+    >(null);
 
   const dispatch = useAppDispatch();
 
@@ -93,4 +101,4 @@ function SocketHOC({
   return <Component {...otherProps} emitEventToSocket={emitEventToSocket} />;
 }
 
-export default memo(SocketHOC);
+export default SocketHOC;
