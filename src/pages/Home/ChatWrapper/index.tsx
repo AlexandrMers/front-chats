@@ -3,7 +3,6 @@ import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
 // Types
-import { ScrollbarsOverrideType } from "types/helpersType";
 import {
   ChatInterface,
   DataForSendMessageInterface,
@@ -18,11 +17,7 @@ import { useTypedSelector } from "state/store";
 import { isHasMoreSelectedChatMessagesSelector } from "../selectors";
 
 // Hooks
-import {
-  useChatScrollManager,
-  // useHookWithRefCallback,
-  useScrollObserver
-} from "hooks/hooks";
+import { useChatScrollManager, useScrollObserver } from "hooks/hooks";
 
 // Container
 import InputMessageContainer from "components/InputMessage/container";
@@ -66,15 +61,14 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   const page = useRef(1);
 
-  const scrollRef = useRef<ScrollbarsOverrideType>();
-
   const refMessagesWrapper = useRef(null);
+  const scrollRef = useRef(null);
 
   const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);
 
   const { scrollToBottom } = useChatScrollManager({
     observableElement: refMessagesWrapper,
-    scroll: scrollRef.current?.view,
+    scroll: scrollRef,
     observerConfig: {
       childList: true,
       subtree: false,
@@ -88,7 +82,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   useScrollObserver(
     {
       debounceDelay: 500,
-      scroll: scrollRef.current?.view,
+      scroll: scrollRef,
       callback: ({ target }) => {
         if (
           isHasMoreMessagesSelectedChat &&

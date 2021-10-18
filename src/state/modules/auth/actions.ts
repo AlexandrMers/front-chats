@@ -25,8 +25,8 @@ export const login = createAsyncThunk<
     const dataToken = await UserAPI.login(data);
     instanceApiRequest.setToken(dataToken.token);
     dispatch(push("/home"));
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
 });
 
@@ -37,8 +37,8 @@ export const registerUser = createAsyncThunk<
 >("registerUser", async (data, { rejectWithValue }) => {
   try {
     return await UserAPI.register(data);
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
 });
 
@@ -57,7 +57,7 @@ export const confirmRegistrationUser = createAsyncThunk<
 >("confirmRegistrationUser", async ({ hash }, { rejectWithValue }) => {
   try {
     return await UserAPI.confirmRegister(hash);
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
 });

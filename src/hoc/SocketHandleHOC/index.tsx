@@ -18,7 +18,7 @@ import {
   updateLastMessage
 } from "../../state/modules/selectedChat/actions";
 
-export type SocketHocTypeComponent<T = {}> = T & {
+export type SocketHocTypeComponent<T = Record<string, any>> = T & {
   emitEventToSocket: (event: typeof ChatEvent, payload: any) => void;
 };
 
@@ -29,15 +29,11 @@ function SocketHOC({
   component: FC<any>;
   [key: string]: any;
 }) {
-  const socket =
-    useRef<
-      typeof Socket & {
-        emit(
-          event: string | typeof ChatEvent,
-          ...args: any[]
-        ): typeof io.Socket;
-      }
-    >(null);
+  const socket = useRef<
+    typeof Socket & {
+      emit(event: string | typeof ChatEvent, ...args: any[]): typeof io.Socket;
+    }
+  >(null);
 
   const dispatch = useAppDispatch();
 

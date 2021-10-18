@@ -1,10 +1,12 @@
 import {
   RefObject,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
-  useRef
+  useRef,
+  useState
 } from "react";
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
@@ -14,17 +16,7 @@ import {
   saveScrollPosition,
   scrollToBottom
 } from "../libs/scroll";
-
-type HookWithRefCallbackInterface = () => Array<[number, any]>;
-
-export const useHookWithRefCallback: HookWithRefCallbackInterface = <T>() => {
-  const ref = useRef<T>(null);
-  const setRef = useCallback((node: any) => {
-    ref.current = node;
-  }, []);
-
-  return [ref as RefObject<T>, setRef as any];
-};
+import { ScrollbarsOverrideType } from "../types/helpersType";
 
 export function useFormatRelativeDate(date: string) {
   const dateFormatted = useMemo(
@@ -58,7 +50,7 @@ export function useChatScrollManager({
 }: {
   observableElement: React.RefObject<HTMLElement>;
   observerConfig: MutationObserverInit;
-  scroll: HTMLElement;
+  scroll: RefObject<ScrollbarsOverrideType>;
   callback?: (isLoaded: boolean) => void;
 }) {
   const observer = useRef<MutationObserver>();
@@ -69,9 +61,55 @@ export function useChatScrollManager({
   const isUpPosition = useRef(false);
 
   const oldHeightScroll = useRef(0);
+  const [scrollHeight, setScrollHeight] = useState(0);
+
+  useEffect(() => {
+    if (!scroll?.current) return undefined;
+    const height = scroll.current.getScrollHeight();
+    setScrollHeight(height);
+  });
+
+  useEffect(() => {
+    oldHeightScroll.current = scrollHeight;
+  }, [scrollHeight]);
+
+  useLayoutEffect(() => {
+    if (!observableElement.current || !scroll?.current) {
+      return undefined;
+    }
+
+    observer.current = new MutationObserver(() => {
+      if (!initialScrolledBottom.current) {
+        scrollToBottom(scroll.current.view, "auto");
+        initialScrolledBottom.current = true;
+        return;
+      }
+
+      if (isUpPosition.current) {
+        saveScrollPosition(scroll.current.view, oldHeightScroll.current);
+        oldHeightScroll.current = scroll.current.getScrollHeight();
+      }
+
+      if (!isPined.current) {
+        return;
+      }
+
+      scrollToBottom(scroll.current.view, "smooth");
+    });
+
+    observer.current.observe(observableElement.current, observerConfig);
+
+    if (!initializeObserver.current) {
+      initializeObserver.current = true;
+      callback(initializeObserver.current);
+    }
+
+    return () => observer.current.disconnect();
+    // eslint-disable-next-line
+  }, []);
 
   useScrollObserver({
-    scroll,
+    scroll: scroll,
     debounceDelay: 200,
     callback: ({ target }) => {
       const pinned = calculateScrollBottom(target) === 0;
@@ -85,47 +123,10 @@ export function useChatScrollManager({
     }
   });
 
-  useLayoutEffect(() => {
-    if (!observableElement.current || !scroll) {
-      return undefined;
-    }
-
-    oldHeightScroll.current = scroll.scrollHeight;
-
-    observer.current = new MutationObserver(() => {
-      if (!initialScrolledBottom.current) {
-        scrollToBottom(scroll, "auto");
-        initialScrolledBottom.current = true;
-        return;
-      }
-
-      if (isUpPosition.current) {
-        saveScrollPosition(scroll, oldHeightScroll.current);
-        oldHeightScroll.current = scroll.scrollHeight;
-      }
-
-      if (!isPined.current) {
-        return;
-      }
-
-      scrollToBottom(scroll, "smooth");
-    });
-
-    observer.current.observe(observableElement.current, observerConfig);
-
-    if (!initializeObserver.current) {
-      initializeObserver.current = true;
-      callback(initializeObserver.current);
-    }
-
-    return () => observer.current.disconnect();
-    // eslint-disable-next-line
-  }, [scroll]);
-
   return {
     scrollToBottom: (behavior: "auto" | "smooth" = "smooth") => {
       isPined.current = true;
-      scrollToBottom(scroll, behavior);
+      scrollToBottom(scroll?.current?.view, behavior);
     }
   };
 }
@@ -136,7 +137,7 @@ export const useScrollObserver = (
     debounceDelay,
     callback
   }: {
-    scroll: HTMLElement;
+    scroll: RefObject<ScrollbarsOverrideType>;
     debounceDelay: number;
     callback: (event: { target: HTMLInputElement }) => void;
   },
@@ -145,13 +146,13 @@ export const useScrollObserver = (
   const debouncedRefScroll = useRef<any>();
 
   useLayoutEffect(() => {
-    if (!scroll) return undefined;
+    const scrollView = scroll?.current?.view;
+    if (!scrollView) return undefined;
 
     debouncedRefScroll.current = debounce(callback, debounceDelay);
 
-    scroll.addEventListener("scroll", debouncedRefScroll.current);
+    scrollView.addEventListener("scroll", debouncedRefScroll.current);
     return () =>
-      scroll.removeEventListener("scroll", debouncedRefScroll.current);
-    // eslint-disable-next-line
+      scrollView.removeEventListener("scroll", debouncedRefScroll.current);
   }, [...deps]);
 };

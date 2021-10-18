@@ -7,15 +7,14 @@ import { ThunkOptionsCustomTypes } from "../thunk";
 
 const STATUSES_ERRORS = [401, 404];
 
-function isErrorAuth(error: {
-  response: {
-    status: number;
-  };
-}) {
-  return STATUSES_ERRORS.includes(error.response.status);
+function isErrorAuth(error: any) {
+  return STATUSES_ERRORS.includes(error?.response?.status);
 }
 
-export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
+export const authGuardAsyncThunk = <
+  ReturnType = Record<string, never>,
+  EnterType = void
+>({
   prefix,
   requestFunc,
   options
@@ -24,18 +23,18 @@ export const authGuardAsyncThunk = <ReturnType = {}, EnterType = void>({
   requestFunc: (data?: EnterType) => Promise<any>;
   options?: ThunkOptionsCustomTypes<EnterType>;
 }) =>
-  createAsyncThunk(
+  createAsyncThunk<ReturnType, EnterType>(
     prefix,
     async (data: EnterType, thunkAPI) => {
       try {
         return (await requestFunc(data)) as ReturnType;
-      } catch (error) {
+      } catch (error: any) {
         if (isErrorAuth(error)) {
           instanceApiRequest.deleteToken();
           thunkAPI.dispatch(push("/login"));
         }
         console.error(error);
-        return thunkAPI.rejectWithValue(error.response.data);
+        return thunkAPI.rejectWithValue(error?.response?.data);
       }
     },
     options
