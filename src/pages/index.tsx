@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { FC, useContext } from "react";
 import { __RouterContext, Route, Switch } from "react-router";
 import { animated, useTransition } from "react-spring";
 
@@ -27,7 +27,7 @@ const animationsValues = {
   }
 };
 
-const Routes = () => {
+const Routes: FC = () => {
   const { location } = useRouter();
 
   const transitions = useTransition(
@@ -36,28 +36,30 @@ const Routes = () => {
     animationsValues
   );
 
-  return transitions.map(({ item, props: transition, key }) => (
-    <animated.div
-      key={key}
-      style={{
-        ...transition,
-        overflow: "hidden"
-      }}
-    >
-      <Switch location={item}>
-        <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/registration" component={RegistrationPage} />
-        <Route exact path="/confirm-hash/:id" component={ConfirmedPage} />
-        <ProtectedRoute
-          exact
-          path={["/", "/home"]}
-          render={(props) => <SocketHOC component={Home} {...props} />}
-        />
-      </Switch>
-    </animated.div>
-  ));
+  return (
+    <>
+      {transitions.map(({ item, props: transition, key }) => (
+        <animated.div
+          key={key}
+          style={{
+            ...transition,
+            overflow: "hidden"
+          }}
+        >
+          <Switch location={item}>
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/registration" component={RegistrationPage} />
+            <Route exact path="/confirm-hash/:id" component={ConfirmedPage} />
+            <ProtectedRoute
+              exact
+              path={["/", "/home"]}
+              render={(props) => <SocketHOC component={Home} {...props} />}
+            />
+          </Switch>
+        </animated.div>
+      ))}
+    </>
+  );
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-export default memo(Routes);
+export default Routes;
