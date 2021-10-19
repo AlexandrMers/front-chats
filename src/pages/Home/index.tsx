@@ -45,11 +45,15 @@ type MyType = SocketHocTypeComponent<RouteComponentProps>;
 const Home: FC<MyType> = ({ emitEventToSocket }) => {
   const dispatch = useAppDispatch();
 
+  const getAllData = async () => {
+    await dispatch(getCurrentUser());
+    await dispatch(getAllUsers());
+    await dispatch(getChats());
+  };
+
   useEffect(() => {
-    dispatch(getCurrentUser());
-    dispatch(getAllUsers());
-    dispatch(getChats());
-  }, [dispatch]);
+    getAllData();
+  }, []);
 
   const {
     isLoadingUser,
