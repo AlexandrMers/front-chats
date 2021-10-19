@@ -1,6 +1,5 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { shallowEqual } from "react-redux";
-import io, { Socket } from "socket.io-client";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
 import { addNewChat } from "state/modules/chats/actions";
@@ -17,10 +16,7 @@ import {
   addNewMessage,
   updateLastMessage
 } from "../../state/modules/selectedChat/actions";
-
-export type SocketHocTypeComponent<T = Record<string, any>> = T & {
-  emitEventToSocket: (event: typeof ChatEvent, payload: any) => void;
-};
+import { SocketContext } from "../../App";
 
 function SocketHOC({
   component: Component,
@@ -29,12 +25,6 @@ function SocketHOC({
   component: FC<any>;
   [key: string]: any;
 }) {
-  const socket = useRef<
-    typeof Socket & {
-      emit(event: string | typeof ChatEvent, ...args: any[]): typeof io.Socket;
-    }
-  >(null);
-
   const dispatch = useAppDispatch();
 
   const { currentUserInfo } = useTypedSelector(
@@ -44,57 +34,53 @@ function SocketHOC({
     shallowEqual
   );
 
+  const socket = useContext(SocketContext);
+
   useEffect(() => {
-    socket.current = io(process.env.REACT_APP_SOCKET_URL);
-    socket.current.connect();
+    if (!socket) return undefined;
+    socket.connect();
 
     return () => {
-      socket.current.disconnect();
+      socket.disconnect();
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
-    socket.current.on(
-      ChatEvent.USER_ONLINE,
-      (joinedUserData: UserInterface) => {
-        if (currentUserInfo && currentUserInfo?.id !== joinedUserData?.id) {
-          dispatch(setUserOnlineById(joinedUserData));
-        }
+    if (!socket) return undefined;
+    socket.on(ChatEvent.USER_ONLINE, (joinedUserData: UserInterface) => {
+      if (currentUserInfo && currentUserInfo?.id !== joinedUserData?.id) {
+        dispatch(setUserOnlineById(joinedUserData));
       }
-    );
+    });
 
-    socket.current.on(ChatEvent.USER_OFFLINE, (leftUser: UserInterface) => {
+    socket.on(ChatEvent.USER_OFFLINE, (leftUser: UserInterface) => {
       if (currentUserInfo && currentUserInfo?.id !== leftUser?.id) {
         dispatch(setUserOfflineById(leftUser));
       }
     });
 
-    socket.current.on(ChatEvent.CREATED_CHAT, (createdChat: ChatInterface) => {
+    socket.on(ChatEvent.CREATED_CHAT, (createdChat: ChatInterface) => {
       dispatch(addNewChat(createdChat));
     });
 
-    socket.current.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
+    socket.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
       dispatch(updateLastMessage(newMessage));
       if (currentUserInfo.id === newMessage.author.id) return;
       dispatch(addNewMessage(newMessage));
     });
 
     return () => {
-      socket.current.removeAllListeners();
+      socket.removeAllListeners();
     };
-  }, [currentUserInfo, dispatch]);
+  }, [currentUserInfo, dispatch, socket]);
 
   useEffect(() => {
-    if (!currentUserInfo) return undefined;
+    if (!currentUserInfo || !socket) return undefined;
 
-    socket.current.emit(ChatEvent.CONNECT_USER, currentUserInfo);
-  }, [currentUserInfo]);
+    socket.emit(ChatEvent.CONNECT_USER, currentUserInfo);
+  }, [currentUserInfo, socket]);
 
-  const emitEventToSocket = (event: typeof ChatEvent, payload: any) => {
-    socket.current.emit(event, payload);
-  };
-
-  return <Component {...otherProps} emitEventToSocket={emitEventToSocket} />;
+  return <Component {...otherProps} />;
 }
 
 export default SocketHOC;

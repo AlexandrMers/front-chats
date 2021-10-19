@@ -1,4 +1,12 @@
-import React, { FC, memo, useCallback, useRef, useState } from "react";
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import ScrollBar from "react-custom-scrollbars";
 import classNames from "classnames";
 
@@ -31,6 +39,8 @@ import Wrapper from "primitives/Wrapper";
 
 // Styles
 import styleModule from "./style.module.scss";
+import { SocketContext } from "../../../App";
+import { ChatEvent } from "../../../hoc/SocketHandleHOC/types";
 
 const POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE = 50;
 

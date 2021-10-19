@@ -36,13 +36,8 @@ import DialogItemsWrapper from "./DialogItemsWrapper";
 import HomeHeader from "./HomeHeader";
 
 import styleModule from "./style.module.scss";
-import { RouteComponentProps } from "react-router";
 
-import { SocketHocTypeComponent } from "../../hoc/SocketHandleHOC";
-
-type MyType = SocketHocTypeComponent<RouteComponentProps>;
-
-const Home: FC<MyType> = ({ emitEventToSocket }) => {
+const Home: FC = () => {
   const dispatch = useAppDispatch();
 
   const getAllData = async () => {
