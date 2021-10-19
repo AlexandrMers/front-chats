@@ -8,6 +8,7 @@ import {
   deleteFile,
   getMessagesByChatId,
   loadFile,
+  readMessages,
   selectChatId,
   sendMessage
 } from "./actions";
@@ -191,6 +192,20 @@ const SelectedChatSlice = createSlice({
 
     builder.addCase(clearFiles, (state) => {
       state.attachedFiles = [];
+    });
+
+    builder.addCase(readMessages, (state, { payload: { chatId, userId } }) => {
+      if (state?.selectedChatMessages.length) {
+        state.selectedChatMessages = state.selectedChatMessages.map((msg) => {
+          if (msg.chatId === chatId && userId === msg.author.id) {
+            return {
+              ...msg,
+              isRead: true
+            };
+          }
+          return msg;
+        });
+      }
     });
   }
 });

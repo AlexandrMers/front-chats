@@ -7,8 +7,8 @@ import Home from "./Home";
 import RegistrationPage from "./Registration";
 import LoginPage from "./Login";
 
-import ProtectedRoute from "../hoc/ProtectedRoute";
-import SocketHOC from "../hoc/SocketHandleHOC";
+import ProtectedRoute from "../hocs/ProtectedRoute";
+import SocketHOC from "../hocs/SocketHandleHOC";
 import ConfirmedPage from "./ConfirmedPage";
 
 function useRouter() {

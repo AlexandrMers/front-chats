@@ -4,7 +4,11 @@ import { addNewChat, createNewChat, getChats } from "./actions";
 
 import { ChatsSliceInterface } from "./types";
 import { ChatInterface } from "../../../types/types";
-import { updateLastMessage } from "../selectedChat/actions";
+import {
+  readMessages,
+  updateCountersMessages,
+  updateLastMessage
+} from "../selectedChat/actions";
 
 const initialState: ChatsSliceInterface = {
   chats: [],
@@ -74,6 +78,21 @@ const ChatsSlice = createSlice({
         foundChat.lastMessage = newMessage;
       }
     });
+
+    builder.addCase(
+      updateCountersMessages,
+      (state, { payload: newMessage }) => {
+        state.chats = state.chats.map((chat) => {
+          if (chat.id === newMessage.chatId) {
+            return {
+              ...chat,
+              unreadCountMessages: ++chat.unreadCountMessages
+            };
+          }
+          return chat;
+        });
+      }
+    );
   }
 });
 

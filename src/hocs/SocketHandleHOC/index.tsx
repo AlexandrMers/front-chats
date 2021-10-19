@@ -14,6 +14,8 @@ import { ChatInterface, MessageInterface, UserInterface } from "types/types";
 import { ChatEvent } from "./types";
 import {
   addNewMessage,
+  readMessages,
+  updateCountersMessages,
   updateLastMessage
 } from "../../state/modules/selectedChat/actions";
 import { SocketContext } from "../../App";
@@ -27,9 +29,10 @@ function SocketHOC({
 }) {
   const dispatch = useAppDispatch();
 
-  const { currentUserInfo } = useTypedSelector(
+  const { currentUserInfo, selectedChatId } = useTypedSelector(
     (state) => ({
-      currentUserInfo: state?.userModule?.userInfo
+      currentUserInfo: state?.userModule?.userInfo,
+      selectedChatId: state?.selectedChatModule?.selectedChatId
     }),
     shallowEqual
   );
@@ -67,12 +70,24 @@ function SocketHOC({
       dispatch(updateLastMessage(newMessage));
       if (currentUserInfo.id === newMessage.author.id) return;
       dispatch(addNewMessage(newMessage));
+      if (selectedChatId === newMessage.chatId) {
+        return;
+      }
+      console.log("new mEssage here !! -> ", newMessage);
+      dispatch(updateCountersMessages(newMessage));
     });
+
+    socket.on(
+      ChatEvent.READ_MESSAGE,
+      ({ chatId, userId }: { chatId: string; userId: string }) => {
+        dispatch(readMessages({ chatId, userId }));
+      }
+    );
 
     return () => {
       socket.removeAllListeners();
     };
-  }, [currentUserInfo, dispatch, socket]);
+  }, [currentUserInfo, dispatch, socket, selectedChatId]);
 
   useEffect(() => {
     if (!currentUserInfo || !socket) return undefined;

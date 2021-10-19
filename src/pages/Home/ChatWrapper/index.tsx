@@ -1,4 +1,5 @@
 import React, {
+  createContext,
   FC,
   memo,
   useCallback,
@@ -40,7 +41,7 @@ import Wrapper from "primitives/Wrapper";
 // Styles
 import styleModule from "./style.module.scss";
 import { SocketContext } from "../../../App";
-import { ChatEvent } from "../../../hoc/SocketHandleHOC/types";
+import { ChatEvent } from "../../../hocs/SocketHandleHOC/types";
 
 const POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE = 50;
 
@@ -68,11 +69,24 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   const { isHasMoreMessagesSelectedChat } = useTypedSelector((state) => ({
     isHasMoreMessagesSelectedChat: isHasMoreSelectedChatMessagesSelector(state)
   }));
-
   const page = useRef(1);
-
   const refMessagesWrapper = useRef(null);
   const scrollRef = useRef(null);
+
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!socket || !messages || !currentUser) return undefined;
+    const unreadMessagesFromPartner = messages.filter(
+      (msg) => msg.author.id !== currentUser.id && !msg.isRead
+    );
+    if (unreadMessagesFromPartner.length) {
+      socket.emit(ChatEvent.READ_MESSAGE, {
+        chatId: unreadMessagesFromPartner[0].chatId,
+        userId: unreadMessagesFromPartner[0].author.id
+      });
+    }
+  }, [socket, messages, currentUser]);
 
   const [isLoadedMessagesWrapper, setIsLoadedMessagesWrapper] = useState(false);
 
@@ -88,7 +102,6 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
       setIsLoadedMessagesWrapper(isLoaded);
     }
   });
-
   useScrollObserver(
     {
       debounceDelay: 500,

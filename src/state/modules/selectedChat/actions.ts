@@ -57,6 +57,14 @@ export const addNewMessage = createAction<MessageInterface>(
   ACTIONS_MESSAGE.NEW_MESSAGE
 );
 
+export const updateCountersMessages = createAction<MessageInterface>(
+  ACTIONS_MESSAGE.UPDATE_COUNTERS_CHATS
+);
+
 export const updateLastMessage = createAction<MessageInterface>(
   ACTIONS_MESSAGE.UPDATE_LAST_MESSAGE
+);
+
+export const readMessages = createAction<{ userId: string; chatId: string }>(
+  ACTIONS_MESSAGE.READ_MESSAGES
 );
