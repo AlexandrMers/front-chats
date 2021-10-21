@@ -25,7 +25,10 @@ const addChat = (state: ChatsSliceInterface, newChat: ChatInterface) => {
     return;
   }
 
-  state.chats.push(newChat);
+  state.chats.push({
+    ...newChat,
+    unreadCountMessages: newChat.unreadCountMessages ?? 0
+  });
 };
 
 const ChatsSlice = createSlice({
@@ -82,15 +85,18 @@ const ChatsSlice = createSlice({
     builder.addCase(
       updateCountersMessages,
       (state, { payload: newMessage }) => {
-        state.chats = state.chats.map((chat) => {
-          if (chat.id === newMessage.chatId) {
-            return {
-              ...chat,
-              unreadCountMessages: ++chat.unreadCountMessages
-            };
-          }
-          return chat;
-        });
+        state.chats =
+          Array.isArray(state.chats) && state.chats.length > 0
+            ? state.chats.map((chat) => {
+                if (chat.id === newMessage.chatId) {
+                  return {
+                    ...chat,
+                    unreadCountMessages: ++chat.unreadCountMessages
+                  };
+                }
+                return chat;
+              })
+            : [];
       }
     );
   }

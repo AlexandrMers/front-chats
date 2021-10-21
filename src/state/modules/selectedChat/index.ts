@@ -195,7 +195,7 @@ const SelectedChatSlice = createSlice({
     });
 
     builder.addCase(readMessages, (state, { payload: { chatId, userId } }) => {
-      if (state?.selectedChatMessages.length) {
+      if (state?.selectedChatMessages?.length) {
         state.selectedChatMessages = state.selectedChatMessages.map((msg) => {
           if (msg.chatId === chatId && userId === msg.author.id) {
             return {
