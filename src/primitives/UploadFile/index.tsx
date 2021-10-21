@@ -16,8 +16,6 @@ const UploadFileComponent: FC<UploadFilePropsInterface> = ({
   onAction
 }) => {
   const previewFile = (file: File | Blob): PromiseLike<string> => {
-    console.log("file check => ", file);
-
     return Promise.resolve(".jpg");
   };
 
