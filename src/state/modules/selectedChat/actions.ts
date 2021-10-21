@@ -1,7 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 
 // Constants
-import { ACTIONS_MESSAGE } from "./constants";
+import { ACTIONS_CHAT, ACTIONS_MESSAGE } from "./constants";
 
 // Libs
 import { authGuardAsyncThunk } from "state/lib";
@@ -49,9 +49,8 @@ export const deleteFile = authGuardAsyncThunk<
   requestFunc: FileUploadApi.deleteFile
 });
 
-export const selectChatId = createAction<string>("CHATS/SELECT_CHAT");
-
-export const clearFiles = createAction("CHATS/CLEAR_FILES");
+export const selectChatId = createAction<string>(ACTIONS_CHAT.SELECT_CHAT);
+export const clearFiles = createAction(ACTIONS_CHAT.CHAT_CLEAR_FILES);
 
 export const addNewMessage = createAction<MessageInterface>(
   ACTIONS_MESSAGE.NEW_MESSAGE

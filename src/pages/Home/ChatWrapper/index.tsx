@@ -22,7 +22,7 @@ import { UploadFile } from "antd/lib/upload/interface";
 import { FileInterface } from "state/modules/selectedChat/types";
 
 // State
-import { useTypedSelector } from "state/store";
+import { useAppDispatch, useTypedSelector } from "state/store";
 import { isHasMoreSelectedChatMessagesSelector } from "../selectors";
 
 // Hooks
@@ -42,6 +42,7 @@ import Wrapper from "primitives/Wrapper";
 import styleModule from "./style.module.scss";
 import { SocketContext } from "../../../App";
 import { ChatEvent } from "../../../hocs/SocketHandleHOC/types";
+import { clearUnreadCountMessages } from "../../../state/modules/chats/actions";
 
 const POSITION_SCROLL_TOP_FOR_REQUEST_MESSAGE = 50;
 
@@ -69,11 +70,18 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   const { isHasMoreMessagesSelectedChat } = useTypedSelector((state) => ({
     isHasMoreMessagesSelectedChat: isHasMoreSelectedChatMessagesSelector(state)
   }));
+  const dispatch = useAppDispatch();
+
   const page = useRef(1);
   const refMessagesWrapper = useRef(null);
   const scrollRef = useRef(null);
 
   const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!chat?.id) return undefined;
+    dispatch(clearUnreadCountMessages(chat?.id));
+  }, [dispatch, chat]);
 
   useEffect(() => {
     if (!socket || !messages || !currentUser) return undefined;

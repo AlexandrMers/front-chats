@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 import { shallowEqual } from "react-redux";
 
 import { useAppDispatch, useTypedSelector } from "state/store";
@@ -19,6 +19,10 @@ import {
   updateLastMessage
 } from "../../state/modules/selectedChat/actions";
 import { SocketContext } from "../../App";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import messageSound from "../../audio/icq.mp3";
 
 function SocketHOC({
   component: Component,
@@ -48,6 +52,8 @@ function SocketHOC({
     };
   }, [socket]);
 
+  const audioRef = useRef(null);
+
   useEffect(() => {
     if (!socket) return undefined;
     socket.on(ChatEvent.USER_ONLINE, (joinedUserData: UserInterface) => {
@@ -69,11 +75,11 @@ function SocketHOC({
     socket.on(ChatEvent.NEW_MESSAGE, (newMessage: MessageInterface) => {
       dispatch(updateLastMessage(newMessage));
       if (currentUserInfo.id === newMessage.author.id) return;
+      audioRef?.current?.play();
       dispatch(addNewMessage(newMessage));
       if (selectedChatId === newMessage.chatId) {
         return;
       }
-      console.log("new mEssage here !! -> ", newMessage);
       dispatch(updateCountersMessages(newMessage));
     });
 
@@ -95,7 +101,19 @@ function SocketHOC({
     socket.emit(ChatEvent.CONNECT_USER, currentUserInfo);
   }, [currentUserInfo, socket]);
 
-  return <Component {...otherProps} />;
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src={messageSound}
+        preload="metadata"
+        style={{
+          display: "none"
+        }}
+      />
+      <Component {...otherProps} />
+    </>
+  );
 }
 
 export default SocketHOC;

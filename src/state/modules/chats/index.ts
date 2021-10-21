@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { addNewChat, createNewChat, getChats } from "./actions";
+import {
+  addNewChat,
+  clearUnreadCountMessages,
+  createNewChat,
+  getChats
+} from "./actions";
 
 import { ChatsSliceInterface } from "./types";
 import { ChatInterface } from "../../../types/types";
@@ -99,6 +104,14 @@ const ChatsSlice = createSlice({
             : [];
       }
     );
+
+    builder.addCase(clearUnreadCountMessages, (state, { payload: id }) => {
+      state.chats.forEach((chat) => {
+        if (chat.id === id) {
+          chat.unreadCountMessages = 0;
+        }
+      });
+    });
   }
 });
 

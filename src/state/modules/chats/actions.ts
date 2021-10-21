@@ -21,3 +21,7 @@ export const createNewChat = authGuardAsyncThunk<ChatInterface, string>({
 export const addNewChat = createAction<ChatInterface>(
   CHATS_ACTIONS.ADD_NEW_CHAT
 );
+
+export const clearUnreadCountMessages = createAction<string>(
+  CHATS_ACTIONS.CLEAR_UNREAD_COUNT_MESSAGES
+);

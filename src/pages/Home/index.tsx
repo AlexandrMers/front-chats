@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect } from "react";
+import React, { FC, memo, useCallback, useEffect, useRef } from "react";
 import { shallowEqual } from "react-redux";
 
 import { Empty } from "antd";
@@ -34,6 +34,10 @@ import Wrapper from "primitives/Wrapper";
 import ChatWrapper from "./ChatWrapper";
 import DialogItemsWrapper from "./DialogItemsWrapper";
 import HomeHeader from "./HomeHeader";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import messageSound from "audio/icq.mp3";
 
 import styleModule from "./style.module.scss";
 
