@@ -136,10 +136,6 @@ const InputMessage: FC<InputMessagePropsInterface> = ({
             multiple
           />
 
-          {/*<button className={styleModule.input__button}>*/}
-          {/*  <AudioOutlined className={classNames(styleModule.icon_common)} />*/}
-          {/*</button>*/}
-
           <button
             className={styleModule.input__button}
             onClick={onSendClick}

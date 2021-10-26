@@ -2,7 +2,7 @@ import { FileInterface } from "../state/modules/selectedChat/types";
 
 export interface UserInterface {
   id: string;
-  avatar?: string;
+  avatar: string;
   isOnline?: boolean;
   lastSeen: string;
   fullName: string;

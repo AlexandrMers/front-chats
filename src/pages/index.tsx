@@ -10,6 +10,7 @@ import LoginPage from "./Login";
 import ProtectedRoute from "../hocs/ProtectedRoute";
 import SocketHOC from "../hocs/SocketHandleHOC";
 import ConfirmedPage from "./ConfirmedPage";
+import PersonPage from "./PersonPage";
 
 function useRouter() {
   return useContext(__RouterContext);
@@ -26,6 +27,15 @@ const animationsValues = {
     transform: "scale(0.5)"
   }
 };
+
+export enum ROUTE_PATHS {
+  LOGIN = "/login",
+  REGISTRATION = "/registration",
+  CONFIRM_HASH = "/confirm/hash/:id",
+  MAIN = "/",
+  HOME = "/home",
+  PERSON = "/person/"
+}
 
 const Routes: FC = () => {
   const { location } = useRouter();
@@ -47,13 +57,26 @@ const Routes: FC = () => {
           }}
         >
           <Switch location={item}>
-            <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/registration" component={RegistrationPage} />
-            <Route exact path="/confirm-hash/:id" component={ConfirmedPage} />
+            <Route exact path={ROUTE_PATHS.LOGIN} component={LoginPage} />
+            <Route
+              exact
+              path={ROUTE_PATHS.REGISTRATION}
+              component={RegistrationPage}
+            />
+            <Route
+              exact
+              path={ROUTE_PATHS.CONFIRM_HASH}
+              component={ConfirmedPage}
+            />
             <ProtectedRoute
               exact
-              path={["/", "/home"]}
+              path={[ROUTE_PATHS.MAIN, ROUTE_PATHS.HOME]}
               render={(props) => <SocketHOC component={Home} {...props} />}
+            />
+            <ProtectedRoute
+              exact
+              path={`${ROUTE_PATHS.PERSON}:id`}
+              render={(props) => <PersonPage {...props} />}
             />
           </Switch>
         </animated.div>

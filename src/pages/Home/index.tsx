@@ -128,7 +128,11 @@ const Home: FC = () => {
   return (
     <>
       {currentUser && (
-        <HomeHeader onLogout={onLogout} name={currentUser.fullName} />
+        <HomeHeader
+          onLogout={onLogout}
+          name={currentUser.fullName}
+          id={currentUser.id}
+        />
       )}
 
       <FlexContainer className={styleModule.homeWrapper}>

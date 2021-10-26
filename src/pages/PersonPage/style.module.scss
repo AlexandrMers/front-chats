@@ -1,0 +1,27 @@
+//variables
+@import "../../styles/tools/vars";
+
+.personPage {
+  padding: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  &__blockImage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__buttonChange {
+    margin-top: 20px;
+  }
+
+  &__input {
+    display: none;
+    margin-top: 15px;
+  }
+
+  &__blockInfo {
+    margin-left: 50px;
+  }
+}
