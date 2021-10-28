@@ -3,14 +3,14 @@ import { Typography } from "antd";
 
 import classNames from "classnames";
 
-import { AdditionalInfoChatInterface } from "types/types";
+import { PartnerInfoChatInterface } from "types/types";
 
 import Circle from "primitives/Circle";
 
 import styleModule from "./style.module.scss";
 
 interface ChatHeaderPropsInterface {
-  info: AdditionalInfoChatInterface;
+  info: PartnerInfoChatInterface;
 }
 
 const ChatHeader: FC<ChatHeaderPropsInterface> = ({ info }) => {

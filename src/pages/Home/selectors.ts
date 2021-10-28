@@ -29,15 +29,11 @@ const getSelectedChatInfoSelector = (
   if (!selectedChat) return null;
   return {
     ...selectedChat,
-    additionalInfo: buildAdditionalDataForChats(
-      userInfo.id,
-      selectedChat,
-      allUsers
-    )
+    partnerInfo: buildPartnerInfoByChat(userInfo.id, selectedChat, allUsers)
   };
 };
 
-function buildAdditionalDataForChats(
+function buildPartnerInfoByChat(
   currentUserId: string,
   chat: ChatInterface,
   allUsers: UserInterface[]
@@ -69,7 +65,7 @@ const formatChatsSelector = (
     const currentUserId = userInfo?.id;
     return {
       ...chat,
-      additionalInfo: buildAdditionalDataForChats(currentUserId, chat, allUsers)
+      partnerInfo: buildPartnerInfoByChat(currentUserId, chat, allUsers)
     };
   });
 };

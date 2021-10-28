@@ -56,10 +56,9 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           style={{
             zIndex: 100
           }}
-          src={chat.additionalInfo.avatar}
+          src={chat.partnerInfo.avatar}
           className={classNames(styleModule.dialogItem__avatar, {
-            [styleModule.dialogItem__avatar_isOnline]:
-              chat.additionalInfo.isOnline
+            [styleModule.dialogItem__avatar_isOnline]: chat.partnerInfo.isOnline
           })}
         >
           {shortName(chat.partner.fullName)}
@@ -73,7 +72,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
             className={styleModule.dialogItem__title}
             level={5}
           >
-            {chat.additionalInfo.name}
+            {chat.partnerInfo.name}
           </Typography.Title>
           <time className={styleModule.dialogItem__date}>{date}</time>
         </header>

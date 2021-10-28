@@ -1,4 +1,4 @@
-import { MessageInterface } from "../../types/types";
+import { MessageInterface, UserInterface } from "../../types/types";
 
 export interface ActionsMessagePropsInterface {
   isMe: boolean;
@@ -9,4 +9,5 @@ export interface MessagePropsInterface {
   message: MessageInterface;
   isMe?: boolean;
   isTyping?: boolean;
+  avatar: string;
 }

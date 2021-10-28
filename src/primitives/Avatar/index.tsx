@@ -34,12 +34,9 @@ const AvatarCmp = ({
         backgroundColor: "#9E9EA1"
       }}
       className={classNames(styleModule.avatar, className)}
+      src={avatar}
     >
-      {!isEmptyAvatar ? (
-        <img src={avatar} alt={`avatar ${name}`} />
-      ) : (
-        shortName(name)
-      )}
+      {isEmptyAvatar && shortName(name)}
     </Avatar>
   );
 };

@@ -15,7 +15,12 @@ import { calculateStylesContentMsg } from "./helpers";
 import { MessagePropsInterface } from "./types";
 import ActionsMessage from "./ActionsMessage/ActionsMessage";
 
-const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
+const Message = ({
+  message,
+  isMe,
+  isTyping,
+  avatar
+}: MessagePropsInterface) => {
   const { date } = useFormatRelativeDate(message.createdAt);
 
   return (
@@ -36,8 +41,7 @@ const Message = ({ message, isMe, isTyping }: MessagePropsInterface) => {
             [styleModule.avatar_order_me]: isMe
           })}
           name={message.author.fullName}
-          //TODO - не реализован функционал аватаров
-          avatar={null}
+          avatar={avatar}
         />
 
         {isTyping ? (

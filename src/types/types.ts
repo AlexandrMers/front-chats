@@ -14,7 +14,7 @@ export interface ShortUserInterface {
   id: string;
 }
 
-export interface AdditionalInfoChatInterface {
+export interface PartnerInfoChatInterface {
   name: string;
   id: string;
   isOnline: boolean;
@@ -27,7 +27,7 @@ export interface ChatInterface {
   author: ShortUserInterface;
   partner: ShortUserInterface;
   lastMessage?: MessageInterface;
-  additionalInfo?: AdditionalInfoChatInterface;
+  partnerInfo?: PartnerInfoChatInterface;
   unreadCountMessages: number;
 }
 

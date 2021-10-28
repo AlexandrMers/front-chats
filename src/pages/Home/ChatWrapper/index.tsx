@@ -148,7 +148,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
 
   return (
     <Wrapper className={styleModule.mainWrapper}>
-      <ChatHeader info={chat?.additionalInfo} />
+      <ChatHeader info={chat?.partnerInfo} />
       <ScrollBar
         style={{
           height: "100%",
@@ -167,6 +167,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
             currentUser={currentUser}
             isLoadedMessagesWrapper={isLoadedMessagesWrapper}
             messages={messages}
+            partnerInfo={chat?.partnerInfo}
           />
         </Wrapper>
       </ScrollBar>
