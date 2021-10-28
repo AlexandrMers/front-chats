@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { __RouterContext, Route, Switch } from "react-router";
 import { animated, useTransition } from "react-spring";
 
@@ -11,6 +11,7 @@ import ProtectedRoute from "../hocs/ProtectedRoute";
 import SocketHOC from "../hocs/SocketHandleHOC";
 import ConfirmedPage from "./ConfirmedPage";
 import PersonPage from "./PersonPage";
+import { SocketContext } from "../App";
 
 function useRouter() {
   return useContext(__RouterContext);
@@ -34,7 +35,7 @@ export enum ROUTE_PATHS {
   CONFIRM_HASH = "/confirm/hash/:id",
   MAIN = "/",
   HOME = "/home",
-  PERSON = "/person/"
+  PERSON = "/person"
 }
 
 const Routes: FC = () => {
@@ -68,6 +69,7 @@ const Routes: FC = () => {
               path={ROUTE_PATHS.CONFIRM_HASH}
               component={ConfirmedPage}
             />
+
             <ProtectedRoute
               exact
               path={[ROUTE_PATHS.MAIN, ROUTE_PATHS.HOME]}
@@ -76,7 +78,9 @@ const Routes: FC = () => {
             <ProtectedRoute
               exact
               path={`${ROUTE_PATHS.PERSON}:id`}
-              render={(props) => <PersonPage {...props} />}
+              render={(props) => (
+                <SocketHOC component={PersonPage} {...props} />
+              )}
             />
           </Switch>
         </animated.div>

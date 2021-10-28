@@ -18,6 +18,7 @@ export interface AdditionalInfoChatInterface {
   name: string;
   id: string;
   isOnline: boolean;
+  avatar: string;
 }
 
 export interface ChatInterface {

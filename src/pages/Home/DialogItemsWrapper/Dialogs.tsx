@@ -33,33 +33,37 @@ function Dialogs({
     shallowEqual
   );
 
-  return dialogItems.length > 0 ? (
-    compose(
-      map<ChatInterface, ReactNode>((dialog) => {
-        const isSelected = selectedDialogId === dialog.id;
+  return (
+    <>
+      {dialogItems.length > 0 ? (
+        compose(
+          map<ChatInterface, ReactNode>((dialog) => {
+            const isSelected = selectedDialogId === dialog.id;
 
-        const countUnreadMessages = unreadCountMessages[dialog.id];
+            const countUnreadMessages = unreadCountMessages[dialog.id];
 
-        return (
-          <Wrapper key={dialog.id} className={styleModule.marginFromScroll}>
-            <DialogItem
-              onSelect={setSelectedDialogId}
-              chat={dialog}
-              isSelected={isSelected}
-              currentUser={currentUser}
-              countUnreadMessages={countUnreadMessages}
-            />
-          </Wrapper>
-        );
-      }),
-      sortByDate<ChatInterface>({
-        pathToCode: ["lastMessage", "date"],
-        order: OrderSort.DESC
-      })
-    )(dialogItems)
-  ) : (
-    <Empty description="Поиск не дал результатов" />
+            return (
+              <Wrapper key={dialog.id} className={styleModule.marginFromScroll}>
+                <DialogItem
+                  onSelect={setSelectedDialogId}
+                  chat={dialog}
+                  isSelected={isSelected}
+                  currentUser={currentUser}
+                  countUnreadMessages={countUnreadMessages}
+                />
+              </Wrapper>
+            );
+          }),
+          sortByDate<ChatInterface>({
+            pathToCode: ["lastMessage", "date"],
+            order: OrderSort.DESC
+          })
+        )(dialogItems)
+      ) : (
+        <Empty description="Поиск не дал результатов" />
+      )}
+    </>
   );
 }
 
-export default memo(Dialogs as any);
+export default Dialogs;

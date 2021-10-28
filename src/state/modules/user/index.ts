@@ -38,8 +38,6 @@ const UserSlice = createSlice({
     });
 
     builder.addCase(getCurrentUser.fulfilled, (state, { payload }) => {
-      console.log("payload -> ", payload);
-
       state.loading = false;
       state.error = null;
       state.userInfo = payload;

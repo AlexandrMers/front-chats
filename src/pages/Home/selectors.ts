@@ -49,12 +49,14 @@ function buildAdditionalDataForChats(
     ? {
         name: chat.partner.fullName,
         id: chat.partner.id,
-        isOnline: partnerUser?.isOnline
+        isOnline: partnerUser?.isOnline,
+        avatar: partnerUser?.avatar
       }
     : {
         name: chat.author.fullName,
         id: chat.author.id,
-        isOnline: authorUser?.isOnline
+        isOnline: authorUser?.isOnline,
+        avatar: authorUser?.avatar
       };
 }
 

@@ -33,10 +33,11 @@ function SocketHOC({
 }) {
   const dispatch = useAppDispatch();
 
-  const { currentUserInfo, selectedChatId } = useTypedSelector(
+  const { currentUserInfo, selectedChatId, isAuth } = useTypedSelector(
     (state) => ({
       currentUserInfo: state?.userModule?.userInfo,
-      selectedChatId: state?.selectedChatModule?.selectedChatId
+      selectedChatId: state?.selectedChatModule?.selectedChatId,
+      isAuth: !!state?.userModule.userInfo
     }),
     shallowEqual
   );
@@ -44,13 +45,15 @@ function SocketHOC({
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    if (!socket) return undefined;
+    if (!socket || socket.connected) return undefined;
     socket.connect();
-
-    return () => {
-      socket.disconnect();
-    };
   }, [socket]);
+
+  useEffect(() => {
+    if (isAuth === false && socket?.connected) {
+      socket.disconnect();
+    }
+  }, [isAuth, socket]);
 
   const audioRef = useRef(null);
 

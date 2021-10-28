@@ -6,6 +6,18 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+
+  &__content {
+    margin-left: 40px;
+  }
+
+  &__backButton {
+    svg {
+      width: 25px;
+      height: 25px;
+    }
+  }
 
   &__blockImage {
     display: flex;
@@ -22,6 +34,9 @@
   }
 
   &__blockInfo {
-    margin-left: 50px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
 }

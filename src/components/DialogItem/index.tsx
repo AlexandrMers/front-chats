@@ -2,11 +2,10 @@ import React, { FC, memo, useMemo } from "react";
 import formatRelative from "date-fns/format";
 import { ru } from "date-fns/locale";
 import classNames from "classnames";
-import { Badge, Typography, Avatar } from "antd";
+import { Avatar, Badge, Typography } from "antd";
 
 import styleModule from "./style.module.scss";
 
-// import Avatar from "primitives/Avatar";
 import DialogLastMessage from "./DialogLastMessage";
 
 import { ChatInterface, UserInterface } from "../../types/types";
@@ -57,8 +56,7 @@ const DialogItem: FC<DialogItemPropsInterface> = ({
           style={{
             zIndex: 100
           }}
-          // TODO - не реализован функционал аватарок...
-          src={null}
+          src={chat.additionalInfo.avatar}
           className={classNames(styleModule.dialogItem__avatar, {
             [styleModule.dialogItem__avatar_isOnline]:
               chat.additionalInfo.isOnline
