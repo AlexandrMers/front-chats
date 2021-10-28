@@ -2,6 +2,10 @@
   position: relative;
   overflow: initial;
 
+  & > img {
+    border-radius: 50%;
+  }
+
   &::after {
     content: "";
     z-index: 10;
