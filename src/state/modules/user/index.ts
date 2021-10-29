@@ -4,7 +4,8 @@ import {
   getAllUsers,
   getCurrentUser,
   setUserOfflineById,
-  setUserOnlineById
+  setUserOnlineById,
+  uploadUserAvatar
 } from "./actions";
 
 import { setIsOnlineUserStatus } from "./helpers";
@@ -18,13 +19,17 @@ const initialState: {
   allUsers: UserInterface[];
   allUsersLoading: boolean;
   allUsersError: any;
+  isAvatarUploadLoading: boolean;
+  avatarUploadError: any;
 } = {
   loading: false,
-  error: false,
+  error: null,
   userInfo: null,
   allUsers: [],
   allUsersError: null,
-  allUsersLoading: false
+  allUsersLoading: false,
+  isAvatarUploadLoading: false,
+  avatarUploadError: null
 };
 
 const UserSlice = createSlice({
@@ -74,6 +79,24 @@ const UserSlice = createSlice({
     builder.addCase(setUserOfflineById, (state, { payload: userData }) => {
       setIsOnlineUserStatus(state.allUsers, userData, false);
     });
+
+    builder.addCase(uploadUserAvatar.pending, (state) => {
+      state.isAvatarUploadLoading = true;
+    });
+
+    builder.addCase(uploadUserAvatar.rejected, (state, { payload }) => {
+      state.isAvatarUploadLoading = false;
+      state.avatarUploadError = payload;
+    });
+
+    builder.addCase(
+      uploadUserAvatar.fulfilled,
+      (state, { payload: newUserInfo }) => {
+        state.avatarUploadError = null;
+        state.isAvatarUploadLoading = false;
+        state.userInfo = newUserInfo;
+      }
+    );
   }
 });
 

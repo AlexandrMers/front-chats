@@ -1,26 +1,34 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { NavLink, RouteProps } from "react-router-dom";
-import { useAppDispatch, useTypedSelector } from "../../state/store";
-import { getAllUsers, getCurrentUser } from "../../state/modules/user/actions";
-import { getChats } from "../../state/modules/chats/actions";
+
+import { BarsOutlined } from "@ant-design/icons";
 import { Image, Spin } from "antd";
+
+import { ROUTE_PATHS } from "../index";
+
+import { useAppDispatch, useTypedSelector } from "state/store";
+import {
+  getAllUsers,
+  getCurrentUser,
+  uploadUserAvatar
+} from "state/modules/user/actions";
+import { getChats } from "state/modules/chats/actions";
 
 import fallBackImage from "assets/fallback.png";
 
+import Button from "primitives/Button";
+
 import styles from "./style.module.scss";
-import Button from "../../primitives/Button";
-import { BarsOutlined } from "@ant-design/icons";
-import { ROUTE_PATHS } from "../index";
 
 interface PersonPagePropsInterface extends RouteProps {}
 
-const PersonPage = (props: PersonPagePropsInterface) => {
-  const { userInfo, isLoadingUserInfo } = useTypedSelector((state) => ({
-    userInfo: state?.userModule?.userInfo,
-    isLoadingUserInfo: state?.userModule?.loading
-  }));
-
-  const [loadingAvatar, setLoadingAvatar] = useState(false);
+const PersonPage = (_: PersonPagePropsInterface) => {
+  const { userInfo, isLoadingUserInfo, isLoadingUploadAvatar } =
+    useTypedSelector((state) => ({
+      userInfo: state?.userModule?.userInfo,
+      isLoadingUserInfo: state?.userModule?.loading,
+      isLoadingUploadAvatar: state?.userModule?.isAvatarUploadLoading
+    }));
 
   const dispatch = useAppDispatch();
 
@@ -42,9 +50,8 @@ const PersonPage = (props: PersonPagePropsInterface) => {
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoadingAvatar(true);
     const file = e.target.files[0];
-    console.log("file -> ", file);
+    dispatch(uploadUserAvatar(file));
   };
 
   if (isLoadingUserInfo) {
@@ -64,11 +71,8 @@ const PersonPage = (props: PersonPagePropsInterface) => {
             src={userInfo?.avatar ?? "error"}
             fallback={fallBackImage}
             loading="lazy"
-            onLoad={() => {
-              setLoadingAvatar(false);
-            }}
           />
-          {loadingAvatar && <Spin size="large" />}
+          {isLoadingUploadAvatar && <Spin size="large" />}
           <input
             className={styles.personPage__input}
             type="file"
@@ -79,6 +83,7 @@ const PersonPage = (props: PersonPagePropsInterface) => {
           <Button
             className={styles.personPage__buttonChange}
             onClick={handleClickButton}
+            disabled={isLoadingUploadAvatar}
           >
             Изменить аватар
           </Button>
