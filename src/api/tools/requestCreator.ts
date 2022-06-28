@@ -1,5 +1,5 @@
 import axios from "axios";
-import { assoc, compose, identity, ifElse } from "ramda";
+import { assoc, identity, ifElse } from "ramda";
 
 import { MethodType, OptionsRequestInterface } from "./types";
 
@@ -23,12 +23,10 @@ class ApiRequest {
   ) => {
     const { data, config } = options;
 
-    const preBuiltHeaders = compose(
-      ifElse(
-        () => !!this.token,
-        assoc("Authorization", `Bearer ${this.token}`),
-        identity
-      )
+    const preBuiltHeaders = ifElse(
+      (_) => !!this.token,
+      assoc("Authorization", `Bearer ${this.token}`),
+      identity
     )({});
 
     const instanceAxios = axios.create({

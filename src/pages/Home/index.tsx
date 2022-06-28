@@ -86,7 +86,13 @@ const Home: FC = () => {
   );
 
   const getMessagesByChatIdHandler = useCallback(
-    ({ selectedChatId, page = 1 }) => {
+    ({
+      selectedChatId,
+      page = 1
+    }: {
+      selectedChatId: string;
+      page?: number;
+    }) => {
       dispatch(
         getMessagesByChatId({
           selectedChatId,

@@ -130,7 +130,7 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
   );
 
   const onSendMessage = useCallback(
-    (msgText: string, fileList) => {
+    (msgText: string, fileList: UploadFile[]) => {
       scrollToBottom();
       onSendMessageProp({
         text: msgText,
@@ -139,6 +139,8 @@ const ChatWrapper: FC<ChatWrapperPropsInterface> = ({
           fullName: currentUser.fullName,
           id: currentUser.id
         },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         attachments: fileList.map((file: UploadFile & FileInterface) => file.id)
       });
     },

@@ -13,6 +13,8 @@ import { history } from "./state/store";
 
 ReactDOM.render(
   <Provider store={store}>
+    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+    {/*  @ts-ignore*/}
     <ConnectedRouter history={history}>
       <App />
     </ConnectedRouter>

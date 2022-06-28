@@ -1,8 +1,9 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, ReactNode } from "react";
 import { Upload } from "antd";
 import { RcFile, UploadChangeParam } from "antd/lib/upload/interface";
 
 interface UploadFilePropsInterface {
+  children: ReactNode;
   onChange: (info: UploadChangeParam) => void;
   onAction:
     | string

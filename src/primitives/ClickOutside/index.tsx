@@ -20,6 +20,7 @@ interface ClickOutSideInterface {
   clickEventName?: EventClickName;
   refs?: HTMLElement[];
 }
+
 class ClickOutside extends React.Component<ClickOutSideInterface> {
   stackIndex: number;
   componentDidMount() {
@@ -57,6 +58,8 @@ class ClickOutside extends React.Component<ClickOutSideInterface> {
     }
     const { handleEnabled, handleClickOut, refs } = this.props;
     if (!isNil(handleEnabled) && !handleEnabled) return;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const domNode = ReactDOM.findDOMNode(this);
     if (!domNode || !domNode.contains(event.target)) {
       if (this.hasElementIntoRefs(refs, event.target)) return;

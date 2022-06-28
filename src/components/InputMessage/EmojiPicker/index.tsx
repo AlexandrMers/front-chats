@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useState } from "react";
 import classNames from "classnames";
-import { Picker } from "emoji-mart";
+import { Picker, BaseEmoji } from "emoji-mart";
 import { SmileOutlined } from "@ant-design/icons";
+
+import ClickOutside from "primitives/ClickOutside";
+
 import "emoji-mart/css/emoji-mart.css";
 
-import { BaseEmoji } from "emoji-mart/dist-es/utils/emoji-index/nimble-emoji-index";
-
 import style from "./style.module.scss";
-import ClickOutside from "../../../primitives/ClickOutside";
 
 interface EmojiPickerInterface {
   className: string;
